@@ -43,17 +43,104 @@ app.get("/",(req,res)=>{
   res.render("landing");
 });
 
+///////////////////////////////////////////teacher routes//////////////////////////////////
+
+app.get("/te/register",(req,res)=>{
+  res.render("teregister")
+});
+
 app.get("/te/login",(req,res)=>{
   res.render("telogin");
+});
+
+app.get("/te/logout",(req,res)=>{
+  req.logout();
+  res.redirect("/");
+})
+
+
+
+///////////////////////////////student routes////////////////////////////////
+
+app.get("/st/register",(req,res)=>{
+  res.render("stregister")
 });
 
 app.get("/st/login",(req,res)=>{
   res.render("stlogin");
 });
 
+app.get("/st/logout",(req,res)=>{
+  req.logout();
+  res.redirect("/");
+})
+
 
 
 ////////////////////////////////////////////////////////////////////   POSTS    //////////////////////////////////////////////////////////////
+
+///////////////////////////////////////////teacher routes/////////
+
+app.post("/te/register",(req,res)=>{
+  Teacher.register({username:req.body.username},req.body.password,(error,sol)=>{
+    if(error) console.log(error);
+    else{
+      passport.authenticate("teacherLocal")(req,res,()=>{
+        res.send("<h1>UNLOCKED FOR TEACHER</h1>");
+      });
+    }
+  });
+});
+
+app.post("/te/login",(req,res)=>{
+  const user = new Teacher({
+    username:req.body.username,
+    password:req.body.password
+  });
+
+  req.login(user,(error,sol)=>{
+    if(error) console.log(error);
+    else{
+      passport.authenticate("teacherLocal")(req,res,()=>{
+          res.send("<h1>UNLOCKED FOR TEACHER through login</h1>");
+      })
+    }
+  }
+
+  )
+});
+
+
+
+
+///////////////////////////////student routes//////////////
+
+app.post("/st/register",(req,res)=>{
+  Student.register({username:req.body.username},req.body.password,(error,sol)=>{
+    if(error) console.log(error);
+    else{
+      passport.authenticate("studentLocal")(req,res,()=>{
+        res.send("<h1>UNLOCKED FOR STUDENT</h1>");
+      });
+    }
+  });
+});
+
+app.post("/st/login",(req,res)=>{
+  const user = new Student({
+    username:req.body.username,
+    password:req.body.password
+  });
+  req.login(user,(error,sol)=>{
+    if(error) console.log(error);
+    else{
+      passport.authenticate("studentLocal")(req,res,()=>{
+          res.send("<h1>UNLOCKED FOR STUDENT through login</h1>");
+      })
+    }
+  })
+
+});
 
 
 
