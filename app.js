@@ -8,6 +8,9 @@ const passport = require('passport');
 const passportLocalMongoose = require('passport-local-mongoose');
 const Teacher = require("./models/teacher.js");
 const Student = require("./models/student.js");
+const Exam = require("./models/exam.js");
+const Response = require("./models/response.js");
+const Question = require("./models/question.js");
 
 app.use(express.static(__dirname+'/public'));
 app.set('view engine','ejs');
