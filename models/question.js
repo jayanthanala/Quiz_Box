@@ -7,7 +7,8 @@ const questionSchema = new mongoose.Schema({
   unattempted:Number,
   wrongans:Number,
   rightans:Number,
-  examid:String
+  examid:String,
+  marks:Number
 });
 
 module.exports = mongoose.model("Question",questionSchema);
