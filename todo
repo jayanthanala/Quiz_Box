@@ -4,7 +4,7 @@
 
 //TEACHER
 *setup the route for dashboard, initially only one button for creating an exam!
-****setting up the exam form!*****
+****setting up the exam form!*****=>styling also simultaneously or this form
 *post route handling for the form
 *add tool bar for dashborad, with ongoing,completed,staged,sheduled(leave the functionality of this for now!)
 *staged is the area where the exam created is still there on staged! once they click on the exam, edit form appears(teachers can edit the exam anytime in this staged area!)

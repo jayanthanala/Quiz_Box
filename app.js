@@ -27,7 +27,7 @@ mongoose.connect("mongodb://localhost/QuizDB",{useNewUrlParser:true,useUnifiedTo
 mongoose.set("useCreateIndex",true);
 
 //passportforteacher
-passport.use("teahcerLocal",Teacher.createStrategy());
+passport.use("teacherLocal",Teacher.createStrategy());
 passport.serializeUser(Teacher.serializeUser());
 passport.deserializeUser(Teacher.deserializeUser());
 
@@ -40,8 +40,16 @@ passport.deserializeUser(Student.deserializeUser());
 
 ////////////////////////////////////////////////////////////////////   GETS    //////////////////////////////////////////////////////////////
 app.get("/",(req,res)=>{
-  res.send("landing page");
-})
+  res.render("landing");
+});
+
+app.get("/te/login",(req,res)=>{
+  res.render("telogin");
+});
+
+app.get("/st/login",(req,res)=>{
+  res.render("stlogin");
+});
 
 
 
