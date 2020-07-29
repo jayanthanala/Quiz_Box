@@ -125,6 +125,8 @@ app.post("/te/login",(req,res)=>{
 
 
 
+
+
 ///////////////////////////////student routes//////////////
 
 app.post("/st/register",(req,res)=>{
