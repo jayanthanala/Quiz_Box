@@ -13,7 +13,7 @@
  *can click the exam on ongoing for receiving the responses(but this page might use socket!for real time submissions and graphs and all!)
  *once exam done, it is present in the completed window there socket not required! as no further submissions!
 
-
+* if marks changed in the form ! then change the marks in the left side also!
 //try
 
 
