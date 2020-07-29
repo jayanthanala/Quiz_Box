@@ -80,7 +80,7 @@ function createQuestion(n){
     let input = document.createElement("input");
     input.classList.add("validate");
     input.setAttribute("type","text");
-    input.setAttribute("name","questions["+(n-1)+"][option["+i+"]]");
+    input.setAttribute("name","questions["+(n-1)+"][options["+i+"]]");
     input.id=""+i+(4*(n-1));
 
     let label = document.createElement("label");
@@ -92,10 +92,28 @@ function createQuestion(n){
 
     rowOptions.appendChild(inputF);
   }
+
+  var row3 = document.createElement("div");
+  row3.classList.add("row");
+  var inputdiv = document.createElement("div");
+  inputdiv.classList.add("input-field", "col", "s12");
+  var inp = document.createElement("input");
+  inp.classList.add("validate");
+  inp.setAttribute("type","number");
+  inp.setAttribute("name","question["+(n-1)+"][ans]");
+  inp.id="c"+(n-1);
+  var lab = document.createElement("label");
+  lab.setAttribute("for","c"+(n-1));
+  lab.innerHTML="Correct option Number";
+  inputdiv.appendChild(inp);
+  inputdiv.appendChild(lab);
+  row3.appendChild(inputdiv);
+
   column1.appendChild(r);
   column1.appendChild(row2);
   column1.appendChild(label);
   column1.appendChild(rowOptions);
+  column1.appendChild(row3);
   //creating and nesting buttons claass div
   var btnDiv = document.createElement("div");
   btnDiv.classList.add("col-md-2", "d-flex", "justify-content-around", "align-items-center");
