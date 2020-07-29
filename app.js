@@ -59,6 +59,14 @@ app.get("/te/login",(req,res)=>{
 app.get("/te/logout",(req,res)=>{
   req.logout();
   res.redirect("/");
+});
+
+app.get("/te/index",authenticated,(req,res)=>{
+  res.render("teindex");
+})
+
+app.get("/te/newexam",authenticated,(req,res)=>{
+  res.render("newexam")
 })
 
 
@@ -89,7 +97,7 @@ app.post("/te/register",(req,res)=>{
     if(error) console.log(error);
     else{
       passport.authenticate("teacherLocal")(req,res,()=>{
-        res.send("<h1>UNLOCKED FOR TEACHER</h1>");
+        res.redirect("/te/index");
       });
     }
   });
@@ -105,13 +113,14 @@ app.post("/te/login",(req,res)=>{
     if(error) console.log(error);
     else{
       passport.authenticate("teacherLocal")(req,res,()=>{
-          res.send("<h1>UNLOCKED FOR TEACHER through login</h1>");
+          res.redirect("/te/index");
       })
     }
   }
 
   )
 });
+
 
 
 
