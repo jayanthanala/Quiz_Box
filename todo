@@ -17,7 +17,8 @@
 //try
 
 
-
+* in edit page, after posting we nee to heck whether the titel has been changed or not! if it is changed then change it in exam object also
+or else just don't give an option to change the title.
 
 
 

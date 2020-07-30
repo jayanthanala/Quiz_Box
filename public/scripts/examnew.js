@@ -80,7 +80,7 @@ function createQuestion(n){
     let input = document.createElement("input");
     input.classList.add("validate");
     input.setAttribute("type","text");
-    input.setAttribute("name","questions["+(n-1)+"][options["+i+"]]");
+    input.setAttribute("name","options["+(n-1)+"]["+i+"]");
     input.id=""+i+(4*(n-1));
 
     let label = document.createElement("label");
@@ -100,7 +100,7 @@ function createQuestion(n){
   var inp = document.createElement("input");
   inp.classList.add("validate");
   inp.setAttribute("type","number");
-  inp.setAttribute("name","question["+(n-1)+"][ans]");
+  inp.setAttribute("name","questions["+(n-1)+"][ans]");
   inp.id="c"+(n-1);
   var lab = document.createElement("label");
   lab.setAttribute("for","c"+(n-1));

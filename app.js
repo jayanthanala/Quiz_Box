@@ -65,8 +65,8 @@ app.get("/te/index",authenticated,(req,res)=>{
   res.render("teindex");
 })
 
-app.get("/te/newexam",authenticated,(req,res)=>{
-  res.render("newexam")
+app.get("/te/exam/new",authenticated,(req,res)=>{
+  res.render("newexam");
 })
 
 
@@ -117,9 +117,42 @@ app.post("/te/login",(req,res)=>{
       })
     }
   }
+)});
 
-  )
-});
+app.post("/te/exam/new",(req,res)=>{
+  var accessCode="";
+  var questions= req.body.questions;
+  var options = req.body.options;
+
+  for(var i=1;i<=6;i++){
+    accessCode+=String.fromCharCode((Math.floor(Math.random()*42))+48);
+  }
+  console.log(accessCode);
+
+  var exam = {
+    teacherid:req.user._id,
+    access:accessCode,
+    status:"staged",
+    title:req.body.title
+  }
+  Exam.create(exam,(error,exam)=>{
+    if(error) console.log(error);
+    else{
+        questions.forEach((q,i)=>{
+        q["options"]=options[i];
+        q["examid"]=exam._id;
+      })
+          Question.insertMany(questions,(e,q)=>{
+            if(e) console.log(e);
+            else{
+              console.log(q);
+              res.redirect("/te/index");
+            }
+          })
+    }
+
+  })
+})
 
 
 

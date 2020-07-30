@@ -11,7 +11,15 @@
     </div>
     </div>
     <div class="col-md-10" class="main">
-        <form class="" action="index.html" method="post">
+        <form class="" action="/te/exam/new" method="post">
+          <div class="continer px-5">
+            <div class="row px-5">
+              <div class="input-field col s12">
+                <input type="text" name="title" class="validate" id="title">
+                <label for="title">Title of the quiz</label>
+              </div>
+            </div>
+          </div>
           <div id=cf>
             <div class="container">
               <div class="row">
@@ -28,26 +36,26 @@
                       <label for="optionNo0">Number of options</label>
                     </div>
                     <div class="input-field col s6">
-                      <input id="marks0" type="number" class="validate" min="1" name="question[0][marks]">
+                      <input id="marks0" type="number" class="validate" min="1" name="questions[0][marks]">
                        <label for="marks0">Marks for this question</label>
                     </div>
                   </div>
                   <label>Options:</label>
                   <div class="row options">
                     <div class="input-field col s6">
-                      <input id="o1" type="text" class="validate" name="questions[0][options[1]]">
+                      <input id="o1" type="text" class="validate" name="options[0][1]">
                        <label for="o1">1</label>
                     </div>
                     <div class="input-field col s6">
-                      <input id="o2" type="text" class="validate" name="questions[0][options[2]]">
+                      <input id="o2" type="text" class="validate" name="options[0][2]">
                        <label for="o2">2</label>
                     </div>
                     <div class="input-field col s6">
-                      <input id="o3" type="text" class="validate" name="questions[0][options[3]]">
+                      <input id="o3" type="text" class="validate" name="options[0][3]">
                       <label for="o3">3</label>
                     </div>
                     <div class="input-field col s6">
-                      <input id="o4" type="text" class="validate" name="questions[0][options[4]]">
+                      <input id="o4" type="text" class="validate" name="options[0][4]">
                        <label for="o4">4</label>
                     </div>
                   </div>
