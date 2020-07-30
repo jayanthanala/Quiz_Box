@@ -65,8 +65,18 @@ app.get("/te/index",authenticated,(req,res)=>{
   res.render("teindex");
 })
 
-app.get("/te/newexam",authenticated,(req,res)=>{
-  res.render("newexam")
+app.get("/te/exam/new",authenticated,(req,res)=>{
+  res.render("newexam");
+});
+
+app.get("/te/exam/staged",(req,res)=>{
+  Exam.find({status:"staged",teacherid:req.user._id},(error,exams)=>{
+    if(error) console.log(error);
+    else{
+      res.render("staged",{exams:exams});
+    }
+  })
+
 })
 
 
@@ -117,9 +127,53 @@ app.post("/te/login",(req,res)=>{
       })
     }
   }
+)});
 
-  )
-});
+app.post("/te/exam/new",(req,res)=>{
+  var accessCode="";
+  var questions= req.body.questions;
+  var options = req.body.options;
+
+  for(var i=1;i<=6;i++){
+    accessCode+=String.fromCharCode((Math.floor(Math.random()*42))+48);
+  }
+  console.log(accessCode);
+
+  var exam = {
+    teacherid:req.user._id,
+    access:accessCode,
+    status:"staged",
+    title:req.body.title,
+  }
+  Exam.create(exam,(error,exam)=>{
+    if(error) console.log(error);
+    else{
+        var marks=0;
+        questions.forEach((q,i)=>{
+        q["options"]=options[i];
+        q["examid"]=exam._id;
+        marks+=Number(q["marks"]);
+      });
+      //TRY TO REFACTOR THIS CODE LATER TO MAKE IT MORE DRY AND FAST!!
+      var noquestions = questions.length;
+          Question.insertMany(questions,(e,q)=>{
+            if(e) console.log(e);
+            else{
+              exam["marks"]=marks;
+              exam["noquestions"]=noquestions;
+              exam.save((er,ex)=>{
+                if(er) console.log(er);
+                else{
+                  console.log(q);
+                  res.redirect("/te/index");
+                }
+              })
+            }
+          })
+    }
+
+  })
+})
 
 
 
