@@ -25,3 +25,11 @@ or else just don't give an option to change the title.
 
 
 *****how to handle a hell lot of number of users at a time ? *******************************
+
+
+
+
+
+
+
+<%- include("./partials/tefooter.ejs") %>

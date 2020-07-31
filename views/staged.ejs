@@ -1,3 +1,4 @@
+
 <%- include("./partials/teheader.ejs") %>
 </head>
 <body>
@@ -24,32 +25,32 @@
   </div>
 </nav>
 
-
-<div class="contianer">
-  <% for(var i=0;i<=exams.length-1;i++){%>
-  <div class="row">
-    <div class="col-md-12">
-      Title: <%=exams[i].title%>
+<div class="container px-5">
+  <div class="container px-5">
+    <% for(var i=0;i<=exams.length-1;i++){%>
+    <div class="row my-5 py-3 border">
+      <div class="col-md-12">
+        <h4 class="">Title: <%=exams[i].title%></h4>
+      </div>
+      <div class="col-md-12">
+        <h6 class="">  Number of questions: <%=exams[i].noquestions%></h6>
+      </div>
+      <div class="col-md-12">
+        Total marks: <%=exams[i].marks%>
+      </div>
+      <div class="col-md-12 d-flex justify-content-end">
+          <a href="#" class="btn btn-outline-primary">Edit</a>
+      </div>
+      <div class="col-md-12">
+        <form style="border:0px" action="index.html" method="post">
+          <input type="file" class="" name="excel" value="">
+          <button class="btn btn-outline-success">Submit</button>
+        </form>
+      </div>
     </div>
-    <div class="col-md-12">
-      Number of questions: <%=exams[i].noquestions%>
-    </div>
-    <div class="col-md-12">
-      Total marks: <%=exams[i].marks%>
-    </div>
-    <div class="col-md-12 d-flex justify-content-end">
-        <a href="#" class="btn btn-outline-success">Edit</a>
-    </div>
-    <div class="col-md-12">
-      <form class="" action="index.html" method="post">
-        <input type="file" class="form-control" name="" value="">
-      </form>
-    </div>
+  <%}%>
   </div>
-
-
-
-
+</div>
 
 
 
