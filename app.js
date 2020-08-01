@@ -87,7 +87,7 @@ app.get("/te/exam/ready",(req,res)=>{
   Exam.find({status:"ready",teacherid:req.user._id},(error,exams)=>{
     if(error) console.log(error);
     else{
-      
+
       //once studets schema gets updated ! then even pass the names!
       res.render("examready",{exams:exams});
     }
@@ -104,8 +104,27 @@ app.get("/te/exam/:id/students",(req,res)=>{
       res.render("examstudents",{students:students,id:exam._id,access:exam.access});
     }
   })
+});
+
+//in future if req , give an option for editing the title also!
+app.get("/te/exam/:id/edit",(req,res)=>{
+  Question.find({examid:req.params.id},(error,questions)=>{
+    if(error) console.log(error);
+    else{
+      var id= req.params.id;
+    Exam.findById(req.params.id,(er,exam)=>{
+      console.log(exam.marks,exam.noquestions);
+        res.render("editexam",{questions:questions,marks:exam.marks,qno:exam.noquestions});
+
+    })
+
+    }
+  })
 })
 
+/*Question.deleteMany({examid:id},(e)=>{
+  if(e) console.log(e);
+})*/
 
 
 ///////////////////////////////student routes////////////////////////////////

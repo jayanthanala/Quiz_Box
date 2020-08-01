@@ -40,7 +40,7 @@
           Total marks: <%=exams[i].marks%>
         </div>
         <div class="col-md-12 d-flex justify-content-end">
-            <a href="#" class="btn btn-outline-primary">Edit</a>
+            <a href="<%=exams[i]._id%>/edit" class="btn btn-outline-primary">Edit</a>
         </div>
         <div class="col-md-12">
             <form style="border:0px" action="<%=exams[i]._id%>/staged" method="post" enctype="multipart/form-data">
