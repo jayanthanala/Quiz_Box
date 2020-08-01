@@ -1,7 +1,6 @@
 
 <%- include("./partials/teheader.ejs") %>
   <link rel="stylesheet" href="/stylesheets/examstudent.css">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
 </head>
 <body>
   <nav class="navbar navbar-expand-lg navbar-light bg-light">
@@ -35,13 +34,14 @@
       </div>
       <div class="row">
         <div class="col-md-6">
-           <h5>Add Students By entering the Roll Number:</h5>
+           <h5>Add Students By entering their Roll Number:</h5>
            <form class="" action="/te/exam/<%=id%>/students" method="post">
-              <div class="input-field">
-                <input type="text" name="student" id="s">
-                <label for="s">Student Roll Number</label>
+              <div class="form-group">
+                <input type="text" name="student" class="form-control" placeholder="Student Roll Number" id="s">
               </div>
-            <button type="button" name="button">Submit</button>
+          <div class="form-group">
+              <button class="btn btn-outline-success" >Submit</button>
+          </div>
            </form>
         </div>
       <div class="col-md-6">
