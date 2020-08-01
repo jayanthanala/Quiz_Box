@@ -6,11 +6,14 @@ const mongoose = require('mongoose');
 const session = require('express-session');
 const passport = require('passport');
 const passportLocalMongoose = require('passport-local-mongoose');
+const excel = require("read-excel-file/node");
 const Teacher = require("./models/teacher.js");
 const Student = require("./models/student.js");
 const Exam = require("./models/exam.js");
 const Response = require("./models/response.js");
 const Question = require("./models/question.js");
+const upload = require("./multer.js");
+
 
 app.use(express.static(__dirname+'/public'));
 app.set('view engine','ejs');
@@ -73,12 +76,55 @@ app.get("/te/exam/staged",(req,res)=>{
   Exam.find({status:"staged",teacherid:req.user._id},(error,exams)=>{
     if(error) console.log(error);
     else{
+      console.log(exams);
       res.render("staged",{exams:exams});
     }
   })
 
+});
+
+app.get("/te/exam/ready",(req,res)=>{
+  Exam.find({status:"ready",teacherid:req.user._id},(error,exams)=>{
+    if(error) console.log(error);
+    else{
+
+      //once studets schema gets updated ! then even pass the names!
+      res.render("examready",{exams:exams});
+    }
+  })
+
+});
+
+app.get("/te/exam/:id/students",(req,res)=>{
+  Exam.findById(req.params.id,(error,exam)=>{
+    if(error) console.log(error);
+    else{
+      var students = exam.students;
+      students.sort();
+      res.render("examstudents",{students:students,id:exam._id,access:exam.access});
+    }
+  })
+});
+
+//in future if req , give an option for editing the title also!
+app.get("/te/exam/:id/edit",(req,res)=>{
+  Question.find({examid:req.params.id},(error,questions)=>{
+    if(error) console.log(error);
+    else{
+      var id= req.params.id;
+    Exam.findById(req.params.id,(er,exam)=>{
+      console.log(exam.marks,exam.noquestions);
+        res.render("editexam",{questions:questions,marks:exam.marks,qno:exam.noquestions});
+
+    })
+
+    }
+  })
 })
 
+/*Question.deleteMany({examid:id},(e)=>{
+  if(e) console.log(e);
+})*/
 
 
 ///////////////////////////////student routes////////////////////////////////
@@ -173,7 +219,65 @@ app.post("/te/exam/new",(req,res)=>{
     }
 
   })
-})
+});
+
+
+//posting from the staged area setting the studentid's
+app.post("/te/exam/:id/staged",upload.single("excel"),(req,res)=>{
+  file=req.file;
+  console.log(req.file);
+    id=req.params.id;
+  excel(file.destination+"/"+file.filename).then(async(rows)=>{
+
+      var students  = await new Promise((resolve,reject)=>{
+        var s=[];
+        for(var i=0;i<=rows.length-2;i++){
+          s[i]=rows[i+1][0];
+        }
+        resolve(s);
+      });
+
+      Exam.findById(id,(error,exam)=>{
+      if(error) console.log(error);
+      else{
+          exam.status="ready";
+          exam.students=students;
+          exam.save((e,s)=>{
+            if(e) console.log(e);
+            else{
+              console.log(s);
+              res.redirect("/te/exam/ready")
+            }
+          })
+      }
+    })
+  }).catch((error)=>{
+    console.log(error);
+  });
+});
+
+
+app.post("/te/exam/:id/students",(req,res)=>{
+  Exam.findById(req.params.id,(error,exam)=>{
+    if(error) console.log(error);
+    else{
+     if(exam.students.indexOf(req.body.student)){
+         exam.students.push(req.body.student);
+         exam.save((e,s)=>{
+           if(e) console.log(e);
+           else{
+             console.log(s);
+             res.redirect("/te/exam/"+req.params.id+"/students");
+           }
+         })
+     }else{
+       //send a flash message saying it is already present!
+       res.redirect("/te/exam/"+req.params.id+"/students");
+     }
+
+    }
+  })
+});
 
 
 

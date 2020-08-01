@@ -10,22 +10,22 @@
   <div class="collapse navbar-collapse" id="navbarNav">
     <ul class="navbar-nav">
       <li class="nav-item">
-        <a class="nav-link" href="/te/index">Home</a>
+        <a class="nav-link" href="/te/exam/upcoming">Home</a>
       </li>
-      <li class="nav-item">
-        <a class="nav-link" href="/te/exam/ready">Exams</a>
+      <li class="nav-item active">
+        <a class="nav-link" href="/te/exam/upcoming">Exams<span class="sr-only">(current)</span></a>
       </li>
       <li class="nav-item">
         <a class="nav-link" href="/te/exam/completed">Completed Exams</a>
       </li>
-      <li class="nav-item active">
-        <a class="nav-link" href="/te/exam/staged">Staged Exams<span class="sr-only">(current)</span></a>
+      <li class="nav-item">
+        <a class="nav-link" href="/te/exam/staged">Staged Exams</a>
       </li>
     </ul>
   </div>
 </nav>
 
-<%if(exams[0]){ %>
+<%if(exams[0]){%>
   <div class="container px-5">
     <div class="container px-5">
       <% for(var i=0;i<=exams.length-1;i++){%>
@@ -39,13 +39,10 @@
         <div class="col-md-12">
           Total marks: <%=exams[i].marks%>
         </div>
-        <div class="col-md-12 d-flex justify-content-end">
-            <a href="<%=exams[i]._id%>/edit" class="btn btn-outline-primary">Edit</a>
-        </div>
-        <div class="col-md-12">
-            <form style="border:0px" action="<%=exams[i]._id%>/staged" method="post" enctype="multipart/form-data">
-            <input type="file" name="excel">
-            <button class="btn btn-outline-success">Submit</button>
+        <div class="col-md-12 d-flex justify-content-around">
+            <a href="/te/exam/<%=exams[i]._id%>/students" class="btn btn-outline-primary">Students List</a>
+            <form style="border:0px" action="<%=exams[i]._id%>/ready" method="post">
+            <button class="btn btn-outline-success">Start</button>  <!-- after clicking start only the students should get examid = this exam id -->
           </form>
         </div>
       </div>
@@ -54,7 +51,7 @@
   </div>
 
 <%}else{%>
-  <h5>NO EXAMS WHICH ARE STAGED !!</h5>
+  <h2>NO EXAMS WHICH ARE READY!!</h2>
 <%}%>
 
 
