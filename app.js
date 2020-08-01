@@ -97,7 +97,9 @@ app.get("/te/exam/:id/students",(req,res)=>{
   Exam.findById(req.params.id,(error,exam)=>{
     if(error) console.log(error);
     else{
-      res.render("examstudents",{students:exam.students,id:exam._id});
+      var students = exam.students;
+      students.sort();
+      res.render("examstudents",{students:students,id:exam._id,access:exam.access});
     }
   })
 })
@@ -234,7 +236,27 @@ app.post("/te/exam/:id/staged",upload.single("excel"),(req,res)=>{
 });
 
 
-app.post("/te/exam/:id/students")
+app.post("/te/exam/:id/students",(req,res)=>{
+  Exam.findById(req.params.id,(error,exam)=>{
+    if(error) console.log(error);
+    else{
+     if(exam.students.indexOf(req.body.student)){
+         exam.students.push(req.body.student);
+         exam.save((e,s)=>{
+           if(e) console.log(e);
+           else{
+             console.log(s);
+             res.redirect("/te/exam/"+req.params.id+"/students");
+           }
+         })
+     }else{
+       //send a flash message saying it is already present!
+       res.redirect("/te/exam/"+req.params.id+"/students");
+     }
+
+    }
+  })
+});
 
 
 

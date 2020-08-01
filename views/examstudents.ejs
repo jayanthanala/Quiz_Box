@@ -1,5 +1,6 @@
 
 <%- include("./partials/teheader.ejs") %>
+  <link rel="stylesheet" href="/stylesheets/examstudent.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
 </head>
 <body>
@@ -44,8 +45,28 @@
            </form>
         </div>
       <div class="col-md-6">
-
+        <h5>Share the given accesscode</h5>
+        <div id="copy">
+           <%=access%> <i class="far fa-copy"></i>
+        </div>
     </div>
+  </div>
+  <h2>Students</h2>
+  <div class="container mx-5 px-3">
+    <div class="row">
+      Roll Numbers
+    </div>
+    <% for(var i=0;i<=students.length-1;i++){ %>
+      <div class="row">
+        <div class="col-md-6">
+          <%=i+1%>
+        </div>
+        <div class="colmd-6">
+          <%=students[i]%>
+        </div>
+      </div>
+      <hr>
+   <%  }%>
   </div>
 </div>
 
@@ -62,5 +83,5 @@
 
 
 
-
+<script src="https://kit.fontawesome.com/30ef029f33.js" crossorigin="anonymous"></script>
 <%- include("./partials/tefooter.ejs") %>

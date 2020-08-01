@@ -14,8 +14,10 @@
 *staged is the area where the exam created is still there on staged! once they click on the exam, edit form appears(teachers can edit the exam anytime in this staged area!)
  once modifications and reviewed! a button is present in the staged window, tick box for review and then submit!
  *Exam removed from staged area and now visible in ongoing!
+/////////////////////////////////apple
 
  *start the exams tab !
+ * add copy on select to the access code
  *can click the exam on ongoing for receiving the responses(but this page might use socket!for real time submissions and graphs and all!)
  *once exam done, it is present in the completed window there socket not required! as no further submissions!
 
