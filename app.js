@@ -76,6 +76,7 @@ app.get("/te/exam/staged",(req,res)=>{
   Exam.find({status:"staged",teacherid:req.user._id},(error,exams)=>{
     if(error) console.log(error);
     else{
+      console.log(exams);
       res.render("staged",{exams:exams});
     }
   })
@@ -86,6 +87,7 @@ app.get("/te/exam/ready",(req,res)=>{
   Exam.find({status:"ready",teacherid:req.user._id},(error,exams)=>{
     if(error) console.log(error);
     else{
+      
       //once studets schema gets updated ! then even pass the names!
       res.render("examready",{exams:exams});
     }
