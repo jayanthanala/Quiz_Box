@@ -7,9 +7,15 @@
 ****setting up the exam form!*****=>styling also simultaneously or this form
 *post route handling for the form
 *add tool bar for dashborad, with ongoing,completed,staged,sheduled(leave the functionality of this for now!)
+
+
+* completing the post route of /ecam/staged and /exam/edit also!
+
 *staged is the area where the exam created is still there on staged! once they click on the exam, edit form appears(teachers can edit the exam anytime in this staged area!)
  once modifications and reviewed! a button is present in the staged window, tick box for review and then submit!
  *Exam removed from staged area and now visible in ongoing!
+
+ *start the exams tab !
  *can click the exam on ongoing for receiving the responses(but this page might use socket!for real time submissions and graphs and all!)
  *once exam done, it is present in the completed window there socket not required! as no further submissions!
 

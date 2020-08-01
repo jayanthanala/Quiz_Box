@@ -6,7 +6,8 @@ const examSchema = new mongoose.Schema({
   status:String,
   title:String,
   marks:Number,
-  noquestions:Number
+  noquestions:Number,
+  students:[]
 });
 
 module.exports = mongoose.model("Exam",examSchema);
