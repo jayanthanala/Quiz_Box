@@ -1,3 +1,14 @@
+//still the student schema must be changed and try to add a roll number in it and try to fetch the students using roll number only!!!
+
+
+
+
+
+
+
+
+
+
 *schema for both teacher and student --
 *authentication and auth routes for student and teacher  --
 *schema for exam,response,question
@@ -14,7 +25,12 @@
 *staged is the area where the exam created is still there on staged! once they click on the exam, edit form appears(teachers can edit the exam anytime in this staged area!)
  once modifications and reviewed! a button is present in the staged window, tick box for review and then submit!
  *Exam removed from staged area and now visible in ongoing!
-/////////////////////////////////apple
+/////////////////////////////////
+*excel file , random excel files must also be used! so just check all the attributes and then take the roll numbers
+
+///////////////////
+date-time local doesn't work in mozilla
+/////////////////
 
  *start the exams tab !
  * add copy on select to the access code

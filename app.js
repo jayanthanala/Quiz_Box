@@ -7,6 +7,8 @@ const session = require('express-session');
 const passport = require('passport');
 const passportLocalMongoose = require('passport-local-mongoose');
 const excel = require("read-excel-file/node");
+const fs = require("fs");
+const axios = require("axios");
 const Teacher = require("./models/teacher.js");
 const Student = require("./models/student.js");
 const Exam = require("./models/exam.js");
@@ -221,6 +223,8 @@ app.post("/te/exam/new",(req,res)=>{
   })
 });
 
+//date-time local doesn't work in mozilla
+
 
 //posting from the staged area setting the studentid's
 app.post("/te/exam/:id/staged",upload.single("excel"),(req,res)=>{
@@ -231,21 +235,37 @@ app.post("/te/exam/:id/staged",upload.single("excel"),(req,res)=>{
 
       var students  = await new Promise((resolve,reject)=>{
         var s=[];
-        for(var i=0;i<=rows.length-2;i++){
+        var i=0;
+        console.log(rows);
+        //condition for checking roll number
+        i=rows[0].indexOf("rollno");
+        console.log(i);
+        for(var i;i<=rows.length-2;i++){
           s[i]=rows[i+1][0];
         }
+        console.log(file.destination+"/"+file.filename);
+        fs.unlink(req.file.destination + "/" + req.file.filename,(e)=>{
+          if(e) console.log(e);
+        })
         resolve(s);
+
       });
 
       Exam.findById(id,(error,exam)=>{
       if(error) console.log(error);
       else{
+          var array = req.body.scheduled.date.split("-");
+          var time = req.body.scheduled.time.split(":");
+          var date = new Date(Number(array[0]),Number(array[1])-1,Number(array[2]),Number(time[0]),Number(time[1]));
+          console.log(date);
+          exam.date=date;
           exam.status="ready";
           exam.students=students;
           exam.save((e,s)=>{
             if(e) console.log(e);
             else{
               console.log(s);
+              addExam(s);
               res.redirect("/te/exam/ready")
             }
           })
@@ -278,6 +298,30 @@ app.post("/te/exam/:id/students",(req,res)=>{
     }
   })
 });
+
+//still the student schema must be changed and try to add a roll number in it and try to fetch the students using roll number only!!!
+app.post("/te/exam/:id/start",(req,res)=>{
+  id=req.params.id;
+  Exam.findById(id,(error,exam)=>{
+    exam.students.forEach((s)=>{
+        Student.findOne({username:s},(er,s)=>{
+          if(er) console.log(er);
+          else {
+            s.examid.push(id);
+            console.log(s);
+          }
+        });
+    });
+    exam.status="started";
+    exam.save((e,exa)=>{
+      if(e) console.log(e);
+      else {
+        console.log(exa);
+        res.send("success");
+      }
+    });
+  });
+})
 
 
 
@@ -316,6 +360,40 @@ app.post("/st/login",(req,res)=>{
 
 
 
+///////////////////automated routes////////////////////////////////////
+
+
+Exam.find({},(error,exam)=>{
+  if(error) console.log(error);
+  else{
+    exam.forEach((e)=>{
+      addExam(e);
+    })
+  }
+});
+
+exams = [];
+var stop;
+function run(){
+  stop=setInterval(()=>{
+    for(var i=0;i<=exams.length-1;i++){
+      obj = new Date();
+      console.log("/////////",exams[i].date.getTime(),obj.getTime(),exams[i].date,obj,"///////////");
+      console.log(exams[i].date.getTime()<=obj.getTime() && (exams[i].date.getDate()<=obj.getDate() && exams[i].date.getMonth()<=obj.getMonth() && exams[i].date.getYear()<=obj.getYear()));
+      if(exams[i].date.getTime()<=obj.getTime()&& (exams[i].date.getDate()<=obj.getDate() && exams[i].date.getMonth()<=obj.getMonth() && exams[i].date.getYear()<=obj.getYear())){
+        var a= axios.post("http://localhost:3000/te/exam/"+exams[i]._id+"/start");
+      }
+    }
+  },1000);
+}
+
+function addExam(exam){
+  clearInterval(stop);
+  if(exam.date)   exams.push(exam);
+  console.log(exams);
+  run();
+
+}
 
 
 
