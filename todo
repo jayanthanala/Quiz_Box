@@ -1,3 +1,14 @@
+//still the student schema must be changed and try to add a roll number in it and try to fetch the students using roll number only!!!
+
+
+
+
+
+
+
+
+
+
 *schema for both teacher and student --
 *authentication and auth routes for student and teacher  --
 *schema for exam,response,question

@@ -8,6 +8,7 @@ const passport = require('passport');
 const passportLocalMongoose = require('passport-local-mongoose');
 const excel = require("read-excel-file/node");
 const fs = require("fs");
+const axios = require("axios");
 const Teacher = require("./models/teacher.js");
 const Student = require("./models/student.js");
 const Exam = require("./models/exam.js");
@@ -298,6 +299,29 @@ app.post("/te/exam/:id/students",(req,res)=>{
   })
 });
 
+//still the student schema must be changed and try to add a roll number in it and try to fetch the students using roll number only!!!
+app.post("/te/exam/:id/start",(req,res)=>{
+  id=req.params.id;
+  Exam.findById(id,(error,exam)=>{
+    exam.students.forEach((s)=>{
+        Student.findOne({username:s},(er,s)=>{
+          if(er) console.log(er);
+          else {
+            s.examid.push(id);
+            console.log(s);
+          }
+        });
+    });
+    exam.status="started";
+    exam.save((e,exa)=>{
+      if(e) console.log(e);
+      else {
+        console.log(exa);
+        res.send("success");
+      }
+    });
+  });
+})
 
 
 
@@ -357,7 +381,7 @@ function run(){
       console.log("/////////",exams[i].date.getTime(),obj.getTime(),exams[i].date,obj,"///////////");
       console.log(exams[i].date.getTime()<=obj.getTime() && (exams[i].date.getDate()<=obj.getDate() && exams[i].date.getMonth()<=obj.getMonth() && exams[i].date.getYear()<=obj.getYear()));
       if(exams[i].date.getTime()<=obj.getTime()&& (exams[i].date.getDate()<=obj.getDate() && exams[i].date.getMonth()<=obj.getMonth() && exams[i].date.getYear()<=obj.getYear())){
-        console.log("exam will be posted");
+        var a= axios.post("http://localhost:3000/te/exam/"+exams[i]._id+"/start");
       }
     }
   },1000);
