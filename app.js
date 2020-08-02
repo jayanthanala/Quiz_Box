@@ -222,6 +222,8 @@ app.post("/te/exam/new",(req,res)=>{
   })
 });
 
+//date-time local doesn't work in mozilla
+
 
 //posting from the staged area setting the studentid's
 app.post("/te/exam/:id/staged",upload.single("excel"),(req,res)=>{
@@ -251,12 +253,18 @@ app.post("/te/exam/:id/staged",upload.single("excel"),(req,res)=>{
       Exam.findById(id,(error,exam)=>{
       if(error) console.log(error);
       else{
+          var array = req.body.scheduled.date.split("-");
+          var time = req.body.scheduled.time.split(":");
+          var date = new Date(Number(array[0]),Number(array[1])-1,Number(array[2]),Number(time[0]),Number(time[1]));
+          console.log(date);
+          exam.date=date;
           exam.status="ready";
           exam.students=students;
           exam.save((e,s)=>{
             if(e) console.log(e);
             else{
               console.log(s);
+              addExam(s);
               res.redirect("/te/exam/ready")
             }
           })
@@ -296,6 +304,7 @@ app.post("/te/exam/:id/students",(req,res)=>{
 
 
 
+
 ///////////////////////////////student routes//////////////
 
 app.post("/st/register",(req,res)=>{
@@ -327,6 +336,40 @@ app.post("/st/login",(req,res)=>{
 
 
 
+///////////////////automated routes////////////////////////////////////
+
+
+Exam.find({},(error,exam)=>{
+  if(error) console.log(error);
+  else{
+    exam.forEach((e)=>{
+      addExam(e);
+    })
+  }
+});
+
+exams = [];
+var stop;
+function run(){
+  stop=setInterval(()=>{
+    for(var i=0;i<=exams.length-1;i++){
+      obj = new Date();
+      console.log("/////////",exams[i].date.getTime(),obj.getTime(),exams[i].date,obj,"///////////");
+      console.log(exams[i].date.getTime()<=obj.getTime() && (exams[i].date.getDate()<=obj.getDate() && exams[i].date.getMonth()<=obj.getMonth() && exams[i].date.getYear()<=obj.getYear()));
+      if(exams[i].date.getTime()<=obj.getTime()&& (exams[i].date.getDate()<=obj.getDate() && exams[i].date.getMonth()<=obj.getMonth() && exams[i].date.getYear()<=obj.getYear())){
+        console.log("exam will be posted");
+      }
+    }
+  },1000);
+}
+
+function addExam(exam){
+  clearInterval(stop);
+  if(exam.date)   exams.push(exam);
+  console.log(exams);
+  run();
+
+}
 
 
 

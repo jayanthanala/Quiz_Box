@@ -7,6 +7,7 @@ const examSchema = new mongoose.Schema({
   title:String,
   marks:Number,
   noquestions:Number,
+  date:Date,
   students:[]
 });
 

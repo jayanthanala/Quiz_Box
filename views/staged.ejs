@@ -44,7 +44,18 @@
         </div>
         <div class="col-md-12">
             <form style="border:0px" action="<%=exams[i]._id%>/staged" method="post" enctype="multipart/form-data">
-            <input type="file" name="excel">
+            <div class="form-group">
+              <label for="file">Upload the Excel file:</label>
+              <input type="file" name="excel" id="file">
+            </div>
+            <div class="form-group">
+              <label for="date"> Date</label>
+              <input type="date" id="date" name="scheduled[date]" class="form-control">
+            </div>
+            <div class="form-group">
+              <label for="date">Time</label>
+              <input type="time" id="date" name="scheduled[time]" class="form-control">
+            </div>
             <button class="btn btn-outline-success">Submit</button>
           </form>
         </div>
