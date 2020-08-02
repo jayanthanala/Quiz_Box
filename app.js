@@ -7,6 +7,7 @@ const session = require('express-session');
 const passport = require('passport');
 const passportLocalMongoose = require('passport-local-mongoose');
 const excel = require("read-excel-file/node");
+const fs = require("fs");
 const Teacher = require("./models/teacher.js");
 const Student = require("./models/student.js");
 const Exam = require("./models/exam.js");
@@ -231,10 +232,20 @@ app.post("/te/exam/:id/staged",upload.single("excel"),(req,res)=>{
 
       var students  = await new Promise((resolve,reject)=>{
         var s=[];
-        for(var i=0;i<=rows.length-2;i++){
+        var i=0;
+        console.log(rows);
+        //condition for checking roll number
+        i=rows[0].indexOf("rollno");
+        console.log(i);
+        for(var i;i<=rows.length-2;i++){
           s[i]=rows[i+1][0];
         }
+        console.log(file.destination+"/"+file.filename);
+        fs.unlink(req.file.destination + "/" + req.file.filename,(e)=>{
+          if(e) console.log(e);
+        })
         resolve(s);
+
       });
 
       Exam.findById(id,(error,exam)=>{
