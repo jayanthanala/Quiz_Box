@@ -13,7 +13,7 @@
         <a class="nav-link" href="/te/index">Home</a>
       </li>
       <li class="nav-item active">
-        <a class="nav-link" href="/te/exam/upcoming">Exams<span class="sr-only">(current)</span></a>
+        <a class="nav-link" href="/te/exam/ready">Exams<span class="sr-only">(current)</span></a>
       </li>
       <li class="nav-item">
         <a class="nav-link" href="/te/exam/completed">Completed Exams</a>
@@ -29,23 +29,56 @@
   <div class="container px-5">
     <div class="container px-5">
       <% for(var i=0;i<=exams.length-1;i++){%>
-      <div class="row my-5 py-3 border">
-        <div class="col-md-12">
-          <h4 class="">Title: <%=exams[i].title%></h4>
+      <% if(exams[i].status=="started"){ %>
+        <div class="row my-5 py-3 border">
+          <div class="col-md-12">
+            <h4 class="">Title: <%=exams[i].title%></h4>
+          </div>
+          <div class="col-md-12">
+            <h6 class="">  Number of questions: <%=exams[i].noquestions%></h6>
+          </div>
+          <div class="col-md-12">
+            Total marks: <%=exams[i].marks%>
+          </div>
+          <div class="col-md-12 d-flex justify-content-around">
+              <a href="/te/exam/<%=exams[i]._id%>/students" class="btn btn-outline-primary">Students List</a>
+              <a href="/te/exam/<%=exams[i]._id%>/responses">View Incoming R</a>
+            </form>
+          </div>
         </div>
-        <div class="col-md-12">
-          <h6 class="">  Number of questions: <%=exams[i].noquestions%></h6>
-        </div>
-        <div class="col-md-12">
-          Total marks: <%=exams[i].marks%>
-        </div>
-        <div class="col-md-12 d-flex justify-content-around">
-            <a href="/te/exam/<%=exams[i]._id%>/students" class="btn btn-outline-primary">Students List</a>
-            <form style="border:0px" action="<%=exams[i]._id%>/ready" method="post">
-            <button class="btn btn-outline-success">Start</button>  <!-- after clicking start only the students should get examid = this exam id -->
-          </form>
-        </div>
-      </div>
+      <%}%>
+    <%}%>
+    </div>
+  </div>
+
+<%}%>
+
+
+<hr>
+
+<%if(exams[0]){%>
+  <div class="container px-5">
+    <div class="container px-5">
+      <% for(var i=0;i<=exams.length-1;i++){%>
+        <% if(exams[i].status=="ready"){ %>
+          <div class="row my-5 py-3 border">
+            <div class="col-md-12">
+              <h4 class="">Title: <%=exams[i].title%></h4>
+            </div>
+            <div class="col-md-12">
+              <h6 class="">  Number of questions: <%=exams[i].noquestions%></h6>
+            </div>
+            <div class="col-md-12">
+              Total marks: <%=exams[i].marks%>
+            </div>
+            <div class="col-md-12 d-flex justify-content-around">
+                <a href="/te/exam/<%=exams[i]._id%>/students" class="btn btn-outline-primary">Students List</a>
+                <form style="border:0px" action="<%=exams[i]._id%>/start" method="post">
+                <button class="btn btn-outline-success">Start</button>  <!-- after clicking start only the students should get examid = this exam id -->
+              </form>
+            </div>
+          </div>
+        <%}%>
     <%}%>
     </div>
   </div>
@@ -53,7 +86,6 @@
 <%}else{%>
   <h2>NO EXAMS WHICH ARE READY!!</h2>
 <%}%>
-
 
 
 <%- include("./partials/tefooter.ejs") %>
