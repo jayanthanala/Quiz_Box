@@ -9,6 +9,7 @@ const passportLocalMongoose = require('passport-local-mongoose');
 const excel = require("read-excel-file/node");
 const fs = require("fs");
 const axios = require("axios");
+const methodOverride = require("method-override");
 const Teacher = require("./models/teacher.js");
 const Student = require("./models/student.js");
 const Exam = require("./models/exam.js");
@@ -20,6 +21,7 @@ const upload = require("./multer.js");
 app.use(express.static(__dirname+'/public'));
 app.set('view engine','ejs');
 app.use(bodyParser.urlencoded({extended:true}));
+app.use(methodOverride("_method"));
 
 //setting up the passport package and express-session package
 app.use(session({
@@ -321,10 +323,54 @@ app.post("/te/exam/:id/start",(req,res)=>{
   //     }
   //   });
   // });
-})
+});
+
+app.post("/te/exam/:id/respones",(req,res)=>{
+  // Exam.findById(req.params.id,(error,exam)=>{
+  //   if(error) console.log(error);
+  //   else{
+  //    if(exam.students.indexOf(req.body.student)){
+  //        exam.students.push(req.body.student);
+  //        exam.save((e,s)=>{
+  //          if(e) console.log(e);
+  //          else{
+  //            console.log(s);
+  //            res.redirect("/te/exam/"+req.params.id+"/students");
+  //          }
+  //        })
+  //    }else{
+  //      //send a flash message saying it is already present!
+  //      res.redirect("/te/exam/"+req.params.id+"/students");
+  //    }
+  //
+  //   }
+  // })
+});
 
 
+/////////////////////////////////////////////////////delete routes
 
+app.delete("/te/exam/:id/students",(req,res)=>{
+  Exam.findById(req.params.id,(error,exam)=>{
+    if(error) console.log(error);
+    else{
+     if(exam.students.indexOf(req.body.student)){
+         exam.students.pop(req.body.student);
+         exam.save((e,s)=>{
+           if(e) console.log(e);
+           else{
+             console.log(s);
+             res.redirect("/te/exam/"+req.params.id+"/students");
+           }
+         })
+     }else{
+       //send a flash message saying it is already present!
+       res.redirect("/te/exam/"+req.params.id+"/students");
+     }
+
+    }
+  })
+});
 
 
 
