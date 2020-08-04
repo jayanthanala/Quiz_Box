@@ -42,7 +42,7 @@
           </div>
           <div class="col-md-12 d-flex justify-content-around">
               <a href="/te/exam/<%=exams[i]._id%>/students" class="btn btn-outline-primary">Students List</a>
-              <a href="/te/exam/<%=exams[i]._id%>/responses">View Incoming Responses</a>
+              <a href="/te/exam/<%=exams[i]._id%>/responses">View Incoming R</a>
             </form>
           </div>
         </div>
@@ -51,8 +51,6 @@
     </div>
   </div>
 
-<%}else{%>
-  <h2>No Exam is running !!!</h2>
 <%}%>
 
 
@@ -88,7 +86,6 @@
 <%}else{%>
   <h2>NO EXAMS WHICH ARE READY!!</h2>
 <%}%>
-
 
 
 <%- include("./partials/tefooter.ejs") %>

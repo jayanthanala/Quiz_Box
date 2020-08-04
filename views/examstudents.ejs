@@ -46,8 +46,8 @@
         </div>
       <div class="col-md-6">
         <h5>Share the given accesscode</h5>
-        <div id="copy">
-           <%=access%> <i class="far fa-copy"></i>
+        <div >
+           <input type="text"  value="<%=access%>" id="copy"> <span id="share"><i class="far fa-copy"></span></i>
         </div>
     </div>
   </div>
@@ -96,5 +96,9 @@
 
 
 
+
+<script src="/scripts/examstudents.js">
+
+</script>
 <script src="https://kit.fontawesome.com/30ef029f33.js" crossorigin="anonymous"></script>
 <%- include("./partials/tefooter.ejs") %>
