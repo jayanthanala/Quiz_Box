@@ -13,7 +13,7 @@
         <a class="nav-link" href="/te/index">Home</a>
       </li>
       <li class="nav-item active">
-        <a class="nav-link" href="/te/exam/upcoming">Exams<span class="sr-only">(current)</span></a>
+        <a class="nav-link" href="/te/exam/ready">Exams<span class="sr-only">(current)</span></a>
       </li>
       <li class="nav-item">
         <a class="nav-link" href="/te/exam/completed">Completed Exams</a>
@@ -41,7 +41,7 @@
         </div>
         <div class="col-md-12 d-flex justify-content-around">
             <a href="/te/exam/<%=exams[i]._id%>/students" class="btn btn-outline-primary">Students List</a>
-            <form style="border:0px" action="<%=exams[i]._id%>/ready" method="post">
+            <form style="border:0px" action="<%=exams[i]._id%>/start" method="post">
             <button class="btn btn-outline-success">Start</button>  <!-- after clicking start only the students should get examid = this exam id -->
           </form>
         </div>
