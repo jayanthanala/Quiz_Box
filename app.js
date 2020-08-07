@@ -72,7 +72,7 @@ app.get("/te/index",authenticated,(req,res)=>{
   res.render("teindex");
 })
 
-app.get("/te/exam/new",authenticated,(req,res)=>{
+app.get("/te/exam/new",(req,res)=>{
   res.render("newexam");
 });
 

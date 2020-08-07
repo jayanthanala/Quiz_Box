@@ -38,7 +38,7 @@ function createQuestion(n){
    var optionNo = document.createElement("input");
    optionNo.setAttribute("type","number");
    optionNo.setAttribute("min","1");
-   optionNo.classList.add("validate");
+   optionNo.classList.add("optionno","validate");
    optionNo.id="optionNo"+(n-1);
 
    var optionNoLabel = document.createElement("label");
@@ -172,4 +172,43 @@ $("#cf").on("click",".minus",(e)=>{
 
   }
 
+});
+
+
+function createOption(n,n2){
+  var div = document.createElement("div");
+  div.classList.add("input-field","col","s6");
+  input=document.createElement("input");
+  input.setAttribute("type","text");
+  input.setAttribute("name","options["+n2+"]["+n+"]");
+  input.id="o"+(n+1);
+  var label = document.createElement("label");
+  label.setAttribute("for","o"+(n+1));
+  label.textContent=(n+1);
+  div.appendChild(input);
+  div.appendChild(label);
+  return div;
+}
+
+function appendOptions(n,n2,options){
+  if(n!=4){
+    options.empty();
+    console.log(options);
+    for(var i=0;i<=n-1;i++){
+      options.append(createOption(i,n2));
+    }
+  }
+}
+
+
+$("#cf").on("change",".optionno",(e)=>{
+console.log("hello");
+ var o=$(e.target);
+ var number = o.val();
+ var string= o.attr("id");
+ console.log(number,string);
+ var number2=Number(string.substr(8));
+ var object=o.parent().parent().next().next();
+
+ appendOptions(number,number2,object);
 })
