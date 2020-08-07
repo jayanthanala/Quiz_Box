@@ -37,7 +37,7 @@ function createQuestion(n){
 
    var optionNo = document.createElement("input");
    optionNo.setAttribute("type","number");
-   optionNo.setAttribute("min","1");
+   optionNo.setAttribute("min","2");
    optionNo.classList.add("optionno","validate");
    optionNo.id="optionNo"+(n-1);
 
@@ -72,7 +72,7 @@ function createQuestion(n){
 
 //creating options and nesting them inside rowOptions
    var rowOptions = document.createElement("div");
-   rowOptions.classList.add("row","options");
+   rowOptions.classList.add("options","col","s12");
   for(var i=1;i<=4;i++){
     let inputF = document.createElement("div");
     inputF.classList.add("input-field", "col", "s6");
@@ -191,13 +191,12 @@ function createOption(n,n2){
 }
 
 function appendOptions(n,n2,options){
-  if(n!=4){
     options.empty();
     console.log(options);
     for(var i=0;i<=n-1;i++){
       options.append(createOption(i,n2));
     }
-  }
+
 }
 
 
