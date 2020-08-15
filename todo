@@ -45,10 +45,32 @@ date-time local doesn't work in mozilla
 or else just don't give an option to change the title.
 
 
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+add duration,closetime
+marks and question numbers change
+including socket.io for even the exams tab
+//automatic reload of the teacher pages once the exam is started! to change it to show the responses button!
+//page of student consisting of exams should also automatically reload once the exam closing time is crosses!!!!
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
 *****how to handle a hell lot of number of users at a time ? *******************************
+
 
 
 
