@@ -8,7 +8,10 @@ const examSchema = new mongoose.Schema({
   marks:Number,
   noquestions:Number,
   date:Date,
-  students:[]
+  students:[],
+  duration:String,
+  closetime:Date
+
 });
 
 module.exports = mongoose.model("Exam",examSchema);

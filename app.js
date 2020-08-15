@@ -9,6 +9,7 @@ const passportLocalMongoose = require('passport-local-mongoose');
 const excel = require("read-excel-file/node");
 const fs = require("fs");
 const axios = require("axios");
+const socket = require("socket.io");
 const methodOverride = require("method-override");
 const Teacher = require("./models/teacher.js");
 const Student = require("./models/student.js");
@@ -88,7 +89,7 @@ app.get("/te/exam/staged",(req,res)=>{
 });
 
 app.get("/te/exam/ready",(req,res)=>{
-  Exam.find({status:"ready",teacherid:req.user._id},(error,exams)=>{
+  Exam.find({teacherid:req.user._id},(error,exams)=>{
     if(error) console.log(error);
     else{
 
@@ -302,28 +303,29 @@ app.post("/te/exam/:id/students",(req,res)=>{
 });
 
 //still the student schema must be changed and try to add a roll number in it and try to fetch the students using roll number only!!!
-app.post("/te/exam/:id/start",(req,res)=>{
-  // id=req.params.id;
-  // Exam.findById(id,(error,exam)=>{
-  //   exam.students.forEach((s)=>{
-  //       Student.findOne({username:s},(er,s)=>{
-  //         if(er) console.log(er);
-  //         else {
-  //           s.examid.push(id);
-  //           console.log(s);
-  //         }
-  //       });
-  //   });
-  //   exam.status="started";
-  //   exam.save((e,exa)=>{
-  //     if(e) console.log(e);
-  //     else {
-  //       console.log(exa);
-  //       res.send("success");
-  //     }
-  //   });
-  // });
-});
+// app.post("/te/exam/:id/start",(req,res)=>{
+//
+//   // id=req.params.id;
+//   // Exam.findById(id,(error,exam)=>{
+//   //   exam.students.forEach((s)=>{
+//   //       Student.findOne({username:s},(er,s)=>{
+//   //         if(er) console.log(er);
+//   //         else {
+//   //           s.examid.push(id);
+//   //           console.log(s);
+//   //         }
+//   //       });
+//   //   });
+//   //   exam.status="started";
+//   //   exam.save((e,exa)=>{
+//   //     if(e) console.log(e);
+//   //     else {
+//   //       console.log(exa);
+//   //       res.send("success");
+//   //     }
+//   //   });
+//   // });
+// });
 
 app.post("/te/exam/:id/respones",(req,res)=>{
   // Exam.findById(req.params.id,(error,exam)=>{
@@ -418,6 +420,7 @@ Exam.find({},(error,exam)=>{
   }
 });
 
+examsrunning = [];
 exams = [];
 var stop;
 function run(){
@@ -427,15 +430,37 @@ function run(){
       console.log("/////////",exams[i].date.getTime(),obj.getTime(),exams[i].date,obj,"///////////");
       console.log(exams[i].date.getTime()<=obj.getTime() && (exams[i].date.getDate()<=obj.getDate() && exams[i].date.getMonth()<=obj.getMonth() && exams[i].date.getYear()<=obj.getYear()));
       if(exams[i].date.getTime()<=obj.getTime()&& (exams[i].date.getDate()<=obj.getDate() && exams[i].date.getMonth()<=obj.getMonth() && exams[i].date.getYear()<=obj.getYear())){
-        var a= axios.post("http://localhost:3000/te/exam/"+exams[i]._id+"/start");
-        exams.splice(i,1);
+        start(exams[i]._id);
+        examStarted(exams.splice(i,1));
       }
     }
+    if(exams.length==0) clearInterval(stop);
   },1000);
 }
 
+function start(id){
+  Exam.findById(id,(error,exam)=>{
+      exam.status="started";
+      exam.save((e,exa)=>{
+        if(e) console.log(e);
+        else {
+          console.log("success");
+      }
+  });
+});
+}
+
+
+// function run2(){
+//
+// }
+
+function examStarted(exam){
+  examsrunning.push(exam);
+}
+
 function addExam(exam){
-  clearInterval(stop);
+  // clearInterval(stop);
   if(exam.date)   exams.push(exam);
   console.log(exams);
   run();
@@ -456,6 +481,12 @@ function authenticated(req,res,next){
     }
 }
 
-app.listen(3000,() => {
+server = app.listen(3000,() => {
   console.log("Server is up on port 3000");
-})
+});
+
+const io = socket(server);
+//
+// io.on("connection",(socket)=>{
+//    socket.emit("refresh")
+// })

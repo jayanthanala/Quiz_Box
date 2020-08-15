@@ -1,5 +1,6 @@
 
 <%- include("./partials/teheader.ejs") %>
+<meta http-equiv="refresh" content="30">
 </head>
 <body>
   <nav class="navbar navbar-expand-lg navbar-light bg-light">
@@ -30,6 +31,7 @@
     <div class="container px-5">
       <% for(var i=0;i<=exams.length-1;i++){%>
       <% if(exams[i].status=="started"){ %>
+        <%console.log("started");%>
         <div class="row my-5 py-3 border">
           <div class="col-md-12">
             <h4 class="">Title: <%=exams[i].title%></h4>
@@ -42,8 +44,7 @@
           </div>
           <div class="col-md-12 d-flex justify-content-around">
               <a href="/te/exam/<%=exams[i]._id%>/students" class="btn btn-outline-primary">Students List</a>
-              <a href="/te/exam/<%=exams[i]._id%>/responses">View Incoming R</a>
-            </form>
+              <a href="/te/exam/<%=exams[i]._id%>/responses">View Incoming Responses</a>
           </div>
         </div>
       <%}%>
@@ -88,4 +89,7 @@
 <%}%>
 
 
+<script src="/scripts/examready.js">
+
+</script>
 <%- include("./partials/tefooter.ejs") %>
