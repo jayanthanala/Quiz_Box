@@ -47,12 +47,12 @@ or else just don't give an option to change the title.
 
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-add duration,closetime
-marks and question numbers change
-Dont use socket for reloading the page! ***meta tage oof http-equiv="" 
-//automatic reload of the teacher pages once the exam is started! to change it to show the responses button!
-//page of student consisting of exams should also automatically reload once the exam closing time is crosses!!!!
-
+*****bad idea to have a slot in which at any time studetns can give the test in that slot! think about a good idea (so remove the code which we did for this functionality)!
+1)add the exam id's to the students when the exam is submitted from the staged area! && add the exam id's to the students when the students are added seperately from exams tab && when from student side access code is entered!
+****using these exam id's ------show the exam to the students under upcoming dashboard and few details but don't show the start button(even in that page keep the content refresh for every 5s)
+    but when exam status is set to ready from the backend then after refresh exam must come under the ongoing tab! (duration+10s for instaructions page reading!if user enters late give him a grace time of 5s if he is late by more than 5s then start reducing the duration)
+##### how to resolve the issue of student entering the exam late???????
+**********complete the edit exam************************
 
 
 

@@ -441,6 +441,7 @@ function run(){
 function start(id){
   Exam.findById(id,(error,exam)=>{
       exam.status="started";
+      //code left
       exam.save((e,exa)=>{
         if(e) console.log(e);
         else {
