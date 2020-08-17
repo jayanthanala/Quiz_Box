@@ -47,12 +47,25 @@ or else just don't give an option to change the title.
 
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+NOT DONE YET (REQUIRES STUDETNT SIDE UPDATION)
 *****bad idea to have a slot in which at any time studetns can give the test in that slot! think about a good idea (so remove the code which we did for this functionality)!
 1)add the exam id's to the students when the exam is submitted from the staged area! && add the exam id's to the students when the students are added seperately from exams tab && when from student side access code is entered!
 ****using these exam id's ------show the exam to the students under upcoming dashboard and few details but don't show the start button(even in that page keep the content refresh for every 5s)
     but when exam status is set to ready from the backend then after refresh exam must come under the ongoing tab! (duration+10s for instaructions page reading!if user enters late give him a grace time of 5s if he is late by more than 5s then start reducing the duration)
-##### how to resolve the issue of student entering the exam late???????
+##### how to resolve the issue of student entering the exam late??????? ------Teacher will give an input for last time for exam to be started! (5 mins or 3 mins ..) after that user if clicks start also can't proceed to the exam (middle ware of the route check the system time and the time already spent and the given time limit from the teacher)
 **********complete the edit exam************************
+
+
+
+///////////////////////////////////////////////////////////////////////////////
+1)setup socket on both server and view responses webpage
+2)set time interval for that webpage (go on sendign message which includes the exam id!) ---- collect it on the server, check the exam whether status completed or still started
+3)send the responses of this exam id and even the questions of this exam id.
+4)in the web page maintain an array,push all the responses to it for the first time. and then on wards keep on checking the length of this array and the received array and if both different then add the remaining responses tot eh array and even update on the page.
+
+
+
+
 
 
 
