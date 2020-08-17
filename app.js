@@ -263,6 +263,7 @@ app.post("/te/exam/:id/staged",upload.single("excel"),(req,res)=>{
           console.log(date);
           exam.date=date;
           exam.status="ready";
+          exam.duration=req.body.scheduled.duration;
           exam.students=students;
           exam.save((e,s)=>{
             if(e) console.log(e);
@@ -411,7 +412,7 @@ app.post("/st/login",(req,res)=>{
 ///////////////////automated routes////////////////////////////////////
 
 
-Exam.find({},(error,exam)=>{
+Exam.find({status:"ready"},(error,exam)=>{
   if(error) console.log(error);
   else{
     exam.forEach((e)=>{
@@ -419,10 +420,17 @@ Exam.find({},(error,exam)=>{
     })
   }
 });
-
+Exam.find({status:"started"},(error,exam)=>{
+  if(error) console.log(error);
+  else{
+    exam.forEach((e)=>{
+      examStarted(e);
+    })
+  }
+});
 examsrunning = [];
 exams = [];
-var stop;
+var stop,stop2;
 function run(){
   stop=setInterval(()=>{
     for(var i=0;i<=exams.length-1;i++){
@@ -450,18 +458,54 @@ function start(id){
   });
 });
 }
+function completed(id){
+  Exam.findById(id,(error,exam)=>{
+      exam.status="completed";
+      //code left
+      exam.save((e,exa)=>{
+        if(e) console.log(e);
+        else {
+          console.log("success");
+      }
+  });
+});
+}
 
 
 // function run2(){
 //
 // }
 
+console.log(examsrunning);
+//add a functionality such that when the duration of the test stops
+function checkDuration(){
+  console.log(examsrunning[0]);
+  stop2=setInterval(()=>{
+    for(var i=0;i<=examsrunning.length-1;i++){
+      obj = new Date();
+
+      var mins = Number(examsrunning[i].duration)*60*1000;
+      console.log(examsrunning[i].date.getTime()+"//////");
+      console.log("*********",examsrunning[i].date.getTime()+mins,obj.getTime(),examsrunning[i].date,obj,"*********");
+      console.log((examsrunning[i].date.getTime()+mins)<=obj.getTime() && (examsrunning[i].date.getDate()<=obj.getDate() && examsrunning[i].date.getMonth()<=obj.getMonth() && examsrunning[i].date.getYear()<=obj.getYear()));
+      if((examsrunning[i].date.getTime()+mins)<=obj.getTime()&& (examsrunning[i].date.getDate()<=obj.getDate() && examsrunning[i].date.getMonth()<=obj.getMonth() && examsrunning[i].date.getYear()<=obj.getYear())){
+        completed(examsrunning[i]._id);
+        examsrunning.splice(i,1);
+      }
+    }
+},1000);
+};
+
+
 function examStarted(exam){
-  examsrunning.push(exam);
+  clearInterval(stop2);
+  // console.log(exam[0]);
+  examsrunning.push(exam[0]);
+  checkDuration();
 }
 
 function addExam(exam){
-  // clearInterval(stop);
+  clearInterval(stop);
   if(exam.date)   exams.push(exam);
   console.log(exams);
   run();
