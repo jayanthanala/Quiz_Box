@@ -37,15 +37,18 @@ app.use(passport.session());
 mongoose.connect("mongodb://localhost/QuizDB",{useNewUrlParser:true,useUnifiedTopology: true});
 mongoose.set("useCreateIndex",true);
 
+//passportforstudent
+passport.use("studentLocal",Student.createStrategy());
+passport.serializeUser(Student.serializeUser());
+passport.deserializeUser(Student.deserializeUser());
+
 //passportforteacher
 passport.use("teacherLocal",Teacher.createStrategy());
 passport.serializeUser(Teacher.serializeUser());
 passport.deserializeUser(Teacher.deserializeUser());
 
-//passportforstudent
-passport.use("studentLocal",Student.createStrategy());
-passport.serializeUser(Student.serializeUser());
-passport.deserializeUser(Student.deserializeUser());
+
+
 
 
 
@@ -54,7 +57,7 @@ app.get("/",(req,res)=>{
   res.render("landing");
 });
 
-///////////////////////////////////////////teacher routes//////////////////////////////////
+/////////////////////////////////////////////////////  Teacher ROUTES  //////////////////////////////////
 
 app.get("/te/register",(req,res)=>{
   res.render("teregister")
@@ -132,7 +135,7 @@ app.get("/te/exam/:id/edit",(req,res)=>{
 })*/
 
 
-///////////////////////////////student routes////////////////////////////////
+/////////////////////////////// Student Routes ////////////////////////////////
 
 app.get("/st/register",(req,res)=>{
   res.render("stregister")
@@ -145,13 +148,17 @@ app.get("/st/login",(req,res)=>{
 app.get("/st/logout",(req,res)=>{
   req.logout();
   res.redirect("/");
-})
+});
+
+app.get("/st/index",(req,res)=>{
+  res.render("stindex",{req:req});
+});
 
 
 
 ////////////////////////////////////////////////////////////////////   POSTS    //////////////////////////////////////////////////////////////
 
-///////////////////////////////////////////teacher routes/////////
+/////////////////////////////////////////// Teacher Routes //////////////////////
 
 app.post("/te/register",(req,res)=>{
   Teacher.register({username:req.body.username},req.body.password,(error,sol)=>{
@@ -381,11 +388,16 @@ app.delete("/te/exam/:id/students",(req,res)=>{
 ///////////////////////////////student routes//////////////
 
 app.post("/st/register",(req,res)=>{
-  Student.register({username:req.body.username},req.body.password,(error,sol)=>{
+  var student = {
+    username:req.body.username,
+    name:req.body.name,
+    email:req.body.email,
+  }
+  Student.register(student,req.body.password,(error,sol)=>{
     if(error) console.log(error);
     else{
       passport.authenticate("studentLocal")(req,res,()=>{
-        res.send("<h1>UNLOCKED FOR STUDENT</h1>");
+        res.redirect("/st/index");
       });
     }
   });
@@ -400,8 +412,8 @@ app.post("/st/login",(req,res)=>{
     if(error) console.log(error);
     else{
       passport.authenticate("studentLocal")(req,res,()=>{
-          res.send("<h1>UNLOCKED FOR STUDENT through login</h1>");
-      })
+          res.redirect("/st/index");
+      });
     }
   })
 
@@ -519,11 +531,30 @@ function addExam(exam){
 
 function authenticated(req,res,next){
   if(req.isAuthenticated()) {
-    next();
+    Teacher.find({username:req.body.username},(err,sol) => {
+      if(err){console.log(err);}
+      else{
+        next();
+      }
+    });
   }
-  else {
+  else{
     res.redirect('/');
-    }
+  }
+}
+
+function stauth(req,res,next){
+  if(req.isAuthenticated()) {
+    Student.find({username:req.body.username},(err,sol) => {
+      if(err){console.log(err);}
+      else{
+        next();
+      }
+    });
+  }
+  else{
+    res.redirect('/');
+  }
 }
 
 server = app.listen(3000,() => {
