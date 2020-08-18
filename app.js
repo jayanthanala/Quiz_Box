@@ -223,7 +223,7 @@ app.post("/te/register",(req,res)=>{
     else{
       console.log(sol);
 
-      passport.authenticate("teacherLocal")(req,res,()=>{
+      passport.authenticate("local")(req,res,()=>{
         res.redirect("/te/index");
       });
     }
