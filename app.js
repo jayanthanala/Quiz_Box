@@ -405,28 +405,43 @@ app.post("/te/exam/:id/respones",authenticatedTeacher,(req,res)=>{
 
 /////////////////////////////////////////////////////delete routes
 
-app.delete("/te/exam/:id/students",(req,res)=>{
-  Exam.findById(req.params.id,(error,exam)=>{
-    if(error) console.log(error);
-    else{
-      console.log(exam.students.indexOf(req.body.student));
-     if(exam.students.indexOf(req.body.student)){
-         exam.students.pop(req.body.student);
-         exam.save((e,s)=>{
-           if(e) console.log(e);
-           else{
-             console.log(s);
-             res.redirect("/te/exam/"+req.params.id+"/students");
-           }
-         })
-     }else{
-       //send a flash message saying it is already present!
-       res.redirect("/te/exam/"+req.params.id+"/students");
-     }
+// app.delete("/te/exam/:id/students",(req,res)=>{
+//   Exam.findById(req.params.id,(error,exam)=>{
+//     if(error) console.log(error);
+//     else{
+//       console.log(exam.students.indexOf(req.body.student));
+//      if(exam.students.indexOf(req.body.student)){
+//          exam.students.pop(req.body.student);
+//          exam.save((e,s)=>{
+//            if(e) console.log(e);
+//            else{
+//              console.log(s);
+//              res.redirect("/te/exam/"+req.params.id+"/students");
+//            }
+//          })
+//      }else{
+//        //send a flash message saying it is already present!
+//        res.redirect("/te/exam/"+req.params.id+"/students");
+//      }
+//
+//     }
+//   })
+// });
 
+app.delete("/te/exam/:id/students",(req,res) => {
+  Exam.findById(req.params.id,(err,exams) => {
+    if(err){console.log(err);}
+    else{
+      Exam.findOneAndUpdate({access:exams.access},{$pull:{students:req.body.student}},(err) => {
+        if(err){console.log(err);}
+        else{
+          res.redirect("/te/exam/"+req.params.id+"/students");
+        }
+      });
     }
-  })
+  });
 });
+
 
 
 /////////////////////////////////////////////patch routes
@@ -553,8 +568,10 @@ function checkDuration(){
 function examStarted(exam){
   clearInterval(stop2);
   // console.log(exam[0]);
-  examsrunning.push(exam[0]);
-  checkDuration();
+  if(exam[0]){
+    examsrunning.push(exam[0]);
+    checkDuration();
+  }
 }
 
 function addExam(exam){
