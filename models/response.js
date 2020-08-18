@@ -1,7 +1,12 @@
 const mongoose = require("mongoose");
 
 const responseSchema = new mongoose.Schema({
-  answers:[],
+  answers:[
+    {
+      id:String,
+      marked:Number
+    }
+  ],
   marks:Number,
   userid:String,
   examid:String
