@@ -66,7 +66,8 @@ handle the error caused due to no file upload from staged page.
 
 
 
-
+**************
+fix the error of duration of undefined line 588 ! comes after restarting server.....
 
 
 
@@ -91,6 +92,7 @@ handle the error caused due to no file upload from staged page.
 
 
 
+////////////////role=1 ----teachers
 
 
 <%- include("./partials/tefooter.ejs") %>
