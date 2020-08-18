@@ -55,7 +55,8 @@ NOT DONE YET (REQUIRES STUDETNT SIDE UPDATION)
 ##### how to resolve the issue of student entering the exam late??????? ------Teacher will give an input for last time for exam to be started! (5 mins or 3 mins ..) after that user if clicks start also can't proceed to the exam (middle ware of the route check the system time and the time already spent and the given time limit from the teacher)
 **********complete the edit exam************************
 
-
+///////////////
+handle the error caused due to no file upload from staged page.
 
 ///////////////////////////////////////////////////////////////////////////////
 1)setup socket on both server and view responses webpage

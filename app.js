@@ -382,7 +382,17 @@ app.delete("/te/exam/:id/students",(req,res)=>{
 });
 
 
-
+/////////////////////////////////////////////patch routes
+app.patch("/te/exam/:id/start",(req,res)=>{
+Exam.findById(req.params.id,(e,exam)=>{
+  if(e) console.log(e);
+  else{
+    start(exam._id);
+    examStarted(exams.pop(exam));
+    res.redirect("/te/exam/ready");
+  }
+})
+})
 
 ///////////////////////////////student routes//////////////
 
