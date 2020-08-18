@@ -175,7 +175,7 @@ app.get("/st/exams",(req,res)=>{
     if(error) console.log(error);
     else{
       console.log(exams);
-      res.send("All Exams will appear here!")
+      res.send("All Exams will appear here!");
     }
   })
 });
