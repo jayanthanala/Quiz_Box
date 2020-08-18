@@ -1,0 +1,47 @@
+<%- include("./partials/teheader.ejs") %>
+</head>
+
+<body>
+  <nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <a class="navbar-brand" href="/">QUIRKY</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNav">
+      <ul class="navbar-nav">
+        <li class="nav-item active">
+          <a class="nav-link" href="/st/index">Home<span class="sr-only">(current)</span></a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="/st/exams">Exams</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="/st/exam/completed">Completed Exams</a>
+        </li>
+
+        <div class="form-inline my-2 my-lg-0">
+          <script type="text/javascript">
+            function goToPage() {
+              var page = document.getElementById('page').value;
+              window.location = "/st/exam/" + page;
+            }
+          </script>
+          <input class="form-control mr-sm-2" type="text" placeholder="Search" id="page" name="examid" aria-label="Search">
+          <button class="btn btn-outline-success my-2 my-sm-0" type="submit" value="submit" onclick="goToPage();">Search</button>
+        </div>
+      </ul>
+    </div>
+  </nav>
+
+
+
+  <h1 class="">Hello <%=req.user.name%>.</h1>
+
+
+
+
+
+
+
+
+  <%- include("./partials/tefooter.ejs") %>
