@@ -1,6 +1,24 @@
 
 <%- include("./partials/teheader.ejs") %>
 </head>
+<h1 style="display:none"><%=id%></h1>
+
+
+<div class="mt-5 container students">
+   <div class="row">
+     <div class="col-md-6">
+       userid:
+     </div>
+     <div class="col-md-6">
+       marks
+     </div>
+     <hr>
+   </div>
+</div>
+<hr>
+<div class="container questions">
+
+</div>
 
 
 
@@ -34,32 +52,8 @@
 
 
 
+<script src="/socket.io/socket.io.js"></script>
+<script src="/scripts/responsepage.js">
 
-
-<%
- const socket = io();
- console.log(socket);
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-%>
-
-
-
-<script src="/socket.io/socket.io.js"
 </script>
 <%- include("./partials/tefooter.ejs") %>

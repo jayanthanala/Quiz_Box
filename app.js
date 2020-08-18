@@ -16,6 +16,9 @@ const Exam = require("./models/exam.js");
 const Response = require("./models/response.js");
 const Question = require("./models/question.js");
 const upload = require("./multer.js");
+const seed = require("./seed.js");
+
+seed();
 
 
 app.use(express.static(__dirname+'/public'));
@@ -133,8 +136,8 @@ app.get("/te/exam/:id/edit",authenticatedTeacher,(req,res)=>{
 
 
 ////this page has socket connection so no need to send anything
-app.get("/te/exam/:id/responses",authenticatedTeacher,(req,res)=>{
-  res.render("responses");
+app.get("/te/exam/:id/responses",(req,res)=>{
+  res.render("responses",{id:req.params.id});
 })
 
 /*Question.deleteMany({examid:id},(e)=>{
@@ -283,10 +286,9 @@ app.post("/te/exam/new",authenticatedTeacher,(req,res)=>{
 
 //posting from the staged area setting the studentid's
 app.post("/te/exam/:id/staged",authenticatedTeacher,upload.single("excel"),(req,res)=>{
+    id=req.params.id;
 if(req.file){
   file=req.file;
-  console.log(req.file);
-    id=req.params.id;
   excel(file.destination+"/"+file.filename).then(async(rows)=>{
 
       var students  = await new Promise((resolve,reject)=>{
@@ -606,7 +608,6 @@ function addExam(exam){
 
 
 function authenticatedTeacher(req,res,next){
-  console.log(req.user);
   if(req.isAuthenticated() && req.user.role==1) {
       next();
   }
@@ -632,7 +633,9 @@ server = app.listen(3000,() => {
 const io = socket(server);
 
 io.on("connection",(socket)=>{
+  console.log("connected");
   socket.on("sendResponses",(id)=>{
+    console.log("asked for responses");
     Exam.findById(id,(err,exam)=>{
       if(err) console.log(err);
       else{
