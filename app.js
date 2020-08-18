@@ -11,8 +11,7 @@ const fs = require("fs");
 const axios = require("axios");
 const socket = require("socket.io");
 const methodOverride = require("method-override");
-const Teacher = require("./models/teacher.js");
-const Student = require("./models/student.js");
+const User = require("./models/user.js");
 const Exam = require("./models/exam.js");
 const Response = require("./models/response.js");
 const Question = require("./models/question.js");
@@ -37,15 +36,11 @@ app.use(passport.session());
 mongoose.connect("mongodb://localhost/QuizDB",{useNewUrlParser:true,useUnifiedTopology: true,useFindAndModify:false});
 mongoose.set("useCreateIndex",true);
 
-//passportforstudent
-passport.use("studentLocal",Student.createStrategy());
-passport.serializeUser(Student.serializeUser());
-passport.deserializeUser(Student.deserializeUser());
+//passport config
+passport.use(User.createStrategy());
+passport.serializeUser(User.serializeUser());
+passport.deserializeUser(User.deserializeUser());
 
-//passportforteacher
-passport.use("teacherLocal",Teacher.createStrategy());
-passport.serializeUser(Teacher.serializeUser());
-passport.deserializeUser(Teacher.deserializeUser());
 
 
 
@@ -61,30 +56,33 @@ app.get("/",(req,res)=>{
   res.render("landing");
 });
 
+
+app.get("/login",(req,res)=>{
+  res.render("telogin");
+});
+
 /////////////////////////////////////////////////////  Teacher ROUTES  //////////////////////////////////
 
 app.get("/te/register",(req,res)=>{
   res.render("teregister")
 });
 
-app.get("/te/login",(req,res)=>{
-  res.render("telogin");
-});
 
-app.get("/te/logout",(req,res)=>{
+
+app.get("/te/logout",authenticatedTeacher,(req,res)=>{
   req.logout();
   res.redirect("/");
 });
 
-app.get("/te/index",authenticated,(req,res)=>{
+app.get("/te/index",authenticatedTeacher,(req,res)=>{
   res.render("teindex");
 })
 
-app.get("/te/exam/new",(req,res)=>{
+app.get("/te/exam/new",authenticatedTeacher,(req,res)=>{
   res.render("newexam");
 });
 
-app.get("/te/exam/staged",(req,res)=>{
+app.get("/te/exam/staged",authenticatedTeacher,(req,res)=>{
   Exam.find({status:"staged",teacherid:req.user._id},(error,exams)=>{
     if(error) console.log(error);
     else{
@@ -94,7 +92,7 @@ app.get("/te/exam/staged",(req,res)=>{
   })
 });
 
-app.get("/te/exam/ready",(req,res)=>{
+app.get("/te/exam/ready",authenticatedTeacher,(req,res)=>{
   Exam.find({teacherid:req.user._id},(error,exams)=>{
     if(error) console.log(error);
     else{
@@ -106,7 +104,7 @@ app.get("/te/exam/ready",(req,res)=>{
 
 });
 
-app.get("/te/exam/:id/students",(req,res)=>{
+app.get("/te/exam/:id/students",authenticatedTeacher,(req,res)=>{
   Exam.findById(req.params.id,(error,exam)=>{
     if(error) console.log(error);
     else{
@@ -118,7 +116,7 @@ app.get("/te/exam/:id/students",(req,res)=>{
 });
 
 //in future if req , give an option for editing the title also!
-app.get("/te/exam/:id/edit",(req,res)=>{
+app.get("/te/exam/:id/edit",authenticatedTeacher,(req,res)=>{
   Question.find({examid:req.params.id},(error,questions)=>{
     if(error) console.log(error);
     else{
@@ -131,6 +129,12 @@ app.get("/te/exam/:id/edit",(req,res)=>{
 
     }
   })
+});
+
+
+////this page has socket connection so no need to send anything
+app.get("/te/exam/:id/responses",authenticatedTeacher,(req,res)=>{
+  res.render("responses");
 })
 
 /*Question.deleteMany({examid:id},(e)=>{
@@ -144,25 +148,21 @@ app.get("/st/register",(req,res)=>{
   res.render("stregister")
 });
 
-app.get("/st/login",(req,res)=>{
-  res.render("stlogin");
-});
-
-app.get("/st/logout",(req,res)=>{
+app.get("/st/logout",authenticatedStudent,(req,res)=>{
   req.logout();
   res.redirect("/");
 });
 
-app.get("/st/index",authenticated,(req,res)=>{
+app.get("/st/index",authenticatedStudent,(req,res)=>{
   res.render("stindex",{req:req});
 });
 
-app.get("/st/exam/:id",authenticated,(req,res) => {
+app.get("/st/exam/:id",authenticatedStudent,(req,res) => {
   var access = req.params.id;
   Exam.findOneAndUpdate({access:access},{$push:{students:req.user.username}},(err) => {
     if(err){console.log(err);}
     else{
-      Student.updateOne({username:req.user.username},{$push:{examid:access}},(err) => {
+      User.updateOne({username:req.user.username},{$push:{examid:access}},(err) => {
         res.redirect("back");
         console.log("Added");
       });
@@ -170,7 +170,7 @@ app.get("/st/exam/:id",authenticated,(req,res) => {
   })
 });
 
-app.get("/st/exams",(req,res)=>{
+app.get("/st/exams",authenticatedStudent,(req,res)=>{
   Exam.find({status:"ready",teacherid:req.user._id},(error,exams)=>{
     if(error) console.log(error);
     else{
@@ -180,7 +180,7 @@ app.get("/st/exams",(req,res)=>{
   })
 });
 
-app.get("/st/exam/completed",(req,res)=>{
+app.get("/st/exam/completed",authenticatedStudent,(req,res)=>{
   Exam.find({status:"completed",teacherid:req.user._id},(error,exams)=>{
     if(error) console.log(error);
     else{
@@ -194,21 +194,8 @@ app.get("/st/exam/completed",(req,res)=>{
 
 ////////////////////////////////////////////////////////////////////   POSTS    //////////////////////////////////////////////////////////////
 
-/////////////////////////////////////////// Teacher Routes //////////////////////
-
-app.post("/te/register",(req,res)=>{
-  Teacher.register({username:req.body.username},req.body.password,(error,sol)=>{
-    if(error) console.log(error);
-    else{
-      passport.authenticate("teacherLocal")(req,res,()=>{
-        res.redirect("/te/index");
-      });
-    }
-  });
-});
-
-app.post("/te/login",(req,res)=>{
-  const user = new Teacher({
+app.post("/login",(req,res)=>{
+  const user = new User({
     username:req.body.username,
     password:req.body.password
   });
@@ -216,14 +203,36 @@ app.post("/te/login",(req,res)=>{
   req.login(user,(error,sol)=>{
     if(error) console.log(error);
     else{
-      passport.authenticate("teacherLocal")(req,res,()=>{
-          res.redirect("/te/index");
+      passport.authenticate("local")(req,res,()=>{
+          if(req.user.role==1){
+            res.redirect("/te/index");
+          }else{
+            res.redirect("/st/index")
+          }
       })
     }
   }
 )});
 
-app.post("/te/exam/new",(req,res)=>{
+
+/////////////////////////////////////////// Teacher Routes //////////////////////
+
+app.post("/te/register",(req,res)=>{
+  User.register({username:req.body.username,role:1},req.body.password,(error,sol)=>{
+    if(error) console.log(error);
+    else{
+      console.log(sol);
+
+      passport.authenticate("teacherLocal")(req,res,()=>{
+        res.redirect("/te/index");
+      });
+    }
+  });
+});
+
+
+
+app.post("/te/exam/new",authenticatedTeacher,(req,res)=>{
   var accessCode="";
   var questions= req.body.questions;
   var options = req.body.options;
@@ -273,7 +282,7 @@ app.post("/te/exam/new",(req,res)=>{
 
 
 //posting from the staged area setting the studentid's
-app.post("/te/exam/:id/staged",upload.single("excel"),(req,res)=>{
+app.post("/te/exam/:id/staged",authenticatedTeacher,upload.single("excel"),(req,res)=>{
   file=req.file;
   console.log(req.file);
     id=req.params.id;
@@ -324,7 +333,7 @@ app.post("/te/exam/:id/staged",upload.single("excel"),(req,res)=>{
 });
 
 
-app.post("/te/exam/:id/students",(req,res)=>{
+app.post("/te/exam/:id/students",authenticatedTeacher,(req,res)=>{
   Exam.findById(req.params.id,(error,exam)=>{
     if(error) console.log(error);
     else{
@@ -371,7 +380,7 @@ app.post("/te/exam/:id/students",(req,res)=>{
 //   // });
 // });
 
-app.post("/te/exam/:id/respones",(req,res)=>{
+app.post("/te/exam/:id/respones",authenticatedTeacher,(req,res)=>{
   // Exam.findById(req.params.id,(error,exam)=>{
   //   if(error) console.log(error);
   //   else{
@@ -419,40 +428,35 @@ app.delete("/te/exam/:id/students",(req,res)=>{
 });
 
 
-
+/////////////////////////////////////////////patch routes
+app.patch("/te/exam/:id/start",(req,res)=>{
+Exam.findById(req.params.id,(e,exam)=>{
+  if(e) console.log(e);
+  else{
+    start(exam._id);
+    examStarted(exams.pop(exam));
+    res.redirect("/te/exam/ready");
+  }
+})
+})
 
 ///////////////////////////////student routes//////////////
 
 app.post("/st/register",(req,res)=>{
-  var student = {
+  var user = {
     username:req.body.username,
     name:req.body.name,
     email:req.body.email,
+    role:0
   }
-  Student.register(student,req.body.password,(error,sol)=>{
+  User.register(user,req.body.password,(error,sol)=>{
     if(error) console.log(error);
     else{
-      passport.authenticate("studentLocal")(req,res,()=>{
+      passport.authenticate("local")(req,res,()=>{
         res.redirect("/st/index");
       });
     }
   });
-});
-
-app.post("/st/login",(req,res)=>{
-  const user = new Student({
-    username:req.body.username,
-    password:req.body.password
-  });
-  req.login(user,(error,sol)=>{
-    if(error) console.log(error);
-    else{
-      passport.authenticate("studentLocal")(req,res,()=>{
-          res.redirect("/st/index");
-      });
-    }
-  })
-
 });
 
 
@@ -565,40 +569,57 @@ function addExam(exam){
 ////////////////////////////////////////////////////////////////////   Middle Ware    //////////////////////////////////////////////////////////
 
 
-function authenticated(req,res,next){
-  if(req.isAuthenticated()) {
-    Teacher.find({username:req.body.username},(err,sol) => {
-      if(err){console.log(err);}
-      else{
-        next();
-      }
-    });
+function authenticatedTeacher(req,res,next){
+  console.log(req.user);
+  if(req.isAuthenticated() && req.user.role==1) {
+      next();
   }
   else{
     res.redirect('/');
   }
 }
 
-function stauth(req,res,next){
-  if(req.isAuthenticated()) {
-    Student.find({username:req.body.username},(err,sol) => {
-      if(err){console.log(err);}
-      else{
-        next();
-      }
-    });
+function authenticatedStudent(req,res,next){
+  if(req.isAuthenticated() && req.user.role==0) {
+    next();
   }
   else{
     res.redirect('/');
   }
 }
-
+/////////////////////////////////////////////////////////////server/////////////////////////////////////////////
 server = app.listen(3000,() => {
   console.log("Server is up on port 3000");
 });
 
+////////////////////////////////////////////////////socket programming//////////////////////////////
 const io = socket(server);
-//
-// io.on("connection",(socket)=>{
-//    socket.emit("refresh")
-// })
+
+io.on("connection",(socket)=>{
+  socket.on("sendResponses",(id)=>{
+    Exam.findById(id,(err,exam)=>{
+      if(err) console.log(err);
+      else{
+        if(exam.status=="started"){
+          Response.find({examid:id},(e,s)=>{
+            if(e) console.log(e);
+            else{
+              Question.find({examid:id},(er,so)=>{
+                if(er) console.log(er);
+                else{
+                  socket.emit("responses",{
+                    responses:s,
+                    questions:so
+                  });
+                }
+              })
+            }
+          })
+        }else{
+          socket.emit("final","examclosed");
+        }
+      }
+    })
+  });
+
+})
