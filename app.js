@@ -34,7 +34,7 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 //databse setup
-mongoose.connect("mongodb://localhost/QuizDB",{useNewUrlParser:true,useUnifiedTopology: true});
+mongoose.connect("mongodb://localhost/QuizDB",{useNewUrlParser:true,useUnifiedTopology: true,useFindAndModify:false});
 mongoose.set("useCreateIndex",true);
 
 //passportforstudent
@@ -46,6 +46,10 @@ passport.deserializeUser(Student.deserializeUser());
 passport.use("teacherLocal",Teacher.createStrategy());
 passport.serializeUser(Teacher.serializeUser());
 passport.deserializeUser(Teacher.deserializeUser());
+
+
+
+
 
 
 
@@ -88,7 +92,6 @@ app.get("/te/exam/staged",(req,res)=>{
       res.render("staged",{exams:exams});
     }
   })
-
 });
 
 app.get("/te/exam/ready",(req,res)=>{
@@ -150,8 +153,41 @@ app.get("/st/logout",(req,res)=>{
   res.redirect("/");
 });
 
-app.get("/st/index",(req,res)=>{
+app.get("/st/index",authenticated,(req,res)=>{
   res.render("stindex",{req:req});
+});
+
+app.get("/st/exam/:id",authenticated,(req,res) => {
+  var access = req.params.id;
+  Exam.findOneAndUpdate({access:access},{$push:{students:req.user.username}},(err) => {
+    if(err){console.log(err);}
+    else{
+      Student.updateOne({username:req.user.username},{$push:{examid:access}},(err) => {
+        res.redirect("back");
+        console.log("Added");
+      });
+    }
+  })
+});
+
+app.get("/st/exams",(req,res)=>{
+  Exam.find({status:"ready",teacherid:req.user._id},(error,exams)=>{
+    if(error) console.log(error);
+    else{
+      console.log(exams);
+      res.send("All Exams will appear here!")
+    }
+  })
+});
+
+app.get("/st/exam/completed",(req,res)=>{
+  Exam.find({status:"completed",teacherid:req.user._id},(error,exams)=>{
+    if(error) console.log(error);
+    else{
+      console.log(exams);
+      res.send("All Exams will appear here!")
+    }
+  })
 });
 
 
