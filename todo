@@ -75,7 +75,7 @@ fix the error of duration of undefined line 588 ! comes after restarting server.
 ////////////////////////////todo
 1) auto scroll whenever the + is pushed or - is pushed
 2)usage of fs to delete the excel file once the exam is started
-
+3) give the authentication middleware for the responses get route
 
 /////////////////////////implementaion of quiz submission
 1)name=q[question id] ; value = can be option number
@@ -96,6 +96,8 @@ array.forEach((x)=>{
   qu.save(()=>{});
  })
 })
+
+
 
 
 
