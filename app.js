@@ -283,6 +283,7 @@ app.post("/te/exam/new",authenticatedTeacher,(req,res)=>{
 
 //posting from the staged area setting the studentid's
 app.post("/te/exam/:id/staged",authenticatedTeacher,upload.single("excel"),(req,res)=>{
+if(req.file){
   file=req.file;
   console.log(req.file);
     id=req.params.id;
@@ -330,6 +331,28 @@ app.post("/te/exam/:id/staged",authenticatedTeacher,upload.single("excel"),(req,
   }).catch((error)=>{
     console.log(error);
   });
+}else{
+  Exam.findById(id,(error,exam)=>{
+  if(error) console.log(error);
+  else{
+      var array = req.body.scheduled.date.split("-");
+      var time = req.body.scheduled.time.split(":");
+      var date = new Date(Number(array[0]),Number(array[1])-1,Number(array[2]),Number(time[0]),Number(time[1]));
+      console.log(date);
+      exam.date=date;
+      exam.status="ready";
+      exam.duration=req.body.scheduled.duration;
+      exam.save((e,s)=>{
+        if(e) console.log(e);
+        else{
+          console.log(s);
+          addExam(s);
+          res.redirect("/te/exam/ready")
+        }
+      })
+  }
+})
+}
 });
 
 
