@@ -429,18 +429,13 @@ app.post("/te/exam/:id/respones",authenticatedTeacher,(req,res)=>{
 // });
 
 app.delete("/te/exam/:id/students",(req,res) => {
-  Exam.findById(req.params.id,(err,exams) => {
-    if(err){console.log(err);}
-    else{
-      Exam.findOneAndUpdate({access:exams.access},{$pull:{students:req.body.student}},(err) => {
+      Exam.findByIdAndUpdate(req.params.id,{$pull:{students:req.body.student}},(err) => {
         if(err){console.log(err);}
         else{
           res.redirect("/te/exam/"+req.params.id+"/students");
         }
       });
-    }
-  });
-});
+    });
 
 
 
