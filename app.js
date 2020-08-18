@@ -58,7 +58,7 @@ app.get("/",(req,res)=>{
 
 
 app.get("/login",(req,res)=>{
-  res.render("telogin");
+  res.render("login");
 });
 
 /////////////////////////////////////////////////////  Teacher ROUTES  //////////////////////////////////
@@ -409,6 +409,7 @@ app.delete("/te/exam/:id/students",(req,res)=>{
   Exam.findById(req.params.id,(error,exam)=>{
     if(error) console.log(error);
     else{
+      console.log(exam.students.indexOf(req.body.student));
      if(exam.students.indexOf(req.body.student)){
          exam.students.pop(req.body.student);
          exam.save((e,s)=>{
