@@ -74,7 +74,7 @@
             </div>
             <div class="col-md-12 d-flex justify-content-around">
                 <a href="/te/exam/<%=exams[i]._id%>/students" class="btn btn-outline-primary">Students List</a>
-                <form style="border:0px" action="<%=exams[i]._id%>/start" method="post">
+                <form style="border:0px" action="<%=exams[i]._id%>/start?_method=patch" method="post">
                 <button class="btn btn-outline-success">Start</button>  <!-- after clicking start only the students should get examid = this exam id -->
               </form>
             </div>

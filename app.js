@@ -131,6 +131,12 @@ app.get("/te/exam/:id/edit",(req,res)=>{
 
     }
   })
+});
+
+
+////this page has socket connection so no need to send anything
+app.get("/te/exam/:id/responses",(req,res)=>{
+  res.render("responses");
 })
 
 /*Question.deleteMany({examid:id},(e)=>{
@@ -419,7 +425,17 @@ app.delete("/te/exam/:id/students",(req,res)=>{
 });
 
 
-
+/////////////////////////////////////////////patch routes
+app.patch("/te/exam/:id/start",(req,res)=>{
+Exam.findById(req.params.id,(e,exam)=>{
+  if(e) console.log(e);
+  else{
+    start(exam._id);
+    examStarted(exams.pop(exam));
+    res.redirect("/te/exam/ready");
+  }
+})
+})
 
 ///////////////////////////////student routes//////////////
 
@@ -592,13 +608,39 @@ function stauth(req,res,next){
     res.redirect('/');
   }
 }
-
+/////////////////////////////////////////////////////////////server/////////////////////////////////////////////
 server = app.listen(3000,() => {
   console.log("Server is up on port 3000");
 });
 
+////////////////////////////////////////////////////socket programming//////////////////////////////
 const io = socket(server);
-//
-// io.on("connection",(socket)=>{
-//    socket.emit("refresh")
-// })
+
+io.on("connection",(socket)=>{
+  socket.on("sendResponses",(id)=>{
+    Exam.findById(id,(err,exam)=>{
+      if(err) console.log(err);
+      else{
+        if(exam.status=="started"){
+          Response.find({examid:id},(e,s)=>{
+            if(e) console.log(e);
+            else{
+              Question.find({examid:id},(er,so)=>{
+                if(er) console.log(er);
+                else{
+                  socket.emit("responses",{
+                    responses:s,
+                    questions:so
+                  });
+                }
+              })
+            }
+          })
+        }else{
+          socket.emit("final","examclosed");
+        }
+      }
+    })
+  });
+
+})
