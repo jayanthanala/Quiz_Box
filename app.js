@@ -511,6 +511,7 @@ Exam.find({status:"ready"},(error,exam)=>{
 Exam.find({status:"started"},(error,exam)=>{
   if(error) console.log(error);
   else{
+    console.log("dasdsa",exam);
     exam.forEach((e)=>{
       examStarted(e);
     })
@@ -563,7 +564,8 @@ function completed(id){
 // function run2(){
 //
 // }
-
+console.log(exams);
+console.log(examsrunning);
 console.log(examsrunning);
 //add a functionality such that when the duration of the test stops
 function checkDuration(){
@@ -587,9 +589,9 @@ function checkDuration(){
 
 function examStarted(exam){
   clearInterval(stop2);
-  // console.log(exam[0]);
-  if(exam[0]){
-    examsrunning.push(exam[0]);
+  console.log("dsdfd",exam);
+  if(exam){
+    examsrunning.push(exam);
     checkDuration();
   }
 }
