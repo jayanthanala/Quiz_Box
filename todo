@@ -119,7 +119,7 @@ array.forEach((x)=>{
 
 
 
-////////////////role=1 ----teachers
+role=1 ----teachers
 
 
 <%- include("./partials/tefooter.ejs") %>
