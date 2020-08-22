@@ -20,7 +20,7 @@
           <script type="text/javascript">
             function goToPage() {
               var page = document.getElementById('page').value;
-              window.location = "/st/exam/" + page;
+              window.location = "/st/add/" + page;
             }
           </script>
           <input class="form-control mr-sm-2" type="text" placeholder="Search" id="page" name="examid" aria-label="Search">
@@ -55,7 +55,7 @@
               Total marks: <%=exams[i].marks%>
             </div>
             <div class="col-md-12 d-flex justify-content-around">
-                <a href="/te/exam/<%=exams[i]._id%>/students" class="btn btn-outline-primary">Start Exam</a>
+                <a href="/st/exam/<%=exams[i]._id%>" class="btn btn-outline-primary">Start Exam</a>
             </div>
           </div>
         <%}%>
