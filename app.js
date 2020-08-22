@@ -535,11 +535,13 @@ function run(){
   stop=setInterval(()=>{
     for(var i=0;i<=exams.length-1;i++){
       obj = new Date();
-      console.log("/////////",exams[i].date.getTime(),obj.getTime(),exams[i].date,obj,"///////////");
-      console.log(exams[i].date.getTime()<=obj.getTime() && (exams[i].date.getDate()<=obj.getDate() && exams[i].date.getMonth()<=obj.getMonth() && exams[i].date.getYear()<=obj.getYear()));
+      //console.log("/////////",exams[i].date.getTime(),obj.getTime(),exams[i].date,obj,"///////////");
+      //console.log(exams[i].date.getTime()<=obj.getTime() && (exams[i].date.getDate()<=obj.getDate() && exams[i].date.getMonth()<=obj.getMonth() && exams[i].date.getYear()<=obj.getYear()));
       if(exams[i].date.getTime()<=obj.getTime()&& (exams[i].date.getDate()<=obj.getDate() && exams[i].date.getMonth()<=obj.getMonth() && exams[i].date.getYear()<=obj.getYear())){
         start(exams[i]._id);
-        examStarted(exams.splice(i,1));
+        console.log("exam of id : "+(exams[i]._id+" has started");
+        examStarted(exams.splice(i,1)[0]);
+
       }
     }
     if(exams.length==0) clearInterval(stop);
@@ -575,22 +577,23 @@ function completed(id){
 // function run2(){
 //
 // }
-console.log(exams);
-console.log(examsrunning);
-console.log(examsrunning);
+//console.log(exams);
+//console.log(examsrunning);
+//console.log(examsrunning);
 //add a functionality such that when the duration of the test stops
 function checkDuration(){
-  console.log(examsrunning[0]);
+  //console.log(examsrunning[0].date.getTime());
   stop2=setInterval(()=>{
     for(var i=0;i<=examsrunning.length-1;i++){
       obj = new Date();
 
       var mins = Number(examsrunning[i].duration)*60*1000;
-      console.log(examsrunning[i].date.getTime()+"//////");
-      console.log("*********",examsrunning[i].date.getTime()+mins,obj.getTime(),examsrunning[i].date,obj,"*********");
-      console.log((examsrunning[i].date.getTime()+mins)<=obj.getTime() && (examsrunning[i].date.getDate()<=obj.getDate() && examsrunning[i].date.getMonth()<=obj.getMonth() && examsrunning[i].date.getYear()<=obj.getYear()));
+  //    console.log(examsrunning[i].date.getTime()+"//////");
+  //    console.log("*********",examsrunning[i].date.getTime()+mins,obj.getTime(),examsrunning[i].date,obj,"*********");
+  //    console.log((examsrunning[i].date.getTime()+mins)<=obj.getTime() && (examsrunning[i].date.getDate()<=obj.getDate() && examsrunning[i].date.getMonth()<=obj.getMonth() && examsrunning[i].date.getYear()<=obj.getYear()));
       if((examsrunning[i].date.getTime()+mins)<=obj.getTime()&& (examsrunning[i].date.getDate()<=obj.getDate() && examsrunning[i].date.getMonth()<=obj.getMonth() && examsrunning[i].date.getYear()<=obj.getYear())){
         completed(examsrunning[i]._id);
+        console.log("exam of exam id: "+examsrunning[i]._id+" has completed!!");
         examsrunning.splice(i,1);
       }
     }
