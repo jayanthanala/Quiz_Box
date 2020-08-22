@@ -526,7 +526,7 @@ function run(){
       //console.log(exams[i].date.getTime()<=obj.getTime() && (exams[i].date.getDate()<=obj.getDate() && exams[i].date.getMonth()<=obj.getMonth() && exams[i].date.getYear()<=obj.getYear()));
       if(exams[i].date.getTime()<=obj.getTime()&& (exams[i].date.getDate()<=obj.getDate() && exams[i].date.getMonth()<=obj.getMonth() && exams[i].date.getYear()<=obj.getYear())){
         start(exams[i]._id);
-        console.log("exam of id : "+(exams[i]._id+" has started");
+        console.log("exam of id : "+exams[i]._id+" has started");
         examStarted(exams.splice(i,1)[0]);
 
       }
