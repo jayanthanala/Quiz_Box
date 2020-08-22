@@ -42,7 +42,7 @@
           <div class="btn-group btn-group-toggle" data-toggle="buttons">
             <%  for(var j=0;j<=questions[i].options.length-1;j++){ %>
             <label class="btn btn-secondary">
-              <input type="radio" name="answer" value={eid:<%=j+1%>,qid:<%=questions[i]._id%>}><%=questions[i].options[j]%>
+              <input type="radio" name="<%=questions[i]._id%>" value=<%=j+1%>><%=questions[i].options[j]%>
             </label>
             <% }%>
           </div>

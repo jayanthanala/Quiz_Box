@@ -490,7 +490,7 @@ app.post("/st/register",(req,res)=>{
 });
 
 app.post("/st/submit/:id",(req,res) => {
-  console.log(req.body.answer);
+  console.log(req.body);
   // var answer = {
   //   id:req.body.
   //   marked:req.body.
