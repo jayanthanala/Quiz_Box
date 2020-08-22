@@ -18,7 +18,7 @@ const Question = require("./models/question.js");
 const upload = require("./multer.js");
 const seed = require("./seed.js");
 
-seed();
+//seed();
 
 
 app.use(express.static(__dirname+'/public'));
@@ -490,7 +490,7 @@ app.post("/st/register",(req,res)=>{
 });
 
 app.post("/st/submit/:id",(req,res) => {
-  console.log(req.body);
+  console.log(req.body,req.body.q);
   // var answer = {
   //   id:req.body.
   //   marked:req.body.
