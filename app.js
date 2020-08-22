@@ -204,10 +204,6 @@ app.get("/st/exam/:id",authenticatedStudent,(req,res) => {
   });
 });
 
-app.post("/somewhere",(req,res) => {
-
-});
-
 app.get("/st/completed",authenticatedStudent,(req,res) => {
   Exam.find({students:req.user.username},(err,exams) => {
     if(err){console.log(err);}
@@ -491,6 +487,15 @@ app.post("/st/register",(req,res)=>{
       });
     }
   });
+});
+
+app.post("/st/submit/:id",(req,res) => {
+  console.log(req.body.answer);
+  // var answer = {
+  //   id:req.body.
+  //   marked:req.body.
+  // }
+  // Response.updateOne({examid:req.params.id},{})
 });
 
 

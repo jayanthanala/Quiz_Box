@@ -31,7 +31,7 @@
   </nav>
 
   <%if(questions[0]){%>
-  <form class="" action="/somewhere" method="post">
+  <form class="" action="/st/submit/<%=questions[0].examid%>" method="post">
     <div class="container px-5">
       <div class="container px-5">
         <% for(var i=0;i<=questions.length-1;i++){%>
@@ -42,7 +42,7 @@
           <div class="btn-group btn-group-toggle" data-toggle="buttons">
             <%  for(var j=0;j<=questions[i].options.length-1;j++){ %>
             <label class="btn btn-secondary">
-              <input type="radio" name="<%=questions[i].q%>" value="<%=j+1%>" id="option2"><%=questions[i].options[j]%>
+              <input type="radio" name="answer" value={eid:<%=j+1%>,qid:<%=questions[i]._id%>}><%=questions[i].options[j]%>
             </label>
             <% }%>
           </div>
