@@ -179,27 +179,17 @@ app.get("/st/exam/:id",authenticatedStudent,(req,res) => {
   })
 });
 
-app.get("/st/exams",authenticatedStudent,(req,res)=>{
-  Exam.find({status:"ready",teacherid:req.user._id},(error,exams)=>{
-    if(error) console.log(error);
+app.get("/st/completed",authenticatedStudent,(req,res) => {
+  Exam.find({students:req.user.username},(err,exams) => {
+    if(err){console.log(err);}
     else{
-      console.log(exams);
-      res.send("All Exams will appear here!");
+      console.log("reached");
+      res.render("stcompleted",{req:req.user,exams:exams});
     }
-  })
+  });
 });
 
-app.get("/st/exam/completed",authenticatedStudent,(req,res)=>{
-  // Exam.find({students:req.user.username},(error,exams)=>{
-  //   if(error) console.log(error);
-  //   else{
-  //     console.log(exams);
-  //     console.log("reached");
-  //     res.render("stcompleted",{req:req.user,exams:exams});
-  //   }
-  // })
-  console.log("reached");
-});
+
 
 
 
