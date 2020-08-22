@@ -6,7 +6,6 @@ const questionSchema = new mongoose.Schema({
   ans:Number,
   unattempted:Number,
   wrongans:Number,
-  ans:Number,
   examid:String,
   marks:Number
 });
