@@ -127,7 +127,9 @@ AND EVEN THE STUDENTS LIST PAGE AFTER EVERY 5SECONDS!
 *****how to handle a hell lot of number of users at a time ? *******************************
 
 
-
+/////////////////////////////////////////////////////////////
+change the responses.ejs to responses.html
+getting the initial data can be done using socket!
 
 
 
@@ -136,7 +138,8 @@ role=1 ----teachers
 
 
 
-
+//////////////////////
+add required to the inputs of the forms
 
 
 

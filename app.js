@@ -137,7 +137,10 @@ app.get("/te/exam/:id/edit",authenticatedTeacher,(req,res)=>{
 
 ////this page has socket connection so no need to send anything
 app.get("/te/exam/:id/responses",(req,res)=>{
-  res.render("responses",{id:req.params.id});
+  Question.find({examid:req.params.id},(e,questions)=>{
+    res.render("responses",{id:req.params.id,questions:questions});
+  })
+
 })
 
 /*Question.deleteMany({examid:id},(e)=>{
