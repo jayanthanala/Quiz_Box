@@ -7,7 +7,9 @@ const questionSchema = new mongoose.Schema({
   ans:Number,
   unattempted:Number,
   wrongans:Number,
+
   rightans:Number,
+
   examid:String,
   marks:Number
 });

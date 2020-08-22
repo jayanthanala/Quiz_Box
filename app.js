@@ -169,17 +169,43 @@ app.get("/st/index",authenticatedStudent,(req,res)=>{
   });
 });
 
-app.get("/st/exam/:id",authenticatedStudent,(req,res) => {
+app.get("/st/add/:id",authenticatedStudent,(req,res) => {
   var access = req.params.id;
   Exam.findOneAndUpdate({access:access},{$push:{students:req.user.username}},(err) => {
     if(err){console.log(err);}
     else{
       User.updateOne({username:req.user.username},{$push:{examid:access}},(err) => {
         res.redirect("/st/index");
-        //console.log("Added");
       });
     }
-  })
+  });
+});
+
+app.get("/st/exam/:id",authenticatedStudent,(req,res) => {
+  Question.find({examid:req.params.id},(err,questions) => {
+    if(err){console.log(err);}
+    else{
+      var totalMarks = 0;
+      questions.forEach((question) => {
+        totalMarks = totalMarks + question.marks;
+      });
+        var responseSheet = {
+          examid:req.params.id,
+          userid:req.user.username,
+          marks:totalMarks
+        }
+      Response.create(responseSheet,(err,succ) => {
+        if(err){console.log(err);}
+        else{
+          res.render("stexam",{questions:questions})
+        }
+      });
+    }
+  });
+});
+
+app.post("/somewhere",(req,res) => {
+
 });
 
 app.get("/st/completed",authenticatedStudent,(req,res) => {
