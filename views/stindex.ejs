@@ -13,9 +13,6 @@
           <a class="nav-link" href="/st/index">Home<span class="sr-only">(current)</span></a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="/st/exams">Exams</a>
-        </li>
-        <li class="nav-item">
           <a class="nav-link" href="/st/exam/completed">Completed Exams</a>
         </li>
 
@@ -35,7 +32,59 @@
 
 
 
-  <h1 class="">Hello <%=req.user.name%>.</h1>
+  <h1 class="">Hello <%=req.name%>.</h1>
+
+  <%if(exams[0]){%>
+    <div class="container px-5">
+      <div class="container px-5">
+        <% for(var i=0;i<=exams.length-1;i++){%>
+        <% if(exams[i].status=="started"){ %>
+          <%console.log("started");%>
+          <div class="row my-5 py-3 border">
+            <div class="col-md-12">
+              <h4 class="">Title: <%=exams[i].title%></h4>
+            </div>
+            <div class="col-md-12">
+              <h6 class="">  Number of questions: <%=exams[i].noquestions%></h6>
+            </div>
+            <div class="col-md-12">
+              Total marks: <%=exams[i].marks%>
+            </div>
+            <div class="col-md-12 d-flex justify-content-around">
+                <a href="/te/exam/<%=exams[i]._id%>/students" class="btn btn-outline-primary">Start Exam</a>
+            </div>
+          </div>
+        <%}%>
+      <%}%>
+      </div>
+    </div>
+  <%}%>
+<hr>
+<%if(exams[0]){%>
+  <div class="container px-5">
+    <div class="container px-5">
+      <% for(var i=0;i<=exams.length-1;i++){%>
+      <% if(exams[i].status=="ready"){ %>
+        <%console.log("started");%>
+        <div class="row my-5 py-3 border">
+          <div class="col-md-12">
+            <h4 class="">Title: <%=exams[i].title%></h4>
+          </div>
+          <div class="col-md-12">
+            <h6 class="">  Number of questions: <%=exams[i].noquestions%></h6>
+          </div>
+          <div class="col-md-12">
+            Total marks: <%=exams[i].marks%>
+          </div>
+          <div class="col-md-12 d-flex justify-content-around">
+              <a href="/te/exam/<%=exams[i]._id%>/students" class="btn btn-outline-primary">Upcoming</a>
+          </div>
+        </div>
+      <%}%>
+    <%}%>
+    </div>
+  </div>
+<%}%>
 
 
 
