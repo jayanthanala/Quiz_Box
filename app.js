@@ -137,7 +137,10 @@ app.get("/te/exam/:id/edit",authenticatedTeacher,(req,res)=>{
 
 ////this page has socket connection so no need to send anything
 app.get("/te/exam/:id/responses",(req,res)=>{
-  res.render("responses",{id:req.params.id});
+  Question.find({examid:req.params.id},(e,questions)=>{
+    res.render("responses",{id:req.params.id,questions:questions});
+  })
+
 })
 
 /*Question.deleteMany({examid:id},(e)=>{
@@ -281,7 +284,13 @@ app.post("/te/exam/new",authenticatedTeacher,(req,res)=>{
         var marks=0;
         questions.forEach((q,i)=>{
         q["options"]=options[i];
+        let array = new Array(options[i].length);
+        for(var x of array){
+          x=0;
+        };
+        q["optioncount"]=array;
         q["examid"]=exam._id;
+        q["unattempted"]=q["wrongans"]=q["rightans"]=0;
         marks+=Number(q["marks"]);
       });
       //TRY TO REFACTOR THIS CODE LATER TO MAKE IT MORE DRY AND FAST!!
@@ -332,6 +341,18 @@ if(req.file){
         resolve(s);
 
       });
+    //  console.log(students);
+      students.forEach((s)=>{
+        User.findOne({username:s},(e,st)=>{
+          if(e) console.log(e);
+          else if(st){
+            st.examid.push(id);
+            st.save((e,stu)=>{
+              console.log(e);
+            });
+          }
+        })
+      })
 
       Exam.findById(id,(error,exam)=>{
       if(error) console.log(error);
@@ -344,6 +365,7 @@ if(req.file){
           exam.status="ready";
           exam.duration=req.body.scheduled.duration;
           exam.students=students;
+          //console.log("came");
           exam.save((e,s)=>{
             if(e) console.log(e);
             else{
@@ -392,7 +414,20 @@ app.post("/te/exam/:id/students",authenticatedTeacher,(req,res)=>{
            if(e) console.log(e);
            else{
              console.log(s);
-             res.redirect("/te/exam/"+req.params.id+"/students");
+             User.findOne({username:req.body.student},(e,st)=>{
+               if(e) console.log(e);
+               else{
+                 if(st){
+                   st.examid.push(exam._id);
+                   st.save((e,stu)=>{});
+                   ////////////////////////////////////////////////////////////////////////////////send a toast saying added successfully!!///////////////////////////////////
+                   res.redirect("/te/exam/"+req.params.id+"/students");
+                 }else{
+                   res.redirect("/te/exam/"+req.params.id+"/students"); ////////////////////////////send a toast saying can't be found!!!!!///////////////////////////////////
+                 }
+               }
+             })
+
            }
          })
      }else{
@@ -404,84 +439,23 @@ app.post("/te/exam/:id/students",authenticatedTeacher,(req,res)=>{
   })
 });
 
-//still the student schema must be changed and try to add a roll number in it and try to fetch the students using roll number only!!!
-// app.post("/te/exam/:id/start",(req,res)=>{
-//
-//   // id=req.params.id;
-//   // Exam.findById(id,(error,exam)=>{
-//   //   exam.students.forEach((s)=>{
-//   //       Student.findOne({username:s},(er,s)=>{
-//   //         if(er) console.log(er);
-//   //         else {
-//   //           s.examid.push(id);
-//   //           console.log(s);
-//   //         }
-//   //       });
-//   //   });
-//   //   exam.status="started";
-//   //   exam.save((e,exa)=>{
-//   //     if(e) console.log(e);
-//   //     else {
-//   //       console.log(exa);
-//   //       res.send("success");
-//   //     }
-//   //   });
-//   // });
-// });
-
-app.post("/te/exam/:id/respones",authenticatedTeacher,(req,res)=>{
-  // Exam.findById(req.params.id,(error,exam)=>{
-  //   if(error) console.log(error);
-  //   else{
-  //    if(exam.students.indexOf(req.body.student)){
-  //        exam.students.push(req.body.student);
-  //        exam.save((e,s)=>{
-  //          if(e) console.log(e);
-  //          else{
-  //            console.log(s);
-  //            res.redirect("/te/exam/"+req.params.id+"/students");
-  //          }
-  //        })
-  //    }else{
-  //      //send a flash message saying it is already present!
-  //      res.redirect("/te/exam/"+req.params.id+"/students");
-  //    }
-  //
-  //   }
-  // })
-});
 
 
 /////////////////////////////////////////////////////delete routes
 
-// app.delete("/te/exam/:id/students",(req,res)=>{
-//   Exam.findById(req.params.id,(error,exam)=>{
-//     if(error) console.log(error);
-//     else{
-//       console.log(exam.students.indexOf(req.body.student));
-//      if(exam.students.indexOf(req.body.student)){
-//          exam.students.pop(req.body.student);
-//          exam.save((e,s)=>{
-//            if(e) console.log(e);
-//            else{
-//              console.log(s);
-//              res.redirect("/te/exam/"+req.params.id+"/students");
-//            }
-//          })
-//      }else{
-//        //send a flash message saying it is already present!
-//        res.redirect("/te/exam/"+req.params.id+"/students");
-//      }
-//
-//     }
-//   })
-// });
 
+//////////////////////////////$pull used for pulling out a specific element from an array when used in find by id and update or others where update is used!!!!
 app.delete("/te/exam/:id/students",(req,res) => {
       Exam.findByIdAndUpdate(req.params.id,{$pull:{students:req.body.student}},(err) => {
         if(err){console.log(err);}
         else{
-          res.redirect("/te/exam/"+req.params.id+"/students");
+          User.findOneAndUpdate({username:req.body.student},{$pull:{examid:req.params.id}},(error)=>{
+            if(error) console.log(error);
+            else{
+                        res.redirect("/te/exam/"+req.params.id+"/students");
+            }
+          })
+
         }
       });
     });
@@ -541,9 +515,17 @@ Exam.find({status:"started"},(error,exam)=>{
     })
   }
 });
+
+
+//////////////arrays for holding all the exams which either started or ready!/////////////////////////////////////
 examsrunning = [];
 exams = [];
+
+
 var stop,stop2;
+
+////////////////////////////////////////////////////////////////////run() => checks for exams which needs to be started! once started moves that exam to examsrunning and calls checkduration
+//////////////////////////////////////////////////////////////////// checkDuration() => checks whether the exams time is up or not!!!!
 function run(){
   stop=setInterval(()=>{
     for(var i=0;i<=exams.length-1;i++){
@@ -552,7 +534,7 @@ function run(){
       //console.log(exams[i].date.getTime()<=obj.getTime() && (exams[i].date.getDate()<=obj.getDate() && exams[i].date.getMonth()<=obj.getMonth() && exams[i].date.getYear()<=obj.getYear()));
       if(exams[i].date.getTime()<=obj.getTime()&& (exams[i].date.getDate()<=obj.getDate() && exams[i].date.getMonth()<=obj.getMonth() && exams[i].date.getYear()<=obj.getYear())){
         start(exams[i]._id);
-        console.log("exam of id : "+(exams[i]._id)+" has started");
+        console.log("exam of id : "+exams[i]._id+" has started");
         examStarted(exams.splice(i,1)[0]);
 
       }
@@ -561,35 +543,6 @@ function run(){
   },1000);
 }
 
-function start(id){
-  Exam.findById(id,(error,exam)=>{
-      exam.status="started";
-      //code left
-      exam.save((e,exa)=>{
-        if(e) console.log(e);
-        else {
-          console.log("success");
-      }
-  });
-});
-}
-function completed(id){
-  Exam.findById(id,(error,exam)=>{
-      exam.status="completed";
-      //code left
-      exam.save((e,exa)=>{
-        if(e) console.log(e);
-        else {
-          console.log("success");
-      }
-  });
-});
-}
-
-
-// function run2(){
-//
-// }
 //console.log(exams);
 //console.log(examsrunning);
 //console.log(examsrunning);
@@ -613,6 +566,7 @@ function checkDuration(){
 },1000);
 };
 
+////////////////////////////functions for handling the event: Exams started and for
 
 function examStarted(exam){
   clearInterval(stop2);
@@ -629,6 +583,31 @@ function addExam(exam){
   console.log(exams);
   run();
 
+}
+//////////////////////////////////////////functions for findind the exams ofstatus== started || completed ///////////used for adding the exams directly to the arrray whenever server reloads
+function start(id){
+  Exam.findById(id,(error,exam)=>{
+      exam.status="started";
+      //code left
+      exam.save((e,exa)=>{
+        if(e) console.log(e);
+        else {
+          console.log("success");
+      }
+  });
+});
+}
+function completed(id){
+  Exam.findById(id,(error,exam)=>{
+      exam.status="completed";
+      //code left
+      exam.save((e,exa)=>{
+        if(e) console.log(e);
+        else {
+          console.log("success");
+      }
+  });
+});
 }
 
 

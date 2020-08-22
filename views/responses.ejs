@@ -1,7 +1,10 @@
 
 <%- include("./partials/teheader.ejs") %>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>
 </head>
 <h1 style="display:none"><%=id%></h1>
+<h2 style="display:none"><%=questions%></h2>
+<%= questions %>
 
 
 <div class="mt-5 container students">
@@ -17,43 +20,103 @@
 </div>
 <hr>
 <div class="container questions">
-
+<%for(var i=0;i<=questions.length-1;i++){%>
+          <div class="row">
+            <div class="col-md-4">
+              <div class="row">
+                <%=questions[i].q%>
+              </div>
+              <div class="row">
+              <% for(var j=0;j<=questions[i].options.length-1;j++){%>
+                  <div class="col-md-6">
+                    <%= j+") "+questions[i].options[j] %>
+                  </div>
+              <%}%>
+              </div>
+            </div>
+            <div class="col-md-8">
+              <div class="row">
+                <div class="col-md-6" style="padding:0px 50px">
+                  <canvas id="piechart1<%=i%>" width="50px" height="50px"></canvas>
+                </div>
+                <div class="col-md-6" style="padding:0px 50px">
+                  <canvas id="piechart2<%=i%>" width="50px" height="50px"></canvas>
+                </div>
+              </div>
+            </div>
+          </div>
+ <%}%>
 </div>
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+  <%=questions%>
 
 
 
 
 <script src="/socket.io/socket.io.js"></script>
-<script src="/scripts/responsepage.js">
+<script src="/scripts/responsepage.js"></script>
 
+<script type="text/javascript">
+  // ******************************************************************************************8888
+  var q = <%-JSON.stringify(questions)%>;
+//***************************************************************************************************
+  var i;
+  console.log(typeof  q,q,q.length);
+    for(i=0;i<=q.length-1;i++){
+     var ctx1=document.getElementById("piechart1"+i);
+     var ctx2=document.getElementById("piechart2"+i);
+    // console.log(ctx1,ctx2);
+     var  data1={
+       datasets:[{
+         data:q[i].optioncount
+       }],
+     }
+
+     if(i == 0){
+       var data1={
+         datasets:[{
+           data:[10,20,30],
+           backgroundColor:['rgba(200, 150, 110,1)','rgba(100,150,110,1)','rgba(000,150,110,1)','rgba(0,0,110,1)']
+         }],
+          labels: q[i].options
+     }
+   }
+   console.log(q[i].options,"///////////////");
+     if(1 == 1){
+       var data1={
+         datasets:[{
+           data:[10,20,30,40],
+           backgroundColor:['rgba(200, 150, 110,1)','rgba(100,150,110,1)','rgba(000,150,110,1)','rgba(0,0,110,1)'],
+         }],
+         labels: q[i].options
+     }
+   }
+
+
+     var data2={
+       datasets:[{
+         // data:[q[i].unattempted,q[i].rightans,q[i].wrongans]
+         data:[20,65,25],
+         backgroundColor:['rgba(200, 150, 110,1)','rgba(100,150,110,1)','rgba(0,150,110,1)'],
+       }],
+       labels:["unattempted","right answered","wrongly answered"]
+     };
+     var chart1 = new Chart(ctx1, {
+      type: 'pie',
+      data: data1,
+      options:{
+      responsive:true
+}
+  });
+  console.log(chart1,"dskjaldjksajd");
+      var chart2 = new Chart(ctx2, {
+      type: 'pie',
+      data: data2,
+      options:{
+      responsive:true
+}
+  });
+
+}
 </script>
 <%- include("./partials/tefooter.ejs") %>

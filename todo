@@ -102,28 +102,56 @@ array.forEach((x)=>{
 })
 
 
+/
 
 
 
 
 
+///////////////////////////////////////add socket programming for the exam page of the student!
+1) already the in socket code it keeps on checking whether the exam is in the status completed or not ! once it gets completed! just io.emit("examcompleted")
+2)recieve it only on the students quiz page! and then using dom auto submit the form!
 
 
 
+///////////////////////
+CHANGE THE START EXAM HREF !!!! OF THE STUDENTS SIDE
 
 
-
+////////////////////////////////REFRESH`
+REFRESH THE INDEX PAGE OF THE STUDENT EVERY 5 SECONDS!
+AND EVEN THE STUDENTS LIST PAGE AFTER EVERY 5SECONDS!
 
 
 
 *****how to handle a hell lot of number of users at a time ? *******************************
 
 
-
+/////////////////////////////////////////////////////////////
+change the responses.ejs to responses.html
+getting the initial data can be done using socket!
 
 
 
 role=1 ----teachers
+
+
+
+
+//////////////////////
+add required to the inputs of the forms
+
+
+
+
+
+/////////////////////////////////////////////////in v2 actually implement it now!!!!
+1)adding a functionality that teacher specifieds the time test to be closed in addition to the duration!
+2)then student will be able to join and take the test in any duration block between that block given by teacher!
+3) ex: starts at 10:00 am ends at 10:30am ; duration :10mmins
+student10:20 -----ends at 10:30!
+student 10:10----ends at 10:20
+student >10:20---penalty of those many mins that is 10:23 ----ends at 10:30 -----only 7 mins as he was late!!!!
 
 
 <%- include("./partials/tefooter.ejs") %>

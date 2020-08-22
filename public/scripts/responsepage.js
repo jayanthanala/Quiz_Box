@@ -26,6 +26,7 @@ function addData(data){
   if(responses.length==0){
     data.responses.forEach((d)=>{
       responses.push(d);
+      console.log("pushed");
     });
     // console.log(data);
     // console.log(data.responses);
@@ -61,6 +62,7 @@ function addStudents(data){
     row.appendChild(hr);
     container.appendChild(row);
   })
-
-
 }
+
+
+///////////////////////////////////////////////////////////////charts.js
