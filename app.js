@@ -179,18 +179,31 @@ app.get("/st/add/:id",authenticatedStudent,(req,res) => {
 });
 
 app.get("/st/exam/:id",authenticatedStudent,(req,res) => {
-  Question.find({examid:req.params.id},(err,exam) => {
+  Question.find({examid:req.params.id},(err,questions) => {
     if(err){console.log(err);}
     else{
-      res.render("stexam",{questions:exam})
+      var totalMarks = 0;
+      questions.forEach((question) => {
+        totalMarks = totalMarks + question.marks;
+      });
+        var responseSheet = {
+          examid:req.params.id,
+          userid:req.user.username,
+          marks:totalMarks
+        }
+      Response.create(responseSheet,(err,succ) => {
+        if(err){console.log(err);}
+        else{
+          res.render("stexam",{questions:questions})
+        }
+      });
     }
   });
 });
 
 app.post("/somewhere",(req,res) => {
-  res.send(req.body);
-  console.log(req.body);
-})
+
+});
 
 app.get("/st/completed",authenticatedStudent,(req,res) => {
   Exam.find({students:req.user.username},(err,exams) => {
@@ -539,7 +552,7 @@ function run(){
       //console.log(exams[i].date.getTime()<=obj.getTime() && (exams[i].date.getDate()<=obj.getDate() && exams[i].date.getMonth()<=obj.getMonth() && exams[i].date.getYear()<=obj.getYear()));
       if(exams[i].date.getTime()<=obj.getTime()&& (exams[i].date.getDate()<=obj.getDate() && exams[i].date.getMonth()<=obj.getMonth() && exams[i].date.getYear()<=obj.getYear())){
         start(exams[i]._id);
-        console.log("exam of id : "+(exams[i]._id+" has started");
+        console.log("exam of id : "+(exams[i]._id)+" has started");
         examStarted(exams.splice(i,1)[0]);
 
       }
