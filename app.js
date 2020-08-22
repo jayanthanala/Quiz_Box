@@ -255,7 +255,13 @@ app.post("/te/exam/new",authenticatedTeacher,(req,res)=>{
         var marks=0;
         questions.forEach((q,i)=>{
         q["options"]=options[i];
+        let array = new Array(options[i].length);
+        for(var x of array){
+          x=0;
+        };
+        q["optioncount"]=array;
         q["examid"]=exam._id;
+        q["unattempted"]=q["wrongans"]=q["rightans"]=0;
         marks+=Number(q["marks"]);
       });
       //TRY TO REFACTOR THIS CODE LATER TO MAKE IT MORE DRY AND FAST!!
@@ -306,12 +312,15 @@ if(req.file){
         resolve(s);
 
       });
+    //  console.log(students);
       students.forEach((s)=>{
-        Student.findOne({username:s},(e,st)=>{
+        User.findOne({username:s},(e,st)=>{
           if(e) console.log(e);
           else if(st){
             st.examid.push(id);
-            st.save((e,stu)=>{});
+            st.save((e,stu)=>{
+              console.log(e);
+            });
           }
         })
       })
@@ -327,6 +336,7 @@ if(req.file){
           exam.status="ready";
           exam.duration=req.body.scheduled.duration;
           exam.students=students;
+          //console.log("came");
           exam.save((e,s)=>{
             if(e) console.log(e);
             else{
@@ -375,7 +385,7 @@ app.post("/te/exam/:id/students",authenticatedTeacher,(req,res)=>{
            if(e) console.log(e);
            else{
              console.log(s);
-             Student.findOne({username:req.body.student},(e,st)=>{
+             User.findOne({username:req.body.student},(e,st)=>{
                if(e) console.log(e);
                else{
                  if(st){
@@ -410,7 +420,7 @@ app.delete("/te/exam/:id/students",(req,res) => {
       Exam.findByIdAndUpdate(req.params.id,{$pull:{students:req.body.student}},(err) => {
         if(err){console.log(err);}
         else{
-          Student.findOneAndUpdate({username:req.body.student},{$pull:{examid:req.params.id}},(error)=>{
+          User.findOneAndUpdate({username:req.body.student},{$pull:{examid:req.params.id}},(error)=>{
             if(error) console.log(error);
             else{
                         res.redirect("/te/exam/"+req.params.id+"/students");

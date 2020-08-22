@@ -3,10 +3,11 @@ const mongoose = require("mongoose");
 const questionSchema = new mongoose.Schema({
   q:String,   //question
   options: [],
+  optioncount:[],
   ans:Number,
   unattempted:Number,
   wrongans:Number,
-  ans:Number,
+  rightans:Number,
   examid:String,
   marks:Number
 });
