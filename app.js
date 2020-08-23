@@ -493,7 +493,15 @@ app.post("/st/submit/:id",(req,res) => {
     userid:req.user.username
   });
   responses.save();
-  res.send(responses);
+  console.log(responses);
+
+  Exam.findOneAndUpdate({_id:req.params.id},{$pull:{students:req.user.username}},(err) => {
+    if(err){console.log(err);}
+    else{
+      User.updateOne({username:req.user.username},{$push:{attempted:req.params.id},$pull:{examid:req.params.id}},(err) => {
+        res.redirect("/st/completed");
+      });
+}});
 });
 
 
