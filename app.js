@@ -487,10 +487,16 @@ app.post("/st/submit/:id",(req,res) => {
       questions.forEach((q,i) => {
         if(arr2[i] != -1){
           if(q.ans == arr2[i]){
-            
+            marks += q.marks;
+            q.rightans+=1;
+          }else{
+            q.wrongans+=1;
           }
+        }else{
+          q.unattempted+=1;
         }
-      })
+      });
+      console.log(marks);
     }
   });
 
