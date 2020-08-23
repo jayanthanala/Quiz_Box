@@ -89,7 +89,7 @@ app.get("/te/exam/staged",authenticatedTeacher,(req,res)=>{
   Exam.find({status:"staged",teacherid:req.user._id},(error,exams)=>{
     if(error) console.log(error);
     else{
-      console.log(exams);
+      //console.log(exams);
       res.render("staged",{exams:exams});
     }
   })
@@ -185,21 +185,7 @@ app.get("/st/exam/:id",authenticatedStudent,(req,res) => {
   Question.find({examid:req.params.id},(err,questions) => {
     if(err){console.log(err);}
     else{
-      var totalMarks = 0;
-      questions.forEach((question) => {
-        totalMarks = totalMarks + question.marks;
-      });
-        var responseSheet = {
-          examid:req.params.id,
-          userid:req.user.username,
-          marks:totalMarks
-        }
-      Response.create(responseSheet,(err,succ) => {
-        if(err){console.log(err);}
-        else{
-          res.render("stexam",{questions:questions})
-        }
-      });
+          res.render("stexam",{questions:questions});
     }
   });
 });
@@ -208,7 +194,7 @@ app.get("/st/completed",authenticatedStudent,(req,res) => {
   Exam.find({students:req.user.username},(err,exams) => {
     if(err){console.log(err);}
     else{
-      console.log("reached");
+      //console.log("reached");
       res.render("stcompleted",{req:req.user,exams:exams});
     }
   });
@@ -247,7 +233,7 @@ app.post("/te/register",(req,res)=>{
   User.register({username:req.body.username,role:1},req.body.password,(error,sol)=>{
     if(error) console.log(error);
     else{
-      console.log(sol);
+    //  console.log(sol);
 
       passport.authenticate("local")(req,res,()=>{
         res.redirect("/te/index");
@@ -266,7 +252,7 @@ app.post("/te/exam/new",authenticatedTeacher,(req,res)=>{
   for(var i=1;i<=6;i++){
     accessCode+=String.fromCharCode((Math.floor(Math.random()*42))+48);
   }
-  console.log(accessCode);
+  //console.log(accessCode);
 
   var exam = {
     teacherid:req.user._id,
@@ -299,7 +285,7 @@ app.post("/te/exam/new",authenticatedTeacher,(req,res)=>{
               exam.save((er,ex)=>{
                 if(er) console.log(er);
                 else{
-                  console.log(q);
+                  //console.log(q);
                   res.redirect("/te/index");
                 }
               })
@@ -323,10 +309,10 @@ if(req.file){
       var students  = await new Promise((resolve,reject)=>{
         var s=[];
         var i=0;
-        console.log(rows);
+        //console.log(rows);
         //condition for checking roll number
         i=rows[0].indexOf("rollno");
-        console.log(i);
+        //console.log(i);
         for(var i;i<=rows.length-2;i++){
           s[i]=rows[i+1][0];
         }
@@ -356,7 +342,7 @@ if(req.file){
           var array = req.body.scheduled.date.split("-");
           var time = req.body.scheduled.time.split(":");
           var date = new Date(Number(array[0]),Number(array[1])-1,Number(array[2]),Number(time[0]),Number(time[1]));
-          console.log(date);
+          //console.log(date);
           exam.date=date;
           exam.status="ready";
           exam.duration=req.body.scheduled.duration;
@@ -365,7 +351,7 @@ if(req.file){
           exam.save((e,s)=>{
             if(e) console.log(e);
             else{
-              console.log(s);
+              //console.log(s);
               addExam(s);
               res.redirect("/te/exam/ready")
             }
@@ -382,14 +368,14 @@ if(req.file){
       var array = req.body.scheduled.date.split("-");
       var time = req.body.scheduled.time.split(":");
       var date = new Date(Number(array[0]),Number(array[1])-1,Number(array[2]),Number(time[0]),Number(time[1]));
-      console.log(date);
+      //console.log(date);
       exam.date=date;
       exam.status="ready";
       exam.duration=req.body.scheduled.duration;
       exam.save((e,s)=>{
         if(e) console.log(e);
         else{
-          console.log(s);
+          //console.log(s);
           addExam(s);
           res.redirect("/te/exam/ready")
         }
@@ -409,7 +395,7 @@ app.post("/te/exam/:id/students",authenticatedTeacher,(req,res)=>{
          exam.save((e,s)=>{
            if(e) console.log(e);
            else{
-             console.log(s);
+             //console.log(s);
              User.findOne({username:req.body.student},(e,st)=>{
                if(e) console.log(e);
                else{
@@ -490,12 +476,24 @@ app.post("/st/register",(req,res)=>{
 });
 
 app.post("/st/submit/:id",(req,res) => {
-  console.log(req.body,req.body.q);
-  // var answer = {
-  //   id:req.body.
-  //   marked:req.body.
-  // }
-  // Response.updateOne({examid:req.params.id},{})
+  var answers = [];
+  var keys = Object.keys(req.body.q);
+  var values = Object.values(req.body.q);
+  for(var i=0;i<keys.length;i++){
+    var response = {
+      id:keys[i],
+      marked:values[i]
+    }
+    answers.push(response);
+  }
+
+  const responses = new Response({
+    answers:answers,
+    examid:req.params.id,
+    userid:req.user.username
+  });
+  responses.save();
+  res.send(responses);
 });
 
 
@@ -514,7 +512,7 @@ Exam.find({status:"ready"},(error,exam)=>{
 Exam.find({status:"started"},(error,exam)=>{
   if(error) console.log(error);
   else{
-    console.log("dasdsa",exam);
+    //console.log("dasdsa",exam);
     exam.forEach((e)=>{
       examStarted(e);
     })
