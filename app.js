@@ -260,15 +260,18 @@ app.post("/te/exam/new",authenticatedTeacher,(req,res)=>{
     status:"staged",
     title:req.body.title,
   }
+  console.log("sdamdklsa");
   Exam.create(exam,(error,exam)=>{
     if(error) console.log(error);
     else{
+        console.log("************************************************************8");
         var marks=0;
         questions.forEach((q,i)=>{
         q["options"]=options[i];
-        let array = new Array(options[i].length);
-        for(var x of array){
-          x=0;
+        console.log(options[i],options[i].length);
+        let array = [];
+        for(var x=0;x<=options[i].length-1;x++){
+          array[x]=0;
         };
         q["optioncount"]=array;
         q["examid"]=exam._id;
@@ -285,7 +288,8 @@ app.post("/te/exam/new",authenticatedTeacher,(req,res)=>{
               exam.save((er,ex)=>{
                 if(er) console.log(er);
                 else{
-                  //console.log(q);
+                  console.log(q);
+                    console.log("sdamdklsa");
                   res.redirect("/te/index");
                 }
               })
@@ -489,6 +493,9 @@ app.post("/st/submit/:id",(req,res) => {
       var marks = 0;
       var obj=[];
       questions.forEach((q,i) => {
+        console.log(q.optioncount,"//////////////option count");
+        q.optioncount[arr2[i]-1]=q.optioncount[arr2[i]-1]+1;
+                console.log(q.optioncount,"//////////////option count");
         if(arr2[i] != -1){
           if(q.ans == arr2[i]){
             marks+=q.marks;
@@ -499,15 +506,24 @@ app.post("/st/submit/:id",(req,res) => {
         }else{
           q.unattempted+=1;
         }
-        q.save((e,s)=>{
+        Question.findByIdAndUpdate(q._id,{
+          optioncount:q.optioncount,
+          rightans:q.rightans,
+          wrongans:q.wrongans,
+          unattempted:q.unattempted
+        },(e,s)=>{
           if(e) console.log(e);
+          else {
+            console.log(s);
+          }
+        })
 
-        });
+
         obj[i]={
           id:q._id,
           marked:arr2[i]
-        };
-      });
+        }
+                });
       Response.create({
         answers:obj,
         marks:marks,
@@ -713,23 +729,25 @@ io.on("connection",(socket)=>{
     Exam.findById(id,(err,exam)=>{
       if(err) console.log(err);
       else{
-        if(exam.status=="started"){
-          Response.find({examid:id},(e,s)=>{
-            if(e) console.log(e);
-            else{
-              Question.find({examid:id},(er,so)=>{
-                if(er) console.log(er);
-                else{
-                  socket.emit("responses",{
-                    responses:s,
-                    questions:so
-                  });
-                }
-              })
-            }
-          })
-        }else{
-          socket.emit("final","examclosed");
+        if(exam){
+          if(exam.status=="started"){
+            Response.find({examid:id},(e,s)=>{
+              if(e) console.log(e);
+              else{
+                Question.find({examid:id},(er,so)=>{
+                  if(er) console.log(er);
+                  else{
+                    socket.emit("responses",{
+                      responses:s,
+                      questions:so
+                    });
+                  }
+                })
+              }
+            })
+          }else{
+            socket.emit("final","examclosed");
+          }
         }
       }
     })
