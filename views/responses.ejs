@@ -18,6 +18,16 @@
      </div>
      <hr>
    </div>
+     <%for(var i=0;i<=responses.length-1;i++){%>
+       <div class="row">
+         <div class="col-md-6">
+           <%=responses[i].userid%>
+         </div>
+         <div class="col-md-6">
+           <%=responses[i].marks%>
+         </div>
+       </div>
+     <%}%>
 </div>
 <hr>
 <div class="container questions">
@@ -66,23 +76,25 @@ var a = document.querySelector("h1");
 var id = a.textContent;
 console.log(id);
 
-var responses = [];
-
+var responses = <%-JSON.stringify(responses)%>;
+console.log(responses);
 /////////////socket emit
 
-var stop;
-stop= setInterval(()=>{
-  socket.emit("sendResponses",id);
-  console.log("hello");
-},7000);
+// var stop;
+// stop= setInterval(()=>{
+//   socket.emit("sendResponses",id);
+//   console.log("hello");
+// },7000);
 
 
 socket.on("responses",(data)=>{
+  console.log(data,"***********************************************************************");
   addData(data);
+
 });
 
 socket.on("final",(data)=>{
-  clearInterval(stop);
+  // clearInterval(stop);
   var secret = document.getElementById("secret");
   console.log("examcompleted");
   secret.style.display="flex";
@@ -92,6 +104,7 @@ socket.on("final",(data)=>{
 
 
 function addData(data){
+  console.log("////////////////////////////////////////came inside fucntion",responses.length);
   if(responses.length==0){
     data.responses.forEach((d)=>{
       responses.push(d);
@@ -104,8 +117,10 @@ function addData(data){
       updateCharts(data.questions);
 
   }else{
+    console.log("//////////////////////////////////////////////////data came",responses.length,data.responses.length);
     if(responses.length<data.responses.length){
-      var newResponses = data.responses.slice(responses.length)
+      var newResponses = data.responses.slice(responses.length);
+      console.log(newResponses,"senttttttttt");
       addStudents(newResponses);
       console.log(responses.length,"////////",data.responses.length);
       console.log("added new");
@@ -119,7 +134,7 @@ function addData(data){
 var container = document.getElementsByClassName("students")[0];
 
 function addStudents(data){
-  console.log(data.length);
+  console.log(data.length,"created");
   data.forEach((x)=>{
     let row = document.createElement("div");
     row.classList.add("row");
@@ -133,6 +148,7 @@ function addStudents(data){
     row.appendChild(first);
     row.appendChild(second);
     row.appendChild(hr);
+    console.log("appending");
     container.appendChild(row);
   })
 }

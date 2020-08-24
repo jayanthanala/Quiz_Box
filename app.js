@@ -138,7 +138,11 @@ app.get("/te/exam/:id/edit",authenticatedTeacher,(req,res)=>{
 ////this page has socket connection so no need to send anything
 app.get("/te/exam/:id/responses",(req,res)=>{
   Question.find({examid:req.params.id},(e,questions)=>{
-    res.render("responses",{id:req.params.id,questions:questions});
+    Response.find({examid:req.params.id},(er,s)=>{
+      //console.log("****************************************s",s);
+      res.render("responses",{id:req.params.id,questions:questions,responses:s});
+    })
+
   })
 
 })
@@ -264,7 +268,7 @@ app.post("/te/exam/new",authenticatedTeacher,(req,res)=>{
   Exam.create(exam,(error,exam)=>{
     if(error) console.log(error);
     else{
-        console.log("************************************************************8");
+      //  console.log("************************************************************8");
         var marks=0;
         questions.forEach((q,i)=>{
         q["options"]=options[i];
@@ -320,7 +324,7 @@ if(req.file){
         for(var i;i<=rows.length-2;i++){
           s[i]=rows[i+1][0];
         }
-        console.log(file.destination+"/"+file.filename);
+        //console.log(file.destination+"/"+file.filename);
         fs.unlink(req.file.destination + "/" + req.file.filename,(e)=>{
           if(e) console.log(e);
         })
@@ -493,9 +497,7 @@ app.post("/st/submit/:id",(req,res) => {
       var marks = 0;
       var obj=[];
       questions.forEach((q,i) => {
-        console.log(q.optioncount,"//////////////option count");
         q.optioncount[arr2[i]-1]=q.optioncount[arr2[i]-1]+1;
-                console.log(q.optioncount,"//////////////option count");
         if(arr2[i] != -1){
           if(q.ans == arr2[i]){
             marks+=q.marks;
@@ -725,26 +727,29 @@ const io = socket(server);
 io.on("connection",(socket)=>{
   console.log("connected");
   socket.on("sendResponses",(id)=>{
-    console.log("asked for responses");
+    console.log("sendresponses");
     Exam.findById(id,(err,exam)=>{
       if(err) console.log(err);
       else{
         if(exam){
           if(exam.status=="started"){
-            Response.find({examid:id},(e,s)=>{
-              if(e) console.log(e);
-              else{
-                Question.find({examid:id},(er,so)=>{
-                  if(er) console.log(er);
-                  else{
-                    socket.emit("responses",{
-                      responses:s,
-                      questions:so
-                    });
-                  }
-                })
-              }
-            })
+            setTimeout(()=>{
+              Response.find({examid:id},(e,s)=>{
+                if(e) console.log(e);
+                else{
+                  console.log(s);
+                  Question.find({examid:id},(er,so)=>{
+                    if(er) console.log(er);
+                    else{
+                      io.emit("responses",{
+                        responses:s,
+                        questions:so
+                      });
+                    }
+                  })
+                }
+              })
+            },200);
           }else{
             socket.emit("final","examclosed");
           }
