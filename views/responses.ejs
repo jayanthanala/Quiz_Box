@@ -88,7 +88,7 @@ console.log(responses);
 
 
 socket.on("responses",(data)=>{
-  console.log(data,"***********************************************************************");
+  console.log(data.responses.length,"***********************************************************************");
   addData(data);
 
 });
