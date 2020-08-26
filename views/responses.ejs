@@ -57,47 +57,143 @@
 <script src="/scripts/responsepage.js"></script>
 
 <script type="text/javascript">
+
+//////////////////////////////////////////////////////////////////////////socket programming
+const socket = io();
+console.log(socket);
+
+var a = document.querySelector("h1");
+var id = a.textContent;
+console.log(id);
+
+var responses = [];
+
+/////////////socket emit
+
+setInterval(()=>{
+  socket.emit("sendResponses",id);
+  console.log("hello");
+},7000);
+
+
+socket.on("responses",(data)=>{
+  addData(data);
+});
+
+
+
+
+function addData(data){
+  if(responses.length==0){
+    data.responses.forEach((d)=>{
+      responses.push(d);
+      console.log("pushed");
+
+    });
+    // console.log(data);
+    // console.log(data.responses);
+      addStudents(data.responses);
+      updateQuestions(data.questions);
+
+  }else{
+    if(responses.length<data.responses.length){
+      var newResponses = data.responses.slice(responses.length)
+      addStudents(newResponses);
+      console.log("added new");
+      updateCharts(data.questions);
+    }
+
+  }
+}
+
+var container = document.getElementsByClassName("students")[0];
+
+function addStudents(data){
+  console.log(data.length);
+  data.forEach((x)=>{
+    let row = document.createElement("div");
+    row.classList.add("row");
+    let first = document.createElement("div");
+    first.classList.add("col-md-6");
+    let second = document.createElement("div");
+    second.classList.add("col-md-6");
+    first.innerHTML=x.userid;
+    second.innerHTML=x.marks;
+    let hr = document.createElement("hr");
+    row.appendChild(first);
+    row.appendChild(second);
+    row.appendChild(hr);
+    container.appendChild(row);
+  })
+}
+
+
+///////////////////////////////////////////////////////////////////////////////// Chart.js
   // ******************************************************************************************8888
   var q = <%-JSON.stringify(questions)%>;
 //***************************************************************************************************
+////////////////////////////////////////////////////////////////////initialization!!!
   var i;
-  console.log(typeof  q,q,q.length);
     for(i=0;i<=q.length-1;i++){
      var ctx1=document.getElementById("piechart1"+i);
      var ctx2=document.getElementById("piechart2"+i);
     // console.log(ctx1,ctx2);
-     var  data1={
-       datasets:[{
-         data:q[i].optioncount
-       }],
-     }
-
-     if(i == 0){
-       var data1={
-         datasets:[{
-           data:[10,20,30],
-           backgroundColor:['rgba(200, 150, 110,1)','rgba(100,150,110,1)','rgba(000,150,110,1)','rgba(0,0,110,1)']
-         }],
-          labels: q[i].options
-     }
-   }
-   console.log(q[i].options,"///////////////");
-     if(1 == 1){
-       var data1={
-         datasets:[{
-           data:[10,20,30,40],
-           backgroundColor:['rgba(200, 150, 110,1)','rgba(100,150,110,1)','rgba(000,150,110,1)','rgba(0,0,110,1)'],
-         }],
-         labels: q[i].options
-     }
-   }
+    var data1={
+      datasets:[{
+        data:q[i].optioncount,
+        backgroundColor:[
+        "red",
+        "blue",
+        "orange",
+        "yellow",
+        "green"
+        "violet"]
+      }],
+       labels: q[i].options
+  }
+   //
+   //   if(i == 0){
+   //     var data1={
+   //       datasets:[{
+   //         data:q[i].optioncount,
+   //         backgroundColor:[
+   //         "red",
+   //         "blue",
+   //         "orange",
+   //         "yellow",
+   //         "green"
+   //         "violet"]
+   //       }],
+   //        labels: q[i].options
+   //   }
+   // }
+   // console.log(q[i].options,"///////////////");
+   //   if(1 == 1){
+   //     var data1={
+   //       datasets:[{
+   //         data:[10,20,30,40],
+   //         backgroundColor:[ "red",
+   //          "blue",
+   //          "orange",
+   //          "yellow",
+   //          "green"
+   //          "violet"],
+   //       }],
+   //       labels: q[i].options
+   //   }
+   // }
 
 
      var data2={
        datasets:[{
-         // data:[q[i].unattempted,q[i].rightans,q[i].wrongans]
-         data:[20,65,25],
-         backgroundColor:['rgba(200, 150, 110,1)','rgba(100,150,110,1)','rgba(0,150,110,1)'],
+         data:[q[i].unattempted,q[i].rightans,q[i].wrongans],
+         // data:[20,65,25],
+         backgroundColor:[ "red",
+          "blue",
+          "orange",
+          "yellow",
+          "green"
+          "violet"],
        }],
        labels:["unattempted","right answered","wrongly answered"]
      };
@@ -116,7 +212,93 @@
       responsive:true
 }
   });
+}
+
+
+//////////////////////////////////////////////////////////////////////////////dynamic updation of the charts!!
+function updateCharts(questions){
+  q=questions;
+    for(var i=0;i<=q.length-1;i++){
+     var ctx1=document.getElementById("piechart1"+i);
+     var ctx2=document.getElementById("piechart2"+i);
+    // console.log(ctx1,ctx2);
+    var data1={
+      datasets:[{
+        data:q[i].optioncount,
+        backgroundColor:[
+        "red",
+        "blue",
+        "orange",
+        "yellow",
+        "green"
+        "violet"]
+      }],
+       labels: q[i].options
+  }
+   //
+   //   if(i == 0){
+   //     var data1={
+   //       datasets:[{
+   //         data:q[i].optioncount,
+   //         backgroundColor:[
+   //         "red",
+   //         "blue",
+   //         "orange",
+   //         "yellow",
+   //         "green"
+   //         "violet"]
+   //       }],
+   //        labels: q[i].options
+   //   }
+   // }
+   // console.log(q[i].options,"///////////////");
+   //   if(1 == 1){
+   //     var data1={
+   //       datasets:[{
+   //         data:[10,20,30,40],
+   //         backgroundColor:[ "red",
+   //          "blue",
+   //          "orange",
+   //          "yellow",
+   //          "green"
+   //          "violet"],
+   //       }],
+   //       labels: q[i].options
+   //   }
+   // }
+
+
+     var data2={
+       datasets:[{
+         data:[q[i].unattempted,q[i].rightans,q[i].wrongans],
+         // data:[20,65,25],
+         backgroundColor:[ "red",
+          "blue",
+          "orange",
+          "yellow",
+          "green"
+          "violet"],
+       }],
+       labels:["unattempted","right answered","wrongly answered"]
+     };
+     var chart1 = new Chart(ctx1, {
+      type: 'pie',
+      data: data1,
+      options:{
+      responsive:true
+}
+  });
+  console.log(chart1,"dskjaldjksajd");
+      var chart2 = new Chart(ctx2, {
+      type: 'pie',
+      data: data2,
+      options:{
+      responsive:true
+}
+  });
+}
 
 }
+
 </script>
 <%- include("./partials/tefooter.ejs") %>

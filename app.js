@@ -475,19 +475,23 @@ app.post("/st/register",(req,res)=>{
   });
 });
 
+
 app.post("/st/submit/:id",(req,res) => {
   var arr3 = [];
-  var marks = 0;
+
   var arr1 = Object.keys(req.body.q);
   var arr2 = Object.values(req.body.q);
+
 
   Question.find({examid:req.params.id},(err,questions) => {
     if(err){console.log(err);}
     else{
+      var marks = 0;
+      var obj=[];
       questions.forEach((q,i) => {
         if(arr2[i] != -1){
           if(q.ans == arr2[i]){
-            marks += q.marks;
+            marks+=q.marks;
             q.rightans+=1;
           }else{
             q.wrongans+=1;
@@ -499,6 +503,7 @@ app.post("/st/submit/:id",(req,res) => {
       console.log(marks);
     }
   });
+});
 
 
 //   for(var i=0;i<keys.length;i++){
@@ -523,14 +528,13 @@ app.post("/st/submit/:id",(req,res) => {
 //         if(err){console.log(err);}
 //         else{
 //           console.log(questions);
-//           User.updateOne({username:req.user.username},{$push:{attempted:req.params.id},$pull:{examid:req.params.id}},(err) => {
-//             res.redirect("/st/completed");
+
 //           });
 //         }
 //       })
 //
 // }});
-});
+
 
 
 
