@@ -162,3 +162,32 @@ student >10:20---penalty of those many mins that is 10:23 ----ends at 10:30 ----
 
 /////////////////////////////////////////////////////////////////////////
 class average!!!!
+
+
+
+
+
+
+
+
+
+// function createOption(i,j){
+//   var input= document.createElement("input");
+//   input.setAttribute("type","radio");
+//   input.setAttribute("name","q["+questions[i]._id+"]");
+//   input.id=questions[i]._id;
+//   input.setAttribute("value",j+1);
+//   var label = document.createElement("label");
+//   label.setAttriute("for",questions[i]._id);
+//   label.innerHTML=questions[i].options[j];
+//   var div = createDiv();
+//   div.appendChild(input);
+//   div.appendChild(label);
+//
+// }
+// function createLabel(){
+//   return document.createElement("label");
+// }
+// function createDiv(){
+//   return document.createElement("div");
+// }
