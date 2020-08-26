@@ -32,6 +32,7 @@
 
 
 
+
   <h2 class="">Hello <%=req.name%>.</h2>
 
   <center>
@@ -42,8 +43,7 @@
     <div class="container px-5">
       <div class="container px-5">
         <% for(var i=0;i<=exams.length-1;i++){%>
-        <% if(req.attempted[i] == exam[i].id){ %>
-          <%console.log(req.attempted);%>
+
           <div class="row my-5 py-3 border">
             <div class="col-md-12">
               <h4 class="">Title: <%=exams[i].title%></h4>
@@ -58,7 +58,7 @@
                 <a href="/te/exam/<%=exams[i]._id%>/students" class="btn btn-outline-primary">View Results</a>
             </div>
           </div>
-        <%}%>
+
       <%}%>
       </div>
     </div>

@@ -9,6 +9,7 @@ const examSchema = new mongoose.Schema({
   noquestions:Number,
   date:Date,
   students:[],
+  attempted:[],
   duration:String,
   closetime:Date
 });

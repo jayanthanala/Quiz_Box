@@ -195,10 +195,9 @@ app.get("/st/exam/:id",authenticatedStudent,(req,res) => {
 });
 
 app.get("/st/completed",authenticatedStudent,(req,res) => {
-  Exam.find({students:req.user.username},(err,exams) => {
+  Exam.find({attempted:req.user.username},(err,exams) => {
     if(err){console.log(err);}
     else{
-      //console.log("reached");
       res.render("stcompleted",{req:req.user,exams:exams});
     }
   });
@@ -485,11 +484,10 @@ app.post("/st/register",(req,res)=>{
 
 
 app.post("/st/submit/:id",(req,res) => {
-  var arr3 = [];
 
   var arr1 = Object.keys(req.body.q);
   var arr2 = Object.values(req.body.q);
-
+  var arr3 = [];
 
   Question.find({examid:req.params.id},(err,questions) => {
     if(err){console.log(err);}
@@ -519,13 +517,11 @@ app.post("/st/submit/:id",(req,res) => {
             console.log(s);
           }
         });
-
-
         obj[i]={
           id:q._id,
           marked:arr2[i]
         }
-                });
+        });
       Response.create({
         answers:obj,
         marks:marks,
@@ -534,17 +530,23 @@ app.post("/st/submit/:id",(req,res) => {
       },(err,s)=>{
         if(err) console.log(err);
         else{
-              User.updateOne({username:req.user.username},{$push:{attempted:req.params.id},$pull:{examid:req.params.id}},(error) => {
-              if(error)
-              res.redirect("/st/completed");
+              Exam.updateOne({_id:req.params.id},{$push:{attempted:req.user.username}},(err) => {
+              if(err){console.log(err);}
+              else{
+                Exam.findOneAndUpdate({_id:req.params.id},{$pull:{students:req.user.username}},(err) => {
+                  if(err){console.log(err);}
+                  else{
+                    res.redirect("/st/completed");
+                  }
+                });
+              }
         });
       }
     });
-
-
     }
   });
 });
+
 
 
 //   for(var i=0;i<keys.length;i++){
