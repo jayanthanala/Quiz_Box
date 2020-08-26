@@ -119,7 +119,7 @@ app.get("/te/exam/:id/students",authenticatedTeacher,(req,res)=>{
 });
 
 //in future if req , give an option for editing the title also!
-app.get("/te/exam/:id/edit",authenticatedTeacher,(req,res)=>{
+app.get("/te/exam/:id/edit",(req,res)=>{
   Question.find({examid:req.params.id},(error,questions)=>{
     if(error) console.log(error);
     else{
@@ -430,6 +430,8 @@ app.post("/te/exam/:id/students",authenticatedTeacher,(req,res)=>{
 
 
 
+
+
 /////////////////////////////////////////////////////delete routes
 
 
@@ -463,6 +465,51 @@ Exam.findById(req.params.id,(e,exam)=>{
 })
 })
 
+
+app.patch("/te/exam/:id/edit",(req,res)=>{
+  Question.deleteMany({examid:req.params.id},(e)=>{
+    if(e) console.log(e);
+    else{
+      var questions= req.body.questions;
+      var options = req.body.options;
+      var marks=0;
+      questions.forEach((q,i)=>{
+      q["options"]=options[i];
+      console.log(options[i],options[i].length);
+      let array = [];
+      for(var x=0;x<=options[i].length-1;x++){
+        array[x]=0;
+      };
+      q["optioncount"]=array;
+      q["examid"]=req.params.id;
+      q["unattempted"]=q["wrongans"]=q["rightans"]=0;
+      marks+=Number(q["marks"]);
+      });
+      //TRY TO REFACTOR THIS CODE LATER TO MAKE IT MORE DRY AND FAST!!
+      var noquestions = questions.length;
+        Question.insertMany(questions,(e,q)=>{
+          if(e) console.log(e);
+          else{
+            Exam.findById(req.params.id,(error,exam)=>{
+              if(error) console.log(error);
+              else{
+                exam["marks"]=marks;
+                exam["noquestions"]=noquestions;
+                exam.save((er,ex)=>{
+                  if(er) console.log(er);
+                  else{
+                    res.redirect("/te/exam/staged");
+                  }
+                })
+              }
+
+            })
+          }
+        })
+
+    }
+});
+});
 ///////////////////////////////student routes//////////////
 
 app.post("/st/register",(req,res)=>{
