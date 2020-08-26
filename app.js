@@ -189,6 +189,7 @@ app.get("/st/exam/:id",authenticatedStudent,(req,res) => {
   Question.find({examid:req.params.id},(err,questions) => {
     if(err){console.log(err);}
     else{
+          console.log("hello");
           res.render("stexam",{questions:questions});
     }
   });
@@ -786,7 +787,9 @@ function examNotAttempted(req,res,next){
   Exam.findById(req.params.id,(e,exam)=>{
     if(e) console.log(e);
     else{
-      if(exam.students.indexOf(req.user.username)!=-1) next();
+      if(exam.students.indexOf(req.user.username)!=-1){
+        next();
+      }
       else{
         res.redirect("/st/completed");
       }
