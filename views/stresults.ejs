@@ -75,11 +75,7 @@
               <% }%>
             <%  if(response[0].answers[i].marked == -1){%>
                 <p>No Answer Given</p>
-            <%  }else if(response[0].answers[i].marked == questions[i].ans){%>
-                <p style="color:green">Your Answer = <%=response[0].answers[i].marked%></p>
-            <%  }else{%>
-              <p style="color:red">Your Answer = <%=response[0].answers[i].marked%></p>
-          <%  }%>
+            <%  }%>
           </div>
 
 
