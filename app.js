@@ -209,7 +209,7 @@ app.get("/st/results/:id",authenticatedStudent,(req,res) => {
   Question.find({examid:req.params.id},(err,questions) => {
     if(err){console.log(err);}
     else{
-      Response.find({$or: [{'examid': eid},{'userid': req.user.username}]},(err,response) => {
+      Response.find({$and: [{'examid': eid},{'userid': req.user.username}]},(err,response) => {
         if(err){console.log(err);}
         else{
           //console.log(response);
@@ -589,7 +589,7 @@ app.post("/st/submit/:id",authenticatedStudent,examNotAttempted,(req,res) => {
       Response.create({
         answers:obj,
         marks:marks,
-        userid:req.user._id,
+        userid:req.user.username,
         examid:req.params.id
       },(err,s)=>{
         if(err) console.log(err);
