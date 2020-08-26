@@ -189,8 +189,11 @@ app.get("/st/exam/:id",authenticatedStudent,(req,res) => {
   Question.find({examid:req.params.id},(err,questions) => {
     if(err){console.log(err);}
     else{
-          console.log("hello");
-          res.render("stexam",{questions:questions});
+      Exam.findById(req.params.id,(e,exam)=>{
+        console.log("hello");
+        res.render("stexam",{questions:questions,duration:exam.duration,start:exam.date});
+      })
+
     }
   });
 });
@@ -245,7 +248,7 @@ app.post("/login",(req,res)=>{
           if(req.user.role==1){
             res.redirect("/te/index");
           }else{
-            res.redirect("/st/index")
+            res.redirect("/st/index");
           }
       })
     }
@@ -371,6 +374,7 @@ if(req.file){
       else{
           var array = req.body.scheduled.date.split("-");
           var time = req.body.scheduled.time.split(":");
+          console.log("/////////////////////************",req.body.scheduled.date,req.body.scheduled.time);
           var date = new Date(Number(array[0]),Number(array[1])-1,Number(array[2]),Number(time[0]),Number(time[1]));
           //console.log(date);
           exam.date=date;
@@ -695,6 +699,7 @@ function run(){
 
       }
     }
+    console.log(exams.length);
     if(exams.length==0) clearInterval(stop);
   },1000);
 }
@@ -708,7 +713,6 @@ function checkDuration(){
   stop2=setInterval(()=>{
     for(var i=0;i<=examsrunning.length-1;i++){
       obj = new Date();
-
       var mins = Number(examsrunning[i].duration)*60*1000;
   //    console.log(examsrunning[i].date.getTime()+"//////");
   //    console.log("*********",examsrunning[i].date.getTime()+mins,obj.getTime(),examsrunning[i].date,obj,"*********");

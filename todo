@@ -165,29 +165,9 @@ class average!!!!
 
 
 
-
-
-
-
-
-
-// function createOption(i,j){
-//   var input= document.createElement("input");
-//   input.setAttribute("type","radio");
-//   input.setAttribute("name","q["+questions[i]._id+"]");
-//   input.id=questions[i]._id;
-//   input.setAttribute("value",j+1);
-//   var label = document.createElement("label");
-//   label.setAttriute("for",questions[i]._id);
-//   label.innerHTML=questions[i].options[j];
-//   var div = createDiv();
-//   div.appendChild(input);
-//   div.appendChild(label);
-//
-// }
-// function createLabel(){
-//   return document.createElement("label");
-// }
-// function createDiv(){
-//   return document.createElement("div");
-// }
+//////////////////////////////////////////////////////
+1)timer
+2)marks awarded!
+2)not be able to go back
+3)delete the upload file once the upload has been done!
+4)problem with scheduling of starting of exams code
