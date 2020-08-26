@@ -31,41 +31,27 @@
      </div>
    </nav>
 
-   <script type="text/javascript">
-     function Wrong() {
-       var tag  = document.getElementById('question');
-       tag.style.backgroundColor = "red";
-     }
-   </script>
 
 
 
-<div class="row">
-  <div class="col-md-3">
 
-  </div>
-  <div class="col-md-9">
-      <div class="col-md-12 d-inline">
-          <h1>  timer </h1>
-                <hr>
-      </div>
-
+<div class="" style="padding:150px">
   <%if(questions[0]){%>
+    <center>
+      <h2><%=exam.title%></h2>
+      </center>
         <% for(var i=0;i<=questions.length-1;i++){%>
-          <div id="question">
+
+          <div class="<%=questions[i]%>">
             <div class="col-md-12">
               <h4 class=""><%=(i+1)%>)<%=questions[i].q%></h4>
             </div>
-            <div class="marks">
-              <p style="float:right">(0/5 Marks)</p>
-            </div>
-
               <%  for(var j=0;j<=questions[i].options.length-1;j++){ %>
                 <div class="row">
                   <div class="col-md-6">
                   <%  if(questions[i].ans == j+1){%>
                       <p><%=j+1%>)<%=questions[i].options[j]%> <i class="fas fa-check" style="color:green"></i></p>
-                  <%  }else if(response[0].answers[i].marked == j+1){%>
+                  <%  }else if(response[0].answers[i].marked == j+1 && questions[i].ans != j+1){%>
                       <p><%=j+1%>)<%=questions[i].options[j]%> <i class="fas fa-times" style="color:red"></i></p>
                   <%  }else{%>
                     <p><%=j+1%>)<%=questions[i].options[j]%></p>
@@ -77,16 +63,19 @@
                 <p>No Answer Given</p>
             <%  }%>
           </div>
-
+          <!-- <p style="float:top;font-weight:200;font-size:20px;" id="marks">(<%=response[0].marks%>/<%=questions[i].marks%> Marks)</p> -->
 
             <hr>
         <%}%>
      <div class="form-group submit" style="">
-         <button type="button" class="btn btn-outline-success">Back</button>
+         <a href="/st/completed" style="text-decoration:none"><button type="button" class="btn btn-outline-success">Back</button></a>
      </div>
   <%}%>
-
-
-
 </div>
+
+
+
+
+
+
 <%- include("./partials/tefooter.ejs") %>
