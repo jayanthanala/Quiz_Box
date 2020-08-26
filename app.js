@@ -209,11 +209,17 @@ app.get("/st/results/:id",authenticatedStudent,(req,res) => {
   Question.find({examid:req.params.id},(err,questions) => {
     if(err){console.log(err);}
     else{
-      Response.find({$and: [{'examid': eid},{'userid': req.user.username}]},(err,response) => {
+      Response.find({$and:[{'examid': eid},{'userid': req.user.username}]},(err,response) => {
         if(err){console.log(err);}
         else{
-          //console.log(response);
-          res.render("stresults",{questions:questions,response:response});
+          Exam.findById(req.params.id,(err,exam) => {
+            if(err){console.log(err);}
+            else{
+              console.log(exam);
+              res.render("stresults",{questions:questions,response:response,exam:exam});
+            }
+
+          });
         }
       });
     }

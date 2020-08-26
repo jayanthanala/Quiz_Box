@@ -35,7 +35,7 @@
   <h1 class="">Hello <%=req.name%>.</h1>
 
   <center>
-    <h4>Active Exams</h4>
+    <h3>Active Exams</h3>
     </center>
 
   <%if(exams[0]){%>
@@ -62,10 +62,16 @@
       <%}%>
       </div>
     </div>
-  <%}%>
+  <%}else{%>
+    <div class="container px-5">
+      <center>
+        <h5 style="padding:30px;border:1px solid black;margin:30px">No Active Exams</h5>
+        </center>
+      </div>
+<%  }%>
 <hr>
 <center>
-  <h4>Upcoming Exams</h4>
+  <h3>Upcoming Exams</h3>
   </center>
 <%if(exams[0]){%>
   <div class="container px-5">
@@ -91,6 +97,12 @@
     <%}%>
     </div>
   </div>
+<%}else{%>
+  <div class="container px-5">
+    <center>
+      <h5 style="padding:30px;border:1px solid black;margin:30px">No Active Exams</h5>
+      </center>
+    </div>
 <%}%>
 
 
