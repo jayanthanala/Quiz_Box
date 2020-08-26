@@ -156,7 +156,7 @@
  var inputs = document.getElementsByTagName("input");
  console.log(inputs);
  for(var i=0;i<=inputs.length-1;i++){
-   inputs[i].addEventListener("change",(e)=>{
+   inputs[i].addEventListener("click",(e)=>{
      var input = e.srcElement;
      console.log(input);
      localStorage.setItem(input.getAttribute("name"), input.getAttribute("value"));
@@ -164,25 +164,23 @@
    });
  }
  window.onload=()=>{
-   console.log(questions);
-   questions.forEach((q)=>{
-     if(localStorage.getItem("q["+q._id+"]")){
-       console.log(q._id);
-       var value = localStorage.getItem("q["+q._id+"]");
+   for(var j=0;j<=questions.length-1;j++){
+     if(localStorage.getItem("q["+questions[j]._id+"]")){
+       var value = localStorage.getItem("q["+questions[j]._id+"]");
        if(value!=-1){
-         console.log("hello");
-          for(var i=0;i<=inputs.length-1;i++){
-            var val = inputs[i].getAttribute("value");
+         var input = document.querySelectorAll("input[name=\"q["+questions[j]._id+"]\"]");
+          for(var i=0;i<=input.length-1;i++){
+            var val = input[i].getAttribute("value");
             if(val==value) {
-              inputs[i].checked=true;
-              console.log("checked",inputs[i]);
-              break;
+              input[i].checked=true;
+            console.log("checked this",inputs[i]);
             }
           }
      }
      }
-   })
- };
+   }
+
+   };
  submit.addEventListener("click",()=>{
    localStorage.clear();
  })
