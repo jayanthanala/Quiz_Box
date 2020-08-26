@@ -54,7 +54,7 @@
                 <%  for(var j=0;j<=questions[i].options.length-1;j++){ %>
                   <div class="row">
                     <div class="col-md-6">
-                      <input type="radio" name="q[<%=questions[i]._id%>]" value="-1"  id="<%=i%>,<%=j%>">
+                      <input type="radio" name="q[<%=questions[i]._id%>]" value="<%=j+1%>"  id="<%=i%>,<%=j%>">
                       <label  for="<%=i%>,<%=j%>"><%=questions[i].options[j]%> </label>
                     </div>
                   </div>
@@ -69,11 +69,12 @@
                     <button class="btn btn-outline-primary  <%=i%> navigation">Previous</button>
                   </div>
                 <%}%>
-              <div style="display:none">
-                <input type="radio" name="q[<%=questions[i]._id%>]" value="-1"  checked>
-                <label class="btn btn-secondary">blah blah</label>
-              </div>
+                <div style="display:none">
+                  <input type="radio" name="q[<%=questions[i]._id%>]" value="-1"  checked>
+                  <label class="btn btn-secondary">blah blah</label>
+               </div>
             </div>
+
             <%}%>
          <div class="form-group submit" style="display:none">
              <button type="submit" class="btn btn-outline-success">Submit</button>
@@ -97,7 +98,7 @@
 
 
 <script type="text/javascript">
-  // var questions = <%- JSON.stringify("questions")%>
+  var questions = <%-JSON.stringify(questions)%>
   // function createOption(i,j){
   //   var input= document.createElement("input");
   //   input.setAttribute("type","radio");
@@ -119,6 +120,8 @@
   //   return document.createElement("div");
   // }
   //////////////////////////////////on refresh!!!! it should come to the sam equestion! and with same options selected!
+
+
  var buttons = document.getElementsByClassName("navigation");
  console.log(buttons);
  var submit = document.querySelector(".submit");
@@ -147,6 +150,40 @@
 
    });
  }
+
+ var inputs = document.getElementsByTagName("input");
+ console.log(inputs);
+ for(var i=0;i<=inputs.length-1;i++){
+   inputs[i].addEventListener("change",(e)=>{
+     var input = e.srcElement;
+     console.log(input);
+     localStorage.setItem(input.getAttribute("name"), input.getAttribute("value"));
+     console.log(localStorage);
+   });
+ }
+ window.onload=()=>{
+   console.log(questions);
+   questions.forEach((q)=>{
+     if(localStorage.getItem("q["+q._id+"]")){
+       console.log(q._id);
+       var value = localStorage.getItem("q["+q._id+"]");
+       if(value!=-1){
+         console.log("hello");
+          for(var i=0;i<=inputs.length-1;i++){
+            var val = inputs[i].getAttribute("value");
+            if(val==value) {
+              inputs[i].checked=true;
+              console.log("checked",inputs[i]);
+              break;
+            }
+          }
+     }
+     }
+   })
+ };
+ submit.addEventListener("click",()=>{
+   localStorage.clear();
+ })
 </script>
 
 
