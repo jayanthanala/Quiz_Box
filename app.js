@@ -198,9 +198,25 @@ app.get("/st/completed",authenticatedStudent,(req,res) => {
   Exam.find({attempted:req.user.username},(err,exams) => {
     if(err){console.log(err);}
     else{
-      res.render("stcompleted",{req:req.user,exams:exams});
+      res.render("stcompleted",{req:req.user,exams:exams.reverse()});
     }
   });
+});
+
+app.get("/st/results/:id",authenticatedStudent,(req,res) => {
+  var eid = req.params.id;
+  Question.find({examid:req.params.id},(err,questions) => {
+    if(err){console.log(err);}
+    else{
+      Response.find({$or: [{'examid': eid},{'userid': req.user.username}]},(err,response) => {
+        if(err){console.log(err);}
+        else{
+          //console.log(response);
+          res.render("stresults",{questions:questions,response:response});
+        }
+      });
+    }
+  })
 });
 
 
