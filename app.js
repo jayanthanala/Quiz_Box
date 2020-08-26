@@ -64,7 +64,7 @@ app.get("/login",(req,res)=>{
   res.render("login");
 });
 
-/////////////////////////////////////////////////////  Teacher ROUTES  //////////////////////////////////
+/////////////////////////////////////////////////////  Teacher ROUTES  ///////////////////////////////////
 
 app.get("/te/register",(req,res)=>{
   res.render("teregister")
@@ -138,7 +138,11 @@ app.get("/te/exam/:id/edit",authenticatedTeacher,(req,res)=>{
 ////this page has socket connection so no need to send anything
 app.get("/te/exam/:id/responses",(req,res)=>{
   Question.find({examid:req.params.id},(e,questions)=>{
-    res.render("responses",{id:req.params.id,questions:questions});
+    Response.find({examid:req.params.id},(er,s)=>{
+      //console.log("****************************************s",s);
+      res.render("responses",{id:req.params.id,questions:questions,responses:s});
+    })
+
   })
 
 })
@@ -258,17 +262,20 @@ app.post("/te/exam/new",authenticatedTeacher,(req,res)=>{
     teacherid:req.user._id,
     access:accessCode,
     status:"staged",
-    title:req.body.title,
+    title:req.body.title
   }
+  console.log("sdamdklsa");
   Exam.create(exam,(error,exam)=>{
     if(error) console.log(error);
     else{
+      //  console.log("************************************************************8");
         var marks=0;
         questions.forEach((q,i)=>{
         q["options"]=options[i];
-        let array = new Array(options[i].length);
-        for(var x of array){
-          x=0;
+        console.log(options[i],options[i].length);
+        let array = [];
+        for(var x=0;x<=options[i].length-1;x++){
+          array[x]=0;
         };
         q["optioncount"]=array;
         q["examid"]=exam._id;
@@ -285,7 +292,8 @@ app.post("/te/exam/new",authenticatedTeacher,(req,res)=>{
               exam.save((er,ex)=>{
                 if(er) console.log(er);
                 else{
-                  //console.log(q);
+                  console.log(q);
+                    console.log("sdamdklsa");
                   res.redirect("/te/index");
                 }
               })
@@ -316,7 +324,7 @@ if(req.file){
         for(var i;i<=rows.length-2;i++){
           s[i]=rows[i+1][0];
         }
-        console.log(file.destination+"/"+file.filename);
+        //console.log(file.destination+"/"+file.filename);
         fs.unlink(req.file.destination + "/" + req.file.filename,(e)=>{
           if(e) console.log(e);
         })
@@ -489,6 +497,7 @@ app.post("/st/submit/:id",(req,res) => {
       var marks = 0;
       var obj=[];
       questions.forEach((q,i) => {
+        q.optioncount[arr2[i]-1]=q.optioncount[arr2[i]-1]+1;
         if(arr2[i] != -1){
           if(q.ans == arr2[i]){
             marks+=q.marks;
@@ -499,8 +508,40 @@ app.post("/st/submit/:id",(req,res) => {
         }else{
           q.unattempted+=1;
         }
-      });
-      console.log(marks);
+        Question.findByIdAndUpdate(q._id,{
+          optioncount:q.optioncount,
+          rightans:q.rightans,
+          wrongans:q.wrongans,
+          unattempted:q.unattempted
+        },(e,s)=>{
+          if(e) console.log(e);
+          else {
+            console.log(s);
+          }
+        });
+
+
+        obj[i]={
+          id:q._id,
+          marked:arr2[i]
+        }
+                });
+      Response.create({
+        answers:obj,
+        marks:marks,
+        userid:req.user._id,
+        examid:req.params.id
+      },(err,s)=>{
+        if(err) console.log(err);
+        else{
+              User.updateOne({username:req.user.username},{$push:{attempted:req.params.id},$pull:{examid:req.params.id}},(error) => {
+              if(error)
+              res.redirect("/st/completed");
+        });
+      }
+    });
+
+
     }
   });
 });
@@ -686,27 +727,32 @@ const io = socket(server);
 io.on("connection",(socket)=>{
   console.log("connected");
   socket.on("sendResponses",(id)=>{
-    console.log("asked for responses");
+    console.log("sendresponses");
     Exam.findById(id,(err,exam)=>{
       if(err) console.log(err);
       else{
-        if(exam.status=="started"){
-          Response.find({examid:id},(e,s)=>{
-            if(e) console.log(e);
-            else{
-              Question.find({examid:id},(er,so)=>{
-                if(er) console.log(er);
+        if(exam){
+          if(exam.status=="started"){
+            setTimeout(()=>{
+              Response.find({examid:id},(e,s)=>{
+                if(e) console.log(e);
                 else{
-                  socket.emit("responses",{
-                    responses:s,
-                    questions:so
-                  });
+                  console.log(s);
+                  Question.find({examid:id},(er,so)=>{
+                    if(er) console.log(er);
+                    else{
+                      io.emit("responses",{
+                        responses:s,
+                        questions:so
+                      });
+                    }
+                  })
                 }
               })
-            }
-          })
-        }else{
-          socket.emit("final","examclosed");
+            },200);
+          }else{
+            socket.emit("final","examclosed");
+          }
         }
       }
     })

@@ -3,7 +3,7 @@ const mongoose = require("mongoose");
 const questionSchema = new mongoose.Schema({
   q:String,   //question
   options: [],
-  optioncount:[],
+  optioncount:[Number],
   ans:Number,
   unattempted:Number,
   wrongans:Number,

@@ -141,7 +141,8 @@ role=1 ----teachers
 //////////////////////
 add required to the inputs of the forms
 
-
+///////////////////////////////////////////////////////////////////impppppppppppppppppppppppppppppppppppppppppppp
+1)instead of setinterval at the page of students responses ! connect sokcet to the exam page of student and when he or she submits send a message to the socket! (very less complexity)!!!!
 
 
 
@@ -152,6 +153,3 @@ add required to the inputs of the forms
 student10:20 -----ends at 10:30!
 student 10:10----ends at 10:20
 student >10:20---penalty of those many mins that is 10:23 ----ends at 10:30 -----only 7 mins as he was late!!!!
-
-
-<%- include("./partials/tefooter.ejs") %>
