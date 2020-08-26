@@ -1,4 +1,5 @@
 <%- include("./partials/teheader.ejs") %>
+<link rel="stylesheet" href="/stylesheets/stexam.css">
 </head>
 
 <body>
@@ -30,11 +31,21 @@
     </div>
   </nav>
 
-  
+
 
 <div class="row">
-  <div class="col-md-3">
-
+  <div class="col-md-3  container p-5">
+    <div class="row boxrow">
+      <%for(var i=1;i<=questions.length;i++){%>
+        <div class="box">
+        <%  if(i<10){%>
+            0<%=i%>
+          <%}else{%>
+            <%=i%>
+          <%}%>
+        </div>
+      <%}%>
+    </div>
   </div>
   <div class="col-md-9">
       <div class="col-md-12 d-inline">
@@ -61,6 +72,10 @@
                     </div>
                   </div>
                 <% }%>
+                <div style="display:none">
+                  <input type="radio" name="q[<%=questions[i]._id%>]" value="-1"  checked>
+                  <label class="btn btn-secondary">blah blah</label>
+               </div>
                 <div class="">
                 <%if(i!=questions.length-1){%>
                     <button class="btn btn-outline-primary   <%=i%> navigation">Next</button>
@@ -71,10 +86,6 @@
                     <button class="btn btn-outline-primary  <%=i%> navigation">Previous</button>
                   </div>
                 <%}%>
-                <div style="display:none">
-                  <input type="radio" name="q[<%=questions[i]._id%>]" value="-1"  checked>
-                  <label class="btn btn-secondary">blah blah</label>
-               </div>
             </div>
 
             <%}%>
@@ -101,89 +112,79 @@
 
 <script type="text/javascript">
   var questions = <%-JSON.stringify(questions)%>
-  // function createOption(i,j){
-  //   var input= document.createElement("input");
-  //   input.setAttribute("type","radio");
-  //   input.setAttribute("name","q["+questions[i]._id+"]");
-  //   input.id=questions[i]._id;
-  //   input.setAttribute("value",j+1);
-  //   var label = document.createElement("label");
-  //   label.setAttriute("for",questions[i]._id);
-  //   label.innerHTML=questions[i].options[j];
-  //   var div = createDiv();
-  //   div.appendChild(input);
-  //   div.appendChild(label);
-  //
-  // }
-  // function createLabel(){
-  //   return document.createElement("label");
-  // }
-  // function createDiv(){
-  //   return document.createElement("div");
-  // }
+
   //////////////////////////////////on refresh!!!! it should come to the sam equestion! and with same options selected!
 
-
+var i=0;
  var buttons = document.getElementsByClassName("navigation");
- console.log(buttons);
+ var boxes = document.getElementsByClassName("box");
  var submit = document.querySelector(".submit");
  var container = document.getElementsByTagName("form")[0];
  var qs = container.children;
- console.log(qs);
  for(var i=0;i<=buttons.length-1;i++){
    buttons[i].addEventListener("click",(e)=>{
     submit.style.display="none";
      e.preventDefault();
      var btn = e.srcElement;
      var index= Number(btn.classList.item(2));
-     console.log(index,"");
      qs[index].style.display="none";
      if(btn.innerHTML=="Previous"){
       qs[index-1].style.display="block";
      }else{
-       console.log(qs[index+1],"dsad");
         qs[index+1].style.display="block";
         if((index+2)==qs.length-1){
             submit.style.display="block";
         }
      }
-
+     boxes[index].classList.add("boxred");
     console.log(index+2,qs.length-1);
 
    });
  }
 
  var inputs = document.getElementsByTagName("input");
- console.log(inputs);
  for(var i=0;i<=inputs.length-1;i++){
    inputs[i].addEventListener("click",(e)=>{
      var input = e.srcElement;
-     console.log(input);
      localStorage.setItem(input.getAttribute("name"), input.getAttribute("value"));
-     console.log(localStorage);
+     var index = input.id.split(",")[0];
+     boxes[index].classList.add("boxgreen");
    });
  }
  window.onload=()=>{
+   i++;
    for(var j=0;j<=questions.length-1;j++){
      if(localStorage.getItem("q["+questions[j]._id+"]")){
        var value = localStorage.getItem("q["+questions[j]._id+"]");
-       if(value!=-1){
          var input = document.querySelectorAll("input[name=\"q["+questions[j]._id+"]\"]");
           for(var i=0;i<=input.length-1;i++){
             var val = input[i].getAttribute("value");
             if(val==value) {
               input[i].checked=true;
-            console.log("checked this",inputs[i]);
+              var index = input[i].id.split(",")[0];
+              boxes[index].classList.add("boxgreen");
             }
           }
-     }
+     }else{
+       if(i!=1) boxes[j].classList.add("boxred");
      }
    }
 
    };
  submit.addEventListener("click",()=>{
    localStorage.clear();
- })
+ });
+
+for(var i=0;i<=boxes.length-1;i++){
+  boxes[i].addEventListener("click",(e)=>{
+    for(var j=0;j<=qs.length-1;j++){
+      qs[j].style.display="none";
+    }
+    var index = Number(e.srcElement.innerHTML);
+    qs[index-1].style.display="block";
+    if(index==qs.length-1) submit.style.display="block";
+  });
+}
 </script>
 
 
