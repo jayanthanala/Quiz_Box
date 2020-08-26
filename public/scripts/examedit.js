@@ -16,6 +16,7 @@ function createQuestion(n){
    questionInput.setAttribute("type","text");
    questionInput.setAttribute("name","questions["+(n-1)+"][q]");
    questionInput.id="q"+(n-1);
+   questionInput.required=true;
 
    var questionLabel = document.createElement("label");
    questionLabel.setAttribute("for","q"+(n-1));
@@ -37,9 +38,10 @@ function createQuestion(n){
 
    var optionNo = document.createElement("input");
    optionNo.setAttribute("type","number");
-   optionNo.setAttribute("min","1");
-   optionNo.classList.add("validate");
+   optionNo.setAttribute("min","2");
+   optionNo.classList.add("optionno","validate");
    optionNo.id="optionNo"+(n-1);
+   optionNo.required=true;
 
    var optionNoLabel = document.createElement("label");
    optionNoLabel.setAttribute("for","optionNo"+(n-1));
@@ -53,9 +55,10 @@ function createQuestion(n){
    var marks = document.createElement("input");
    marks.setAttribute("type","number");
    marks.setAttribute("min","1");
-   marks.classList.add("validate");
+   marks.classList.add("validate","marks");
    marks.setAttribute("name","questions["+(n-1)+"][marks]");
    marks.id="marks"+(n-1);
+   marks.required=true;
 
    var marksLabel = document.createElement("label");
    marksLabel.setAttribute("for","marks"+(n-1));
@@ -72,7 +75,7 @@ function createQuestion(n){
 
 //creating options and nesting them inside rowOptions
    var rowOptions = document.createElement("div");
-   rowOptions.classList.add("row","options");
+   rowOptions.classList.add("options","col","s12");
   for(var i=1;i<=4;i++){
     let inputF = document.createElement("div");
     inputF.classList.add("input-field", "col", "s6");
@@ -82,6 +85,7 @@ function createQuestion(n){
     input.setAttribute("type","text");
     input.setAttribute("name","options["+(n-1)+"]["+i+"]");
     input.id=""+i+(4*(n-1));
+    input.required=true;
 
     let label = document.createElement("label");
     label.setAttribute("for",""+i+(4*(n-1)));
@@ -98,6 +102,7 @@ function createQuestion(n){
   var inputdiv = document.createElement("div");
   inputdiv.classList.add("input-field", "col", "s12");
   var inp = document.createElement("input");
+  inp.required=true;
   inp.classList.add("validate");
   inp.setAttribute("type","number");
   inp.setAttribute("name","questions["+(n-1)+"][ans]");
@@ -144,14 +149,11 @@ $("#cf").on("click",".plus",(e)=>{
   e.preventDefault();
   var containers = $("#cf").children();
  var length = containers.length;
-  console.log(length);
   var container = createQuestion(length+1);
   $("#plus"+(length-1)).hide();
  $("#minus"+(length-1)).hide();
   $("#cf").append(container);
   $("#qno").html(length+1);
-  var marks= Number($("#marks"+(length-1)).val());
-  $("#marks").html(Number($("#marks").html())+marks);
 });
 
 $("#cf").on("click",".minus",(e)=>{
@@ -163,20 +165,55 @@ $("#cf").on("click",".minus",(e)=>{
     length=$("#cf").children().length;
     $("#plus"+(length-1)).show();
    $("#minus"+(length-1)).show();
-   $("#qno").html(length);
-   if(length!=1)$("#marks").html(Number($("#marks").html())-marks);
-   else{
-     $("#marks").html(0);
-   }
+   $("#qno").html(Number($("#qno").html())-1);
+   $("#marks").html(Number($("#marks").html())-marks);
 
   }
 
 });
 
 
+function createOption(n,n2){
+  var div = document.createElement("div");
+  div.classList.add("input-field","col","s6");
+  input=document.createElement("input");
+  input.setAttribute("type","text");
+  input.setAttribute("name","options["+n2+"]["+n+"]");
+  input.id="o"+(n+1);
+  var label = document.createElement("label");
+  label.setAttribute("for","o"+(n+1));
+  label.textContent=(n+1);
+  div.appendChild(input);
+  div.appendChild(label);
+  return div;
+}
 
-$("input").change(()=>{
+function appendOptions(n,n2,options){
+    options.empty();
+    for(var i=0;i<=n-1;i++){
+      options.append(createOption(i,n2));
+    }
 
+}
 
-  $(this).setAttribute("value",$(this.element).val());
+$("#cf").on("change",".optionno",(e)=>{
+ var o=$(e.target);
+ var number = o.val();
+ var string= o.attr("id");
+ var number2=Number(string.substr(8));
+ var object=o.parent().parent().next().next();
+
+ appendOptions(number,number2,object);
+});
+
+var marks = $("#marks");
+
+var mark=0;
+$("#cf").on("focus",".marks",(e)=>{
+  var element=e.target;
+  mark = element.value;
 })
+$("#cf").on("change",".marks",(e)=>{
+    var element = e.target;
+    marks.html((Number(marks.html())-mark)+Number(element.value));
+  });

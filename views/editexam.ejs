@@ -6,70 +6,60 @@
   <div class="row">
     <div class="col-md-2 fixed">
     <div class="sticky-top">
-      <h4>Total number of questions: <span id="qno"><%=marks%></span></h4>
-      <h4>Total number of marks: <span id="marks"><%=qno%></span></h4>
+      <h4>Total number of questions: <span id="qno"><%=qno%></span></h4>
+      <h4>Total number of marks: <span id="marks"><%=marks%></span></h4>
     </div>
-    </div>
-    <div class="hello">
-      <%=questions%>
     </div>
     <div class="col-md-10" class="main">
-        <form class="" action="/te/exam//edit" method="post">
+        <form class="" action="/te/exam/<%=questions[0].examid%>/edit?_method=patch" method="post">
+          <div id=cf>
           <%for(var i=0;i<=questions.length-1;i++){%>
-            <div id=cf>
               <div class="container">
                 <div class="row">
                   <div class="col m10">
                     <div class="row">
                       <div class="input-field col s12">
-                        <input id="q0" type="text" class="validate" name="questions[<%=i%>][q]"  placeholder="<%=questions[i]["q"]%>">
+                        <input id="q0" type="text" class="validate" name="questions[<%=i%>][q]"  value="<%=questions[i]["q"]%>">
                          <label for="q0">Question</label>
                       </div>
                     </div>
                     <div class="row">
                       <div class="input-field col s6">
-                        <input id="optionNo0" type="number" class="validate" min="1" placeholder="<%=questions[i].options.length%>">
+                        <input id="optionNo0" type="number" class="validate optionno" min="2" value="<%=questions[i].options.length%>">
                         <label for="optionNo0">Number of options</label>
                       </div>
                       <div class="input-field col s6">
-                        <input id="marks0" type="number" class="validate" min="1" name="questions[<%=i%>][marks]" placeholder="<%=questions[i].marks%>">
-                         <label for="marks0">Marks for this question</label>
+                        <input id="marks<%=i%>" type="number" class="validate marks" min="1" name="questions[<%=i%>][marks]" value="<%=questions[i].marks%>">
+                         <label for="marks<%=i%>">Marks for this question</label>
                       </div>
                     </div>
                     <label>Options:</label>
                     <div class="row options">
-                      <div class="input-field col s6">
-                        <input id="o1" type="text" class="validate" name="options[<%=i%>][1]" placeholder="<%=questions[i].options[0]%>">
-                         <label for="o1">1</label>
-                      </div>
-                      <div class="input-field col s6">
-                        <input id="o2" type="text" class="validate" name="options[<%=i%>][2]" placeholder="<%=questions[i].options[1]%>">
-                         <label for="o2">2</label>
-                      </div>
-                      <div class="input-field col s6">
-                        <input id="o3" type="text" class="validate" name="options[<%=i%>][3]" placeholder="<%=questions[i].options[2]%>">
-                        <label for="o3">3</label>
-                      </div>
-                      <div class="input-field col s6">
-                        <input id="o4" type="text" class="validate" name="options[<%=i%>][4]" placeholder="<%=questions[i].options[3]%>">
-                         <label for="o4">4</label>
-                      </div>
+                      <%for(var j=1;j<=questions[i].options.length;j++){%>
+                        <div class="input-field col s6">
+                          <input id="o<%=j%>" type="text" class="validate" name="options[<%=i%>][<%=j%>]" value="<%=questions[i].options[j-1]%>">
+                           <label for="o<%=j%>"><%=j%></label>
+                        </div>
+                      <%}%>
                     </div>
                   <div class="row">
                     <div class="input-field col s12">
-                      <input id="c0" type="number" class="validate" name="questions[<%=i%>][ans]" min="1" placeholder="<%=questions[i]["ans"]%>" >
+                      <input id="c0" type="number" class="validate" name="questions[<%=i%>][ans]" min="1" value="<%=questions[i]["ans"]%>" >
                        <label for="c0">Correct Option Number</label>
                     </div>
                   </div>
                   </div>
                   <div class="col-md-2 d-flex justify-content-around align-items-center">
-                      <button class="plus" id="plus0">+</button>
-                      <button class="minus" id="minus0">-</button>
+                      <button class="plus" id="plus<%=i%>">+</button>
+                      <%if(i!=0){%>
+                      <button class="minus" id="minus<%=i%>">-</button>
+                      <%}%>
                   </div>
                 </div>
               </div>
-            </div>
+
           <%}%>
+          </div>
           <div class="row d-flex justify-content-center">
             <button>Submit</button>
           </div>

@@ -153,3 +153,27 @@ add required to the inputs of the forms
 student10:20 -----ends at 10:30!
 student 10:10----ends at 10:20
 student >10:20---penalty of those many mins that is 10:23 ----ends at 10:30 -----only 7 mins as he was late!!!!
+
+
+
+
+
+
+
+
+<!-- <div class="input-field col s6">
+  <input id="o1" type="text" class="validate" name="options[<%=i%>][1]" value="<%=questions[i].options[0]%>">
+   <label for="o1">1</label>
+</div>
+<div class="input-field col s6">
+  <input id="o2" type="text" class="validate" name="options[<%=i%>][2]" value="<%=questions[i].options[1]%>">
+   <label for="o2">2</label>
+</div>
+<div class="input-field col s6">
+  <input id="o3" type="text" class="validate" name="options[<%=i%>][3]" value="<%=questions[i].options[2]%>">
+  <label for="o3">3</label>
+</div>
+<div class="input-field col s6">
+  <input id="o4" type="text" class="validate" name="options[<%=i%>][4]" value="<%=questions[i].options[3]%>">
+   <label for="o4">4</label>
+</div> -->
