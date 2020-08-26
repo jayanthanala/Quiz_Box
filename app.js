@@ -198,9 +198,25 @@ app.get("/st/completed",authenticatedStudent,(req,res) => {
   Exam.find({attempted:req.user.username},(err,exams) => {
     if(err){console.log(err);}
     else{
-      res.render("stcompleted",{req:req.user,exams:exams});
+      res.render("stcompleted",{req:req.user,exams:exams.reverse()});
     }
   });
+});
+
+app.get("/st/results/:id",authenticatedStudent,(req,res) => {
+  var eid = req.params.id;
+  Question.find({examid:req.params.id},(err,questions) => {
+    if(err){console.log(err);}
+    else{
+      Response.find({$or: [{'examid': eid},{'userid': req.user.username}]},(err,response) => {
+        if(err){console.log(err);}
+        else{
+          //console.log(response);
+          res.render("stresults",{questions:questions,response:response});
+        }
+      });
+    }
+  })
 });
 
 
@@ -483,7 +499,7 @@ app.post("/st/register",(req,res)=>{
 });
 
 
-app.post("/st/submit/:id",(req,res) => {
+app.post("/st/submit/:id",examDone,(req,res) => {
 
   var arr1 = Object.keys(req.body.q);
   var arr2 = Object.values(req.body.q);
@@ -717,6 +733,15 @@ function authenticatedStudent(req,res,next){
   else{
     res.redirect('/');
   }
+}
+
+function examDone(req,res,next){
+  Exam.find({students:req.user.username},(err,s) => {
+    if(err){console.log(err);}
+    else{
+      authenticatedStudent();
+    }
+  });
 }
 /////////////////////////////////////////////////////////////server/////////////////////////////////////////////
 server = app.listen(3000,() => {

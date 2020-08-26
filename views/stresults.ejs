@@ -1,0 +1,77 @@
+<%- include("./partials/teheader.ejs") %>
+</head>
+
+<body>
+  <nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <a class="navbar-brand" href="/">QUIRKY</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNav">
+      <ul class="navbar-nav">
+        <li class="nav-item active">
+          <a class="nav-link" href="/st/index">Home<span class="sr-only">(current)</span></a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="/st/completed">Completed Exams</a>
+        </li>
+
+        <div class="form-inline my-2 my-lg-0">
+          <script type="text/javascript">
+            function goToPage() {
+              var page = document.getElementById('page').value;
+              window.location = "/st/add/" + page;
+            }
+          </script>
+          <input class="form-control mr-sm-2" type="text" placeholder="Search" id="page" name="examid" aria-label="Search">
+          <button class="btn btn-outline-success my-2 my-sm-0" type="submit" value="submit" onclick="goToPage();">Search</button>
+        </div>
+      </ul>
+    </div>
+  </nav>
+
+
+
+<div class="row">
+  <div class="col-md-3">
+
+  </div>
+  <div class="col-md-9">
+      <div class="col-md-12 d-inline">
+          <h1>  timer </h1>
+                <hr>
+      </div>
+
+      <%if(questions[0]){%>
+            <% for(var i=0;i<=questions.length-1;i++){%>
+              <div class="col-md-12">
+                <h4 class=""><%=(i+1)%>)<%=questions[i].q%></h4>
+              </div>
+                <%  for(var j=0;j<=questions[i].options.length-1;j++){ %>
+                  <div class="row">
+                    <div class="col-md-6">
+                    <%  if(questions[i].ans == j+1){%>
+                        <p><%=j+1%>)<%=questions[i].options[j]%> <i class="fas fa-check"></i> </p>
+                    <%  }else{%>
+                        <p><%=j+1%>)<%=questions[i].options[j]%> </p>
+                    <%  }%>
+                    </div>
+                  </div>
+                <% }%>
+              <%  if(response[0].answers[i].marked == -1){%>
+                  <p>No Answer Given</p>
+              <%  }else if(response[0].answers[i].marked == questions[i].ans){%>
+                  <p style="color:green">Your Answer = <%=response[0].answers[i].marked%></p>
+              <%  }else{%>
+                <p style="color:red">Your Answer = <%=response[0].answers[i].marked%></p>
+            <%  }%>
+              <p>Correct Answer = <%=questions[i].ans%></p>
+                <hr>
+            <%}%>
+         <div class="form-group submit" style="">
+             <button type="button" class="btn btn-outline-success">Back</button>
+         </div>
+      <%}%>
+
+</div>
+<%- include("./partials/tefooter.ejs") %>
