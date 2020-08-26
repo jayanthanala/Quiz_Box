@@ -530,7 +530,7 @@ app.post("/st/register",(req,res)=>{
 });
 
 
-app.post("/st/submit/:id",(req,res) => {
+app.post("/st/submit/:id",authenticatedStudent,examNotAttempted,(req,res) => {
 
   var arr1 = Object.keys(req.body.q);
   var arr2 = Object.values(req.body.q);
@@ -764,6 +764,18 @@ function authenticatedStudent(req,res,next){
   else{
     res.redirect('/');
   }
+}
+
+function examNotAttempted(req,res,next){
+  Exam.findById(req.params.id,(e,exam)=>{
+    if(e) console.log(e);
+    else{
+      if(exam.students.indexOf(req.user.username)!=-1) next();
+      else{
+        res.redirect("/st/completed");
+      }
+    }
+  })
 }
 /////////////////////////////////////////////////////////////server/////////////////////////////////////////////
 server = app.listen(3000,() => {
