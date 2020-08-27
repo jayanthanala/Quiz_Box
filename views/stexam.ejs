@@ -189,13 +189,25 @@ for(var i=0;i<=boxes.length-1;i++){
 
 var duration = Number(<%=duration%>)*60*1000;
 var starttime = new Date(<%-JSON.stringify(start)%>);
-
-var totaltime = new Date(starttime.getTime()+duration);
-
-console.log(typeof starttime,starttime.getTime(),"total",totaltime);
 var h = document.querySelector("#hours");
 var m = document.querySelector("#mins");
 var s = document.querySelector("#secs");
+
+var totaltime = new Date(starttime.getTime()+duration);
+var now = new Date();
+var timer = totaltime.getTime()-now.getTime()
+var hours = Math.floor((timer/1000)/3600);
+var mins =   Math.floor((timer/1000)/60)%60;
+var seconds = Math.floor(timer/1000)%60;
+if(hours<10) h.innerHTML=0+String(hours);
+else h.innerHTML=hours;
+if(mins<10) m.innerHTML=0+String(mins);
+else m.innerHTML=mins;
+if(seconds<10) s.innerHTML=0+String(seconds);
+else s.innerHTML=seconds;
+
+
+////////////////////////////////////////////////////iteration
 var stopit=setInterval(()=>{
   var now = new Date();
   var timer = totaltime.getTime()-now.getTime()
