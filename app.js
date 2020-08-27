@@ -187,6 +187,7 @@ app.get("/st/add/:id",authenticatedStudent,(req,res) => {
 });
 
 app.get("/st/exam/:id",authenticatedStudent,(req,res) => {
+  console.log("exams");
   Question.find({examid:req.params.id},(err,questions) => {
     if(err){console.log(err);}
     else{
