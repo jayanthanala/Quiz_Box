@@ -239,8 +239,46 @@ var stopit=setInterval(()=>{
 // console.log("now date",now);
 //
 // console.log(hours,mins,seconds);
-
-
+////////////////////////////////////////////////////////////////////////////////voice recognition
+// if ('speechSynthesis' in window){
+//   console.log("he,lo");
+//     var recognition = new webkitSpeechRecognition();
+//     console.log(recognition);
+//
+// recognition.continuous = true;
+//
+//     recognition.onstart = ()=>{
+//       console.log("started the service");
+//     };
+//
+//     recognition.maxAlternatives=4;
+//     recognition.lang='en-IN';
+//     //recognition.interimResults=true;
+//     var speechRecognitionList = new webkitSpeechGrammarList();
+//     var newGrammar = new webkitSpeechGrammar();
+//     //newGrammar.src = '#JSGF V1.0; grammar names; public <name> = 1 |  2 |  3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12 | 13 | 14 | 15 | 16 | 17 | 18 | 19 | 20 | A | B | C | D | E | F | G | H | I | J ;'
+//     newGrammar.src = '#JSGF V1.0; grammar letters; public <letter> =  a | b | c | d | e | f | g | h | i ;'
+//     speechRecognitionList[1] = newGrammar; // should add the new SpeechGrammar object to the list
+//
+//     recognition.grammars = speechRecognitionList;
+//   recognition.onresult = (e)=>{
+//     console.log(e.results);
+//
+//   }
+//
+//
+//
+// recognition.start();
+//     // recognition.onerror = function(event) {
+//     //     console.log(event.error);
+//     // };
+//
+// // recognition.addEventListener('soundstart', function() {
+// //   console.log('Some sound is being received');
+// // });
+// }else{
+//   console.log("not supported");
+// }
 </script>
 
 
