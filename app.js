@@ -126,7 +126,7 @@ app.get("/te/exam/:id/edit",(req,res)=>{
     else{
       var id= req.params.id;
     Exam.findById(req.params.id,(er,exam)=>{
-      console.log(exam.marks,exam.noquestions);
+    //  console.log(exam.marks,exam.noquestions);
         res.render("editexam",{questions:questions,marks:exam.marks,qno:exam.noquestions});
 
     })
@@ -168,7 +168,7 @@ app.get("/st/index",authenticatedStudent,(req,res)=>{
   Exam.find({students:req.user.username},(err,exams) => {
     if(err){console.log(err);}
     else{
-      console.log(exams);
+    //  console.log(exams);
       res.render("stindex",{req:req.user,exams:exams})
     }
   });
@@ -187,12 +187,12 @@ app.get("/st/add/:id",authenticatedStudent,(req,res) => {
 });
 
 app.get("/st/exam/:id",authenticatedStudent,(req,res) => {
-  console.log("exams");
+  //console.log("exams");
   Question.find({examid:req.params.id},(err,questions) => {
     if(err){console.log(err);}
     else{
       Exam.findById(req.params.id,(e,exam)=>{
-        console.log("hello");
+        //console.log("hello");
         res.render("stexam",{questions:questions,duration:exam.duration,start:exam.date});
       })
 
@@ -220,7 +220,7 @@ app.get("/st/results/:id",authenticatedStudent,(req,res) => {
           Exam.findById(req.params.id,(err,exam) => {
             if(err){console.log(err);}
             else{
-              console.log(exam);
+              //console.log(exam);
               res.render("stresults",{questions:questions,response:response,exam:exam});
             }
 
@@ -291,7 +291,7 @@ app.post("/te/exam/new",authenticatedTeacher,(req,res)=>{
     status:"staged",
     title:req.body.title
   }
-  console.log("sdamdklsa");
+  //console.log("sdamdklsa");
   Exam.create(exam,(error,exam)=>{
     if(error) console.log(error);
     else{
@@ -299,7 +299,7 @@ app.post("/te/exam/new",authenticatedTeacher,(req,res)=>{
         var marks=0;
         questions.forEach((q,i)=>{
         q["options"]=options[i];
-        console.log(options[i],options[i].length);
+      //  console.log(options[i],options[i].length);
         let array = [];
         for(var x=0;x<=options[i].length-1;x++){
           array[x]=0;
@@ -319,8 +319,8 @@ app.post("/te/exam/new",authenticatedTeacher,(req,res)=>{
               exam.save((er,ex)=>{
                 if(er) console.log(er);
                 else{
-                  console.log(q);
-                    console.log("sdamdklsa");
+                  //console.log(q);
+                  //  console.log("sdamdklsa");
                   res.redirect("/te/index");
                 }
               })
@@ -376,9 +376,13 @@ if(req.file){
       else{
           var array = req.body.scheduled.date.split("-");
           var time = req.body.scheduled.time.split(":");
-          console.log("/////////////////////************",req.body.scheduled.date,req.body.scheduled.time);
+          //console.log("/////////////////////************",req.body.scheduled.date,req.body.scheduled.time);
           var date = new Date(Number(array[0]),Number(array[1])-1,Number(array[2]),Number(time[0]),Number(time[1]));
           //console.log(date);
+          var array2 = req.body.scheduled.date2.split("-");
+          var time2 = req.body.scheduled.time2.split(":");
+          var date2= new Date(Number(array2[0]),Number(array2[1])-1,Number(array2[2]),Number(time2[0]),Number(time2[1]));
+          exam.closedate=date2;
           exam.date=date;
           exam.status="ready";
           exam.duration=req.body.scheduled.duration;
@@ -387,7 +391,6 @@ if(req.file){
           exam.save((e,s)=>{
             if(e) console.log(e);
             else{
-              //console.log(s);
               addExam(s);
               res.redirect("/te/exam/ready")
             }
@@ -405,6 +408,10 @@ if(req.file){
       var time = req.body.scheduled.time.split(":");
       var date = new Date(Number(array[0]),Number(array[1])-1,Number(array[2]),Number(time[0]),Number(time[1]));
       //console.log(date);
+      var array2 = req.body.scheduled.date2.split("-");
+      var time2 = req.body.scheduled.time2.split(":");
+      var date2= new Date(Number(array2[0]),Number(array2[1])-1,Number(array2[2]),Number(time2[0]),Number(time2[1]));
+      exam.closedate=date2;
       exam.date=date;
       exam.status="ready";
       exam.duration=req.body.scheduled.duration;
@@ -504,7 +511,7 @@ app.patch("/te/exam/:id/edit",(req,res)=>{
       var marks=0;
       questions.forEach((q,i)=>{
       q["options"]=options[i];
-      console.log(options[i],options[i].length);
+      //console.log(options[i],options[i].length);
       let array = [];
       for(var x=0;x<=options[i].length-1;x++){
         array[x]=0;
@@ -590,7 +597,7 @@ app.post("/st/submit/:id",authenticatedStudent,examNotAttempted,(req,res) => {
         },(e,s)=>{
           if(e) console.log(e);
           else {
-            console.log(s);
+            //console.log(s);
           }
         });
         obj[i]={
@@ -701,7 +708,7 @@ function run(){
 
       }
     }
-    console.log(exams.length);
+  //  console.log(exams.length);
     if(exams.length==0) clearInterval(stop);
   },1000);
 }
@@ -715,11 +722,11 @@ function checkDuration(){
   stop2=setInterval(()=>{
     for(var i=0;i<=examsrunning.length-1;i++){
       obj = new Date();
-      var mins = Number(examsrunning[i].duration)*60*1000;
-  //    console.log(examsrunning[i].date.getTime()+"//////");
+  //    var mins = Number(examsrunning[i].duration)*60*1000;
+  // console.log(examsrunning[i],examsrunning[i].date.getTime()+"//////");
   //    console.log("*********",examsrunning[i].date.getTime()+mins,obj.getTime(),examsrunning[i].date,obj,"*********");
   //    console.log((examsrunning[i].date.getTime()+mins)<=obj.getTime() && (examsrunning[i].date.getDate()<=obj.getDate() && examsrunning[i].date.getMonth()<=obj.getMonth() && examsrunning[i].date.getYear()<=obj.getYear()));
-      if((examsrunning[i].date.getTime()+mins)<=obj.getTime()&& (examsrunning[i].date.getDate()<=obj.getDate() && examsrunning[i].date.getMonth()<=obj.getMonth() && examsrunning[i].date.getYear()<=obj.getYear())){
+      if(examsrunning[i].closedate.getTime()<=obj.getTime() && examsrunning[i].closedate.getDate()<=obj.getDate() && examsrunning[i].closedate.getMonth()<=obj.getMonth() && examsrunning[i].closedate.getYear()<=obj.getYear()){
         completed(examsrunning[i]._id);
         console.log("exam of exam id: "+examsrunning[i]._id+" has completed!!");
         examsrunning.splice(i,1);
@@ -732,7 +739,7 @@ function checkDuration(){
 
 function examStarted(exam){
   clearInterval(stop2);
-  console.log("dsdfd",exam);
+  //console.log("dsdfd",exam);
   if(exam){
     examsrunning.push(exam);
     checkDuration();
@@ -742,7 +749,7 @@ function examStarted(exam){
 function addExam(exam){
   clearInterval(stop);
   if(exam.date)   exams.push(exam);
-  console.log(exams);
+//  console.log(exams);
   run();
 
 }
@@ -829,7 +836,7 @@ io.on("connection",(socket)=>{
               Response.find({examid:id},(e,s)=>{
                 if(e) console.log(e);
                 else{
-                  console.log(s);
+                  //console.log(s);
                   Question.find({examid:id},(er,so)=>{
                     if(er) console.log(er);
                     else{
