@@ -89,9 +89,15 @@
             </div>
 
             <%}%>
-         <div class="form-group submit" style="display:none">
-             <button type="submit" class="btn btn-outline-success">Submit</button>
-         </div>
+         <%if(questions.length==1){%>
+           <div class="form-group submit">
+               <button type="submit" class="btn btn-outline-success">Submit</button>
+           </div>
+         <%}else{ %>
+           <div class="form-group submit" style="display:none">
+               <button type="submit" class="btn btn-outline-success">Submit</button>
+           </div>
+         <%}%>
           </form>
       <%}%>
   </div>
@@ -193,7 +199,15 @@ var h = document.querySelector("#hours");
 var m = document.querySelector("#mins");
 var s = document.querySelector("#secs");
 
-var totaltime = new Date(starttime.getTime()+duration);
+var closetime = new Date(<%-JSON.stringify(close)%>);
+var totaltime =0;
+if(closetime.getTime()> (starttime.getTime()+duration)) totaltime = new Date(starttime.getTime()+duration);
+else{
+   totaltime = new Date(closetime.getTime());
+}
+
+console.log(totaltime);
+
 var now = new Date();
 var timer = totaltime.getTime()-now.getTime()
 var hours = Math.floor((timer/1000)/3600);
@@ -224,7 +238,9 @@ var stopit=setInterval(()=>{
     var timer = document.querySelector(".timer");
     timer.style.color="red";
   }
-  if(hours==0 && mins==0 && seconds==0){
+  console.log(hours,mins,seconds);
+  if(hours<=0 && mins<=0 && seconds<=0){
+    localStorage.clear();
     form.submit();
     clearInterval(stopit);
   }

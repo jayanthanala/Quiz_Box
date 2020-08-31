@@ -192,7 +192,7 @@ app.get("/st/exam/:id",authenticatedStudent,(req,res) => {
     else{
       Exam.findById(req.params.id,(e,exam)=>{
         //console.log("hello");
-        res.render("stexam",{questions:questions,duration:exam.duration,start:exam.date});
+        res.render("stexam",{questions:questions,duration:exam.duration,start:exam.date,close:exam.closedate});
       })
 
     }
