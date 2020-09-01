@@ -57,7 +57,7 @@
       <form class="" action="/st/submit/<%=questions[0].examid%>" method="post">
             <% for(var i=0;i<=questions.length-1;i++){%>
             <%if(i==0){%>
-              <div class="containers">
+              <div class="containers" style="display:block">
             <%}else{%>
               <div class="containers" style="display:none">
             <%}%>
@@ -78,12 +78,12 @@
                </div>
                 <div class="">
                 <%if(i!=questions.length-1){%>
-                    <button class="btn btn-outline-primary   <%=i%> navigation">Next</button>
+                    <button class="btn btn-outline-primary <%=i%> navigation">Next</button>
                 <%}%>
                 </div>
               <%  if(i!=0) {%>
                   <div class="">
-                    <button class="btn btn-outline-primary  <%=i%> navigation">Previous</button>
+                    <button class="btn btn-outline-primary <%=i%> navigation">Previous</button>
                   </div>
                 <%}%>
             </div>
@@ -238,7 +238,7 @@ var stopit=setInterval(()=>{
     var timer = document.querySelector(".timer");
     timer.style.color="red";
   }
-  console.log(hours,mins,seconds);
+  //console.log(hours,mins,seconds);
   if(hours<=0 && mins<=0 && seconds<=0){
     localStorage.clear();
     form.submit();
@@ -256,45 +256,136 @@ var stopit=setInterval(()=>{
 //
 // console.log(hours,mins,seconds);
 ////////////////////////////////////////////////////////////////////////////////voice recognition
-// if ('speechSynthesis' in window){
-//   console.log("he,lo");
-//     var recognition = new webkitSpeechRecognition();
-//     console.log(recognition);
-//
-// recognition.continuous = true;
-//
-//     recognition.onstart = ()=>{
-//       console.log("started the service");
-//     };
-//
-//     recognition.maxAlternatives=4;
-//     recognition.lang='en-IN';
-//     //recognition.interimResults=true;
-//     var speechRecognitionList = new webkitSpeechGrammarList();
-//     var newGrammar = new webkitSpeechGrammar();
-//     //newGrammar.src = '#JSGF V1.0; grammar names; public <name> = 1 |  2 |  3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12 | 13 | 14 | 15 | 16 | 17 | 18 | 19 | 20 | A | B | C | D | E | F | G | H | I | J ;'
-//     newGrammar.src = '#JSGF V1.0; grammar letters; public <letter> =  a | b | c | d | e | f | g | h | i ;'
-//     speechRecognitionList[1] = newGrammar; // should add the new SpeechGrammar object to the list
-//
-//     recognition.grammars = speechRecognitionList;
-//   recognition.onresult = (e)=>{
-//     console.log(e.results);
-//
-//   }
-//
-//
-//
-// recognition.start();
-//     // recognition.onerror = function(event) {
-//     //     console.log(event.error);
-//     // };
-//
-// // recognition.addEventListener('soundstart', function() {
-// //   console.log('Some sound is being received');
-// // });
-// }else{
-//   console.log("not supported");
-// }
+if ('speechSynthesis' in window){
+  console.log("he,lo");
+    var recognition = new webkitSpeechRecognition();
+    console.log(recognition);
+
+recognition.continuous = true;
+
+    recognition.onstart = ()=>{
+      console.log("started the service");
+    };
+
+    // recognition.maxAlternatives=4;
+    recognition.lang='en-IN';
+    //recognition.interimResults=true;
+    var speechRecognitionList = new webkitSpeechGrammarList();
+    var newGrammar = new webkitSpeechGrammar();
+    //newGrammar.src = '#JSGF V1.0; grammar names; public <name> = 1 |  2 |  3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12 | 13 | 14 | 15 | 16 | 17 | 18 | 19 | 20 | A | B | C | D | E | F | G | H | I | J ;'
+    newGrammar.src = '#JSGF V1.0; grammar letters; public <letter> =  a | b | c | d | e | f | g | h | i ;'
+    speechRecognitionList[1] = newGrammar; // should add the new SpeechGrammar object to the list
+
+    recognition.grammars = speechRecognitionList;
+    var i=0;
+  recognition.onresult = (e)=>{
+  //  console.log(e.results);
+      //console.log(e.results[i][0].transcript);
+      var transcript = e.results[i][0].transcript;
+      //console.log(transcript.indexOf("option"));
+      if(transcript.indexOf("option")!=-1){
+        var option = transcript.substr(transcript.indexOf("option")+7,1);
+        //console.log("option: "+option);
+        for(var j=0;j<=qs.length-2;j++){
+          if(qs[j].style.display!="none"){
+            var options =document.querySelectorAll("input[name=\"q["+questions[j]._id+"]\"]");
+            //var options = questions[j].options;
+            console.log(options);
+            switch(option){
+              case "A":
+                  options[0].click();
+                  break;
+              case "B":
+                  options[1].click();
+                  break;
+              case "C":
+                  options[2].click();
+                  break;
+              case "D":
+                  options[3].click();
+                  break;
+
+              case "E":
+                  options[4].click();
+                  break;
+              case "a":
+                  options[0].click();
+                  break;
+              case "b":
+                  options[1].click();
+                  break;
+              case "c":
+                  options[2].click();
+                  break;
+              case "d":
+                  options[3].click();
+                  break;
+              case "e":
+                  options[4].click();
+                  break;
+              default:
+                  console.log("couldn't recognize");
+                  break;
+            }
+          }
+        }
+      }else if(transcript.indexOf("number")!=-1){
+      //  console.log(transcript);
+        var matches = transcript.match(/(\d+)/)
+        if(matches[0] &&  Number(matches[0])<=qs.length-1){
+        //  console.log(matches &&  Number(matches[0])<=qs.length);
+          var number = Number(matches[0])-1;
+          for(var j=0;j<=qs.length-2;j++){
+            if(j!=number){
+              qs[j].style.display="none";
+            }else{
+              qs[j].style.display="block";
+            }
+          }
+        }
+      }else if(transcript.indexOf("next")!=-1){
+      //  console.log("next");
+      //  console.log(qs[0]);
+        for(var j=0;j<=qs.length-2;j++){
+            //console.log(j,qs[j].style.display);
+          if(qs[j].style.display=="block" && j!=qs.length-2){
+            var button = document.getElementsByClassName(j)[0].click();
+            // if(j==qs.length-3) qs[qs.length-1].style.display="block";
+            break;
+          }
+        }
+      }else if(transcript.indexOf("previous")!=-1){
+        //console.log("previous");
+      //  console.log(qs[0]);
+        for(var j=0;j<=qs.length-2;j++){
+            //console.log(j,qs[j].style.display);
+          if(qs[j].style.display=="block" && j!=0){
+            var button = document.getElementsByClassName(j)[1].click();
+            // if(j==qs.length-3) qs[qs.length-1].style.display="block";
+            break;
+          }
+        }
+      }else if(transcript.indexOf("submit")!=-1){
+            //ask are you sure ? u have these many unattempted answers!!!! (text to speech )
+            form.submit();
+      }
+    i++;
+
+  }
+
+
+
+recognition.start();
+    // recognition.onerror = function(event) {
+    //     console.log(event.error);
+    // };
+
+// recognition.addEventListener('soundstart', function() {
+//   console.log('Some sound is being received');
+// });
+}else{
+  console.log("not supported");
+}
 </script>
 
 
