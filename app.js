@@ -823,9 +823,9 @@ server = app.listen(3000,() => {
 const io = socket(server);
 
 io.on("connection",(socket)=>{
-  console.log("connected");
+//  console.log("connected");
   socket.on("sendResponses",(id)=>{
-    console.log("sendresponses");
+//    console.log("sendresponses");
     Exam.findById(id,(err,exam)=>{
       if(err) console.log(err);
       else{

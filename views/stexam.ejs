@@ -152,7 +152,9 @@ if(localStorage.getItem("z")) z=localStorage.getItem("z");
      var input = e.srcElement;
      localStorage.setItem(input.getAttribute("name"), input.getAttribute("value"));
      var index = input.id.split(",")[0];
+     boxes[index].classList.remove("boxred")
      boxes[index].classList.add("boxgreen");
+     console.log(boxes[index].classList);
    });
  }
  window.onload=()=>{
@@ -179,16 +181,29 @@ if(localStorage.getItem("z")) z=localStorage.getItem("z");
    };
  submit.addEventListener("click",()=>{
    localStorage.clear();
+   form.submit();
  });
 
 for(var i=0;i<=boxes.length-1;i++){
   boxes[i].addEventListener("click",(e)=>{
-    for(var j=0;j<=qs.length-1;j++){
+    for(var j=0;j<=qs.length-2;j++){
+      if(qs[j].style.display=="block"){
+        var options =document.querySelectorAll("input[name=\"q["+questions[j]._id+"]\"]");
+        if(options[options.length-1].checked==true) {
+          boxes[j].classList.add("boxred");
+      }
+            }
       qs[j].style.display="none";
+
+
     }
     var index = Number(e.srcElement.innerHTML);
     qs[index-1].style.display="block";
+
     if(index==qs.length-1) submit.style.display="block";
+    else{
+      submit.style.display="none";
+    }
   });
 }
 ///////////////////////////////////////////timer
@@ -240,8 +255,7 @@ var stopit=setInterval(()=>{
   }
   //console.log(hours,mins,seconds);
   if(hours<=0 && mins<=0 && seconds<=0){
-    localStorage.clear();
-    form.submit();
+    submit.click();
     clearInterval(stopit);
   }
 },1000)
@@ -283,45 +297,45 @@ recognition.continuous = true;
       //console.log(e.results[i][0].transcript);
       var transcript = e.results[i][0].transcript;
       //console.log(transcript.indexOf("option"));
-      if(transcript.indexOf("option")!=-1){
+      if(transcript.search(/option/i)!=-1){
         var option = transcript.substr(transcript.indexOf("option")+7,1);
         //console.log("option: "+option);
         for(var j=0;j<=qs.length-2;j++){
           if(qs[j].style.display!="none"){
             var options =document.querySelectorAll("input[name=\"q["+questions[j]._id+"]\"]");
             //var options = questions[j].options;
-            console.log(options);
+          //  console.log(options);
             switch(option){
               case "A":
-                  options[0].click();
+                if(options[0]) options[0].click();
                   break;
               case "B":
-                  options[1].click();
+                if(options[1]) options[1].click();
                   break;
               case "C":
-                  options[2].click();
+                  if(options.length>3) options[2].click();
                   break;
               case "D":
-                  options[3].click();
+                if(options.length>4) options[3].click();
                   break;
 
               case "E":
-                  options[4].click();
+                if(options.length>5) options[4].click();
                   break;
               case "a":
-                  options[0].click();
+                if(options[0]) options[0];
                   break;
               case "b":
-                  options[1].click();
+                    if(options[1]) options[1].click();
                   break;
               case "c":
-                  options[2].click();
+                  if(options.length>3) options[2].click();
                   break;
               case "d":
-                  options[3].click();
+                  if(options.length>4) options[3].click();
                   break;
               case "e":
-                  options[4].click();
+                    if(options.length>5) options[4].click();
                   break;
               default:
                   console.log("couldn't recognize");
@@ -329,21 +343,17 @@ recognition.continuous = true;
             }
           }
         }
-      }else if(transcript.indexOf("number")!=-1){
-      //  console.log(transcript);
+      }else if(transcript.search(/number/i)!=-1 ){
+       //console.log(transcript,"*********");
         var matches = transcript.match(/(\d+)/)
-        if(matches[0] &&  Number(matches[0])<=qs.length-1){
-        //  console.log(matches &&  Number(matches[0])<=qs.length);
-          var number = Number(matches[0])-1;
-          for(var j=0;j<=qs.length-2;j++){
-            if(j!=number){
-              qs[j].style.display="none";
-            }else{
-              qs[j].style.display="block";
-            }
+        if(matches &&  Number(matches[1])<=qs.length-1){
+       console.log(matches);
+          var number = Number(matches[1])-1;
+          boxes[number].click();
+          //console.log("clicked");
           }
         }
-      }else if(transcript.indexOf("next")!=-1){
+      else if(transcript.search(/next/i)!=-1){
       //  console.log("next");
       //  console.log(qs[0]);
         for(var j=0;j<=qs.length-2;j++){
@@ -354,7 +364,7 @@ recognition.continuous = true;
             break;
           }
         }
-      }else if(transcript.indexOf("previous")!=-1){
+      }else if(transcript.search(/previous/i)!=-1){
         //console.log("previous");
       //  console.log(qs[0]);
         for(var j=0;j<=qs.length-2;j++){
@@ -365,9 +375,12 @@ recognition.continuous = true;
             break;
           }
         }
-      }else if(transcript.indexOf("submit")!=-1){
+      }else if(transcript.search(/submit/i)!=-1){
             //ask are you sure ? u have these many unattempted answers!!!! (text to speech )
-            form.submit();
+          //  console.log("SUBMIT");
+            console.log(submit);
+          submit.click();
+          form.submit
       }
     i++;
 
