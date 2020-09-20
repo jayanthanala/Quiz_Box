@@ -1,6 +1,7 @@
 const mongoose = require("mongoose");
 
 const questionSchema = new mongoose.Schema({
+  type:Number,
   q:String,   //question
   options: [],
   optioncount:[Number],

@@ -191,3 +191,13 @@ class average!!!!
 // recognition.addEventListener('soundstart', function() {
 //   console.log('Some sound is being received');
 // });
+
+
+
+
+
+
+////////////////////////////////////////////////////////////////////////////////////v2
+1)type attr in questionSchema
+2)handling it in the client side and then the server SIDE
+3)then start the student side implementation
