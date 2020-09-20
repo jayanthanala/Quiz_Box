@@ -3,8 +3,11 @@ const mongoose = require("mongoose");
 const responseSchema = new mongoose.Schema({
   answers:[
     {
+      type:Number,
       id:String,
-      marked:Number
+      marked:Number,
+      link:String,
+      marksAlloted:Number
     }
   ],
   marks:Number,
