@@ -44,7 +44,14 @@
 
           <div class="<%=questions[i]%>">
             <div class="col-md-12">
-              <h4 class=""><%=(i+1)%>)<%=questions[i].q%></h4>
+                <h4 class=""><%=(i+1)%>)<%=questions[i].q%>
+              <%if(questions[i].ans == response[0].answers[i].marked){%>
+
+                <p style="float:right;font-weight:200;font-size:20px;color:green" id="marks">(<%=questions[i].marks%>/<%=questions[i].marks%> Marks)</p>
+            <%  }else{ %>
+                <p style="float:right;font-weight:200;font-size:20px;color:red" id="marks">(0/<%=questions[i].marks%> Marks)</p>
+            <%  } %>  </h4>
+
             </div>
               <%  for(var j=0;j<=questions[i].options.length-1;j++){ %>
                 <div class="row">
@@ -61,9 +68,9 @@
               <% }%>
             <%  if(response[0].answers[i].marked == -1){%>
                 <p>No Answer Given</p>
-            <%  }%>
+            <%}%>
           </div>
-          <!-- <p style="float:top;font-weight:200;font-size:20px;" id="marks">(<%=response[0].marks%>/<%=questions[i].marks%> Marks)</p> -->
+
 
             <hr>
         <%}%>

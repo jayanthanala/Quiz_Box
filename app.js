@@ -129,12 +129,9 @@ app.get("/te/exam/:id/students", authenticatedTeacher, (req, res) => {
     if (error) console.log(error);
     else {
       var students = exam.students;
+      var attempted = exam.attempted;
       students.sort();
-      res.render("examstudents", {
-        students: students,
-        id: exam._id,
-        access: exam.access
-      });
+      res.render("examstudents",{students:students,attempted:attempted,id:exam._id,access:exam.access});
     }
   })
 });

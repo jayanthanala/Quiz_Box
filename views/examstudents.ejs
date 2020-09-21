@@ -52,22 +52,64 @@
     </div>
   </div>
   <h2>Students</h2>
-  <div class="container mx-5 px-3">
-    <div class="row">
-      Roll Numbers
-    </div>
-    <% for(var i=0;i<=students.length-1;i++){ %>
+
+    <div class="container mx-5 px-3">
+      <center><h3 style="padding:30px">Submitted</h3></center>
       <div class="row">
-        <div class="col-md-6">
-          <%=i+1%>
+        <div class="col-md-4">
+          <h5>S.No</h5>
         </div>
-        <div class="col-md-6">
-          <%=students[i]%>
+        <div class="col-md-4">
+          <h5>Reg No</h5>
+        </div>
+        <div class="col-md-4">
+          <h5>Status</h5>
         </div>
       </div>
-      <hr>
-   <%  }%>
+      <% for(var i=0;i<=attempted.length-1;i++){ %>
+        <div class="row">
+          <div class="col-md-4">
+            <%=i+1%>
+          </div>
+          <div class="col-md-4">
+            <%=attempted[i]%>
+          </div>
+          <div class="col-md-4">
+            Submitted
+          </div>
+        </div>
+        <hr>
+     <%  }%>
+
+
+  <center><h3 style="padding:30px">Viewed</h3></center>
+  <div class="row">
+    <div class="col-md-4">
+      <h5>S.No</h5>
+    </div>
+    <div class="col-md-4">
+      <h5>Reg No</h5>
+    </div>
+    <div class="col-md-4">
+      <h5>Status</h5>
+    </div>
   </div>
+   <% for(var i=0;i<=students.length-1;i++){ %>
+     <div class="row">
+       <div class="col-md-4">
+         <%=i+1%>
+       </div>
+       <div class="col-md-4">
+         <%=students[i]%>
+       </div>
+       <div class="col-md-4">
+         Viewed / Absent
+       </div>
+     </div>
+     <hr>
+  <%  }%>
+ </div>
+
   <div class="row">
     <div class="col-md-12">
       Remove Any Student From the List
