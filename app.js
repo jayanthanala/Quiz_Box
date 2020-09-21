@@ -137,7 +137,7 @@ app.get("/te/exam/:id/edit",(req,res)=>{
 
 ////this page has socket connection so no need to send anything
 app.get("/te/exam/:id/responses",(req,res)=>{
-  Question.find({examid:req.params.id},(e,questions)=>{
+  Question.find({examid:req.params.id,type:0},(e,questions)=>{
     Response.find({examid:req.params.id},(er,s)=>{
       //console.log("****************************************s",s);
       res.render("responses",{id:req.params.id,questions:questions,responses:s});
@@ -297,16 +297,24 @@ app.post("/te/exam/new",authenticatedTeacher,(req,res)=>{
       //  console.log("************************************************************8");
         var marks=0;
         questions.forEach((q,i)=>{
-        q["options"]=options[i];
-      //  console.log(options[i],options[i].length);
-        let array = [];
-        for(var x=0;x<=options[i].length-1;x++){
-          array[x]=0;
-        };
-        q["optioncount"]=array;
-        q["examid"]=exam._id;
-        q["unattempted"]=q["wrongans"]=q["rightans"]=0;
-        marks+=Number(q["marks"]);
+            if(q.ans){
+              q["type"]=0;
+              q["options"]=options[i];
+            //  console.log(options[i],options[i].length);
+              let array = [];
+              for(var x=0;x<=options[i].length-1;x++){
+                array[x]=0;
+              };
+              q["optioncount"]=array;
+              q["examid"]=exam._id;
+              q["unattempted"]=q["wrongans"]=q["rightans"]=0;
+              marks+=Number(q["marks"]);
+            }else{
+              console.log("filetype");
+              q["type"]=1;
+              q["examid"]=exam._id;
+              marks+=Number(q["marks"]);
+            }
       });
       //TRY TO REFACTOR THIS CODE LATER TO MAKE IT MORE DRY AND FAST!!
       var noquestions = questions.length;
@@ -836,7 +844,7 @@ io.on("connection",(socket)=>{
                 if(e) console.log(e);
                 else{
                   //console.log(s);
-                  Question.find({examid:id},(er,so)=>{
+                  Question.find({examid:id,type:0},(er,so)=>{
                     if(er) console.log(er);
                     else{
                       io.emit("responses",{
