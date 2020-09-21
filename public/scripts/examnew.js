@@ -8,6 +8,30 @@ function createQuestion(n){
    var column1 = document.createElement("div");
    column1.classList.add("col","m10");
 
+   var switchdiv = document.createElement("div");
+   var switchlabel1 = document.createElement("label");
+   var switchdiv2 = document.createElement("div");
+   var switchinput = document.createElement("input");
+   var switchlabel2 = document.createElement("label");
+
+
+   switchdiv.classList.add("row","d-flex","justify-content-end");
+   switchlabel1.classList.add("mr-2");
+   switchlabel1.innerHTML="MCQ";
+   switchdiv2.classList.add("custom-control","custom-switch");
+   switchinput.setAttribute("type","checkbox");
+   switchinput.classList.add("custom-control-input","mr-3","cs");
+   switchinput.id="cs"+(n-1);
+   switchlabel2.classList.add("custom-control-label");
+   switchlabel2.setAttribute("for","cs"+(n-1));
+   switchlabel2.innerHTML="FILE UPLOAD";
+
+   switchdiv2.appendChild(switchinput);
+   switchdiv2.appendChild(switchlabel2);
+   switchdiv.appendChild(switchlabel1);
+   switchdiv.appendChild(switchdiv2);
+
+
    var questiondiv = document.createElement("div");
    questiondiv.classList.add("input-field", "col", "s12");
 
@@ -76,7 +100,7 @@ function createQuestion(n){
 //creating options and nesting them inside rowOptions
    var rowOptions = document.createElement("div");
    rowOptions.classList.add("options","col","s12");
-  for(var i=1;i<=4;i++){
+  for(var i=0;i<=3;i++){
     let inputF = document.createElement("div");
     inputF.classList.add("input-field", "col", "s6");
 
@@ -114,6 +138,7 @@ function createQuestion(n){
   inputdiv.appendChild(lab);
   row3.appendChild(inputdiv);
 
+  column1.appendChild(switchdiv);
   column1.appendChild(r);
   column1.appendChild(row2);
   column1.appendChild(label);
@@ -240,7 +265,7 @@ $("#cf").on("click",".cs",(e)=>{
 
     var n = div.parent().parent().next().next().children().length;
 
-    for(var i=1;i<=n;i++){
+    for(var i=0;i<=n-1;i++){
       $("input[name=\'options["+index+"]["+i+"]\']")[0].required=false;
     }
 
@@ -267,5 +292,26 @@ $("#cf").on("click",".cs",(e)=>{
     //   }
 
 
+  }else{
+    let index = Number(element.id.substring(2));
+
+    var optionNo = $("#optionNo"+index)[0];
+    optionNo.required=true;
+    var div = $("#optionNo"+index);
+    div.parent().css("display","block");
+
+    var n = div.parent().parent().next().next().children().length;
+
+
+    for(var i=0;i<=n-1;i++){
+      $("input[name=\'options["+index+"]["+i+"]\']")[0].required=true;
+    }
+
+    div.parent().parent().next().css("display","block")
+   div.parent().parent().next().next().css("display","block");
+
+
+    $("#c"+index)[0].required=true;
+        div.parent().parent().next().next().next().css("display","block");
   }
 })
