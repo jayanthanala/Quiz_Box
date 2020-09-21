@@ -54,7 +54,7 @@
       </div>
 
       <%if(questions[0]){%>
-      <form class="" action="/st/submit/<%=questions[0].examid%>" method="post">
+      <form class="" action="/st/submit/<%=questions[0].examid%>" method="post" enctype="multipart/form-data">
             <% for(var i=0;i<=questions.length-1;i++){%>
             <%if(i==0){%>
               <div class="containers" style="display:block">
@@ -64,6 +64,7 @@
               <div class="col-md-12">
                 <h4 class=""><%=(i+1)%>)<%=questions[i].q%></h4>
               </div>
+              <%if(questions[i].qtype==0){%>
                 <%  for(var j=0;j<=questions[i].options.length-1;j++){ %>
                   <div class="row">
                     <div class="col-md-6">
@@ -76,6 +77,13 @@
                   <input type="radio" name="q[<%=questions[i]._id%>]" value="-1"  checked>
                   <label class="btn btn-secondary">blah blah</label>
                </div>
+              <%}else{%>
+                <div class="row">
+                  <div class="col-md-12">
+                    <input type="file" name="q[<%=questions[i]._id%>]" multiple id="<%=i%>,<%=j%>">
+                  </div>
+                </div>
+              <%}%>
                 <div class="">
                 <%if(i!=questions.length-1){%>
                     <button class="btn btn-outline-primary <%=i%> navigation">Next</button>
