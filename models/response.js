@@ -3,7 +3,7 @@ const mongoose = require("mongoose");
 const responseSchema = new mongoose.Schema({
   answers:[
     {
-      type:Number,
+      qtype:Number,
       id:String,
       marked:Number,
       link:String,
