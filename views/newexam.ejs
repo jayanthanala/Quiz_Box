@@ -1,5 +1,6 @@
 <%- include("./partials/teheader.ejs") %>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+<link rel="stylesheet" href="/stylesheets/newexam.css">
  </head>
 <body>
 <div class="continer-fluid">
@@ -24,6 +25,13 @@
             <div class="container">
               <div class="row">
                 <div class="col m10">
+                  <div class="row d-flex justify-content-end">
+                        <label class="mr-2">MCQ</label>
+                        <div class="custom-control custom-switch">
+                        <input type="checkbox" class="custom-control-input mr-3 cs" id="cs0">
+                        <label class="custom-control-label" for="cs0">FILE UPLOAD</label>
+                        </div>
+                  </div>
                   <div class="row">
                     <div class="input-field col s12">
                       <input id="q0" type="text" class="validate" name="questions[0][q]" required>

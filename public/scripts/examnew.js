@@ -206,6 +206,7 @@ $("#cf").on("change",".optionno",(e)=>{
  var o=$(e.target);
  var number = o.val();
  var string= o.attr("id");
+ console.log(o);
  console.log(number,string);
  var number2=Number(string.substr(8));
  var object=o.parent().parent().next().next();
@@ -217,13 +218,54 @@ var marks = $("#marks");
 
 var mark=0;
 $("#cf").on("focus",".marks",(e)=>{
-  var element=e.target;
+  let element=e.target;
   mark = element.value;
 })
 $("#cf").on("change",".marks",(e)=>{
-    var element = e.target;
+    let element = e.target;
     marks.html((Number(marks.html())-mark)+Number(element.value));
   });
 
+$("#cf").on("click",".cs",(e)=>{
+  console.log("clicked");
+  let element = e.target;
+  if(element.checked==true){
+    // let children = $("#cf")[0].childNodes;
+    let index = Number(element.id.substring(2));
 
-$("#cf").pn("")
+    var optionNo = $("#optionNo"+index)[0];
+    optionNo.required=false;
+    var div = $("#optionNo"+index);
+    div.parent().css("display","none");
+
+    var n = div.parent().parent().next().next().children().length;
+
+    for(var i=1;i<=n;i++){
+      $("input[name=\'options["+index+"]["+i+"]\']")[0].required=false;
+    }
+
+    div.parent().parent().next().css("display","none")
+    div.parent().parent().next().next().css("display","none");
+
+
+    $("#c"+index)[0].required=false;
+        div.parent().parent().next().next().next().css("display","none");
+    // console.log(container);
+    // container.childNodes.forEach((x,i)=>{
+    //   console.log(x,i);
+    //   if(i==5){
+    //     console.log(x.childNodes);
+    //     console.log(x.childNodes[0],x.childNodes[1]);
+    //   //  x.childNodes[0].css("display","none");
+    //     let y= x.childNodes[1]
+    //     y.style.display="none";
+    //     y.required=false;
+    //   }
+    //   if(i>6 && i%2!=0){
+    //     x.style.display="none";
+    //     x.required=false;
+    //   }
+
+
+  }
+})
