@@ -57,9 +57,18 @@
               <input type="time" id="time<%=i%>" name="scheduled[time]" class="form-control">
             </div>
             <div class="form-group">
-              <label for="duration<%=i%>">Duration in mins</label>
-              <input type="range" id="duration<%=i%>" name="scheduled[duration]" class="form-control" max="180">
+              <label for="cdate<%=i%>"> Date of closing</label>
+              <input type="date" id="cdate<%=i%>" name="scheduled[date2]" class="form-control">
             </div>
+            <div class="form-group">
+              <label for="ctime<%=i%>">Time of closing</label>
+              <input type="time" id="ctime<%=i%>" name="scheduled[time2]" class="form-control ctime">
+            </div>
+            <div class="form-group">
+              <label for="duration<%=i%>">Duration in mins</label>
+              <input type="range" id="duration<%=i%>" name="scheduled[duration]" class="form-control" min="1" max="180">
+            </div>
+
             <button class="btn btn-outline-success">Submit</button>
           </form>
         </div>
@@ -72,6 +81,32 @@
   <h5>NO EXAMS WHICH ARE STAGED !!</h5>
 <%}%>
 
+<script type="text/javascript">
+  var closetime = document.querySelectorAll(".ctime");
+   for(var i=0;i<=closetime.length-1;i++){
+     closetime[i].addEventListener("change",(e)=>{
+       var element = e.srcElement;
+       var index = element.id.substring(5);
+       var rangeinput = document.querySelector("#duration"+index);
+
+       var starttime = document.querySelector("#time"+index).value;
+       var startdate = document.querySelector("#date"+index).value;
+       var closedate = document.querySelector("#cdate"+index).value;
+       var closetime = element.value;
+
+       var array = startdate.split("-");
+       var time = starttime.split(":");
+       var start = new Date(Number(array[0]),Number(array[1])-1,Number(array[2]),Number(time[0]),Number(time[1]));
+
+       var array2 = closedate.split("-");
+       var time2 = closetime.split(":");
+       var close= new Date(Number(array2[0]),Number(array2[1])-1,Number(array2[2]),Number(time2[0]),Number(time2[1]));
+
+       var duration = (close.getTime()-start.getTime())/(1000*60);
+       rangeinput.setAttribute("max",duration);
+     })
+   }
+</script>
 
 
 <%- include("./partials/tefooter.ejs") %>

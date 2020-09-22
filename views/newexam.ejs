@@ -1,5 +1,6 @@
 <%- include("./partials/teheader.ejs") %>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+<link rel="stylesheet" href="/stylesheets/newexam.css">
  </head>
 <body>
 <div class="continer-fluid">
@@ -24,6 +25,13 @@
             <div class="container">
               <div class="row">
                 <div class="col m10">
+                  <div class="row d-flex justify-content-end">
+                        <label class="mr-2">MCQ</label>
+                        <div class="custom-control custom-switch">
+                        <input type="checkbox" class="custom-control-input mr-3 cs" id="cs0">
+                        <label class="custom-control-label" for="cs0">FILE UPLOAD</label>
+                        </div>
+                  </div>
                   <div class="row">
                     <div class="input-field col s12">
                       <input id="q0" type="text" class="validate" name="questions[0][q]" required>
@@ -43,19 +51,19 @@
                   <label>Options:</label>
                   <div class="col s12 options">
                     <div class="input-field col s6">
-                      <input id="o1" type="text" class="validate" name="options[0][1]" required>
+                      <input id="o1" type="text" class="validate" name="options[0][0]" required>
                        <label for="o1">1</label>
                     </div>
                     <div class="input-field col s6">
-                      <input id="o2" type="text" class="validate" name="options[0][2]" required>
+                      <input id="o2" type="text" class="validate" name="options[0][1]" required>
                        <label for="o2">2</label>
                     </div>
                     <div class="input-field col s6">
-                      <input id="o3" type="text" class="validate" name="options[0][3]" required>
+                      <input id="o3" type="text" class="validate" name="options[0][2]" required>
                       <label for="o3">3</label>
                     </div>
                     <div class="input-field col s6">
-                      <input id="o4" type="text" class="validate" name="options[0][4]" required>
+                      <input id="o4" type="text" class="validate" name="options[0][3]" required>
                        <label for="o4">4</label>
                     </div>
                   </div>

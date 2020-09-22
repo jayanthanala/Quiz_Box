@@ -54,16 +54,17 @@
       </div>
 
       <%if(questions[0]){%>
-      <form class="" action="/st/submit/<%=questions[0].examid%>" method="post">
+      <form class="" action="/st/submit/<%=questions[0].examid%>" method="post" enctype="multipart/form-data">
             <% for(var i=0;i<=questions.length-1;i++){%>
             <%if(i==0){%>
-              <div class="containers">
+              <div class="containers" style="display:block">
             <%}else{%>
               <div class="containers" style="display:none">
             <%}%>
               <div class="col-md-12">
                 <h4 class=""><%=(i+1)%>)<%=questions[i].q%></h4>
               </div>
+              <%if(questions[i].qtype==0){%>
                 <%  for(var j=0;j<=questions[i].options.length-1;j++){ %>
                   <div class="row">
                     <div class="col-md-6">
@@ -76,22 +77,35 @@
                   <input type="radio" name="q[<%=questions[i]._id%>]" value="-1"  checked>
                   <label class="btn btn-secondary">blah blah</label>
                </div>
+              <%}else{%>
+                <div class="row">
+                  <div class="col-md-12">
+                    <input type="file" name="q[<%=questions[i]._id%>]" multiple id="<%=i%>,<%=j%>">
+                  </div>
+                </div>
+              <%}%>
                 <div class="">
                 <%if(i!=questions.length-1){%>
-                    <button class="btn btn-outline-primary   <%=i%> navigation">Next</button>
+                    <button class="btn btn-outline-primary <%=i%> navigation">Next</button>
                 <%}%>
                 </div>
               <%  if(i!=0) {%>
                   <div class="">
-                    <button class="btn btn-outline-primary  <%=i%> navigation">Previous</button>
+                    <button class="btn btn-outline-primary <%=i%> navigation">Previous</button>
                   </div>
                 <%}%>
             </div>
 
             <%}%>
-         <div class="form-group submit" style="display:none">
-             <button type="submit" class="btn btn-outline-success">Submit</button>
-         </div>
+         <%if(questions.length==1){%>
+           <div class="form-group submit">
+               <button type="submit" class="btn btn-outline-success">Submit</button>
+           </div>
+         <%}else{ %>
+           <div class="form-group submit" style="display:none">
+               <button type="submit" class="btn btn-outline-success">Submit</button>
+           </div>
+         <%}%>
           </form>
       <%}%>
   </div>
@@ -146,7 +160,9 @@ if(localStorage.getItem("z")) z=localStorage.getItem("z");
      var input = e.srcElement;
      localStorage.setItem(input.getAttribute("name"), input.getAttribute("value"));
      var index = input.id.split(",")[0];
+     boxes[index].classList.remove("boxred")
      boxes[index].classList.add("boxgreen");
+     console.log(boxes[index].classList);
    });
  }
  window.onload=()=>{
@@ -173,29 +189,62 @@ if(localStorage.getItem("z")) z=localStorage.getItem("z");
    };
  submit.addEventListener("click",()=>{
    localStorage.clear();
+   form.submit();
  });
 
 for(var i=0;i<=boxes.length-1;i++){
   boxes[i].addEventListener("click",(e)=>{
-    for(var j=0;j<=qs.length-1;j++){
+    for(var j=0;j<=qs.length-2;j++){
+      if(qs[j].style.display=="block"){
+        var options =document.querySelectorAll("input[name=\"q["+questions[j]._id+"]\"]");
+        if(options[options.length-1].checked==true) {
+          boxes[j].classList.add("boxred");
+      }
+            }
       qs[j].style.display="none";
+
+
     }
     var index = Number(e.srcElement.innerHTML);
     qs[index-1].style.display="block";
+
     if(index==qs.length-1) submit.style.display="block";
+    else{
+      submit.style.display="none";
+    }
   });
 }
 ///////////////////////////////////////////timer
 
 var duration = Number(<%=duration%>)*60*1000;
 var starttime = new Date(<%-JSON.stringify(start)%>);
-
-var totaltime = new Date(starttime.getTime()+duration);
-
-console.log(typeof starttime,starttime.getTime(),"total",totaltime);
 var h = document.querySelector("#hours");
 var m = document.querySelector("#mins");
 var s = document.querySelector("#secs");
+
+var closetime = new Date(<%-JSON.stringify(close)%>);
+var totaltime =0;
+if(closetime.getTime()> (starttime.getTime()+duration)) totaltime = new Date(starttime.getTime()+duration);
+else{
+   totaltime = new Date(closetime.getTime());
+}
+
+console.log(totaltime);
+
+var now = new Date();
+var timer = totaltime.getTime()-now.getTime()
+var hours = Math.floor((timer/1000)/3600);
+var mins =   Math.floor((timer/1000)/60)%60;
+var seconds = Math.floor(timer/1000)%60;
+if(hours<10) h.innerHTML=0+String(hours);
+else h.innerHTML=hours;
+if(mins<10) m.innerHTML=0+String(mins);
+else m.innerHTML=mins;
+if(seconds<10) s.innerHTML=0+String(seconds);
+else s.innerHTML=seconds;
+
+
+////////////////////////////////////////////////////iteration
 var stopit=setInterval(()=>{
   var now = new Date();
   var timer = totaltime.getTime()-now.getTime()
@@ -212,8 +261,9 @@ var stopit=setInterval(()=>{
     var timer = document.querySelector(".timer");
     timer.style.color="red";
   }
-  if(hours==0 && mins==0 && seconds==0){
-    form.submit();
+  //console.log(hours,mins,seconds);
+  if(hours<=0 && mins<=0 && seconds<=0){
+    submit.click();
     clearInterval(stopit);
   }
 },1000)
@@ -227,8 +277,136 @@ var stopit=setInterval(()=>{
 // console.log("now date",now);
 //
 // console.log(hours,mins,seconds);
+////////////////////////////////////////////////////////////////////////////////voice recognition
+if ('speechSynthesis' in window){
+  console.log("he,lo");
+    var recognition = new webkitSpeechRecognition();
+    console.log(recognition);
+
+recognition.continuous = true;
+
+    recognition.onstart = ()=>{
+      console.log("started the service");
+    };
+
+    // recognition.maxAlternatives=4;
+    recognition.lang='en-IN';
+    //recognition.interimResults=true;
+    var speechRecognitionList = new webkitSpeechGrammarList();
+    var newGrammar = new webkitSpeechGrammar();
+    //newGrammar.src = '#JSGF V1.0; grammar names; public <name> = 1 |  2 |  3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12 | 13 | 14 | 15 | 16 | 17 | 18 | 19 | 20 | A | B | C | D | E | F | G | H | I | J ;'
+    newGrammar.src = '#JSGF V1.0; grammar letters; public <letter> =  a | b | c | d | e | f | g | h | i ;'
+    speechRecognitionList[1] = newGrammar; // should add the new SpeechGrammar object to the list
+
+    recognition.grammars = speechRecognitionList;
+    var i=0;
+  recognition.onresult = (e)=>{
+  //  console.log(e.results);
+      //console.log(e.results[i][0].transcript);
+      var transcript = e.results[i][0].transcript;
+      //console.log(transcript.indexOf("option"));
+      if(transcript.search(/option/i)!=-1){
+        var option = transcript.substr(transcript.indexOf("option")+7,1);
+        //console.log("option: "+option);
+        for(var j=0;j<=qs.length-2;j++){
+          if(qs[j].style.display!="none"){
+            var options =document.querySelectorAll("input[name=\"q["+questions[j]._id+"]\"]");
+            //var options = questions[j].options;
+          //  console.log(options);
+            switch(option){
+              case "A":
+                if(options[0]) options[0].click();
+                  break;
+              case "B":
+                if(options[1]) options[1].click();
+                  break;
+              case "C":
+                  if(options.length>3) options[2].click();
+                  break;
+              case "D":
+                if(options.length>4) options[3].click();
+                  break;
+
+              case "E":
+                if(options.length>5) options[4].click();
+                  break;
+              case "a":
+                if(options[0]) options[0];
+                  break;
+              case "b":
+                    if(options[1]) options[1].click();
+                  break;
+              case "c":
+                  if(options.length>3) options[2].click();
+                  break;
+              case "d":
+                  if(options.length>4) options[3].click();
+                  break;
+              case "e":
+                    if(options.length>5) options[4].click();
+                  break;
+              default:
+                  console.log("couldn't recognize");
+                  break;
+            }
+          }
+        }
+      }else if(transcript.search(/number/i)!=-1 ){
+       //console.log(transcript,"*********");
+        var matches = transcript.match(/(\d+)/)
+        if(matches &&  Number(matches[1])<=qs.length-1){
+       console.log(matches);
+          var number = Number(matches[1])-1;
+          boxes[number].click();
+          //console.log("clicked");
+          }
+        }
+      else if(transcript.search(/next/i)!=-1){
+      //  console.log("next");
+      //  console.log(qs[0]);
+        for(var j=0;j<=qs.length-2;j++){
+            //console.log(j,qs[j].style.display);
+          if(qs[j].style.display=="block" && j!=qs.length-2){
+            var button = document.getElementsByClassName(j)[0].click();
+            // if(j==qs.length-3) qs[qs.length-1].style.display="block";
+            break;
+          }
+        }
+      }else if(transcript.search(/previous/i)!=-1){
+        //console.log("previous");
+      //  console.log(qs[0]);
+        for(var j=0;j<=qs.length-2;j++){
+            //console.log(j,qs[j].style.display);
+          if(qs[j].style.display=="block" && j!=0){
+            var button = document.getElementsByClassName(j)[1].click();
+            // if(j==qs.length-3) qs[qs.length-1].style.display="block";
+            break;
+          }
+        }
+      }else if(transcript.search(/submit/i)!=-1){
+            //ask are you sure ? u have these many unattempted answers!!!! (text to speech )
+          //  console.log("SUBMIT");
+            console.log(submit);
+          submit.click();
+          form.submit
+      }
+    i++;
+
+  }
 
 
+
+recognition.start();
+    // recognition.onerror = function(event) {
+    //     console.log(event.error);
+    // };
+
+// recognition.addEventListener('soundstart', function() {
+//   console.log('Some sound is being received');
+// });
+}else{
+  console.log("not supported");
+}
 </script>
 
 

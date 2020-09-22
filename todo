@@ -166,8 +166,44 @@ class average!!!!
 
 
 //////////////////////////////////////////////////////
-1)timer
 2)marks awarded!
 2)not be able to go back
 3)delete the upload file once the upload has been done!
 4)problem with scheduling of starting of exams code
+
+///////////////////////////////////////////////////////////////////
+1)clicked plus means auto scrolll to that question.
+
+
+//
+// recognition.start();
+// recognition.onresult= (e)=>{
+//   console.log(e.results);
+//   console.log(e.results[0][0]);
+//   console.log(e.results[0][0].transcript);
+// };;
+//   recognition.addEventListener('soundstart', function(e) {
+// console.log('Speech has been detected');
+
+// recognition.onstart = ()=>{
+//   console.log("started the service");
+// };
+// recognition.addEventListener('soundstart', function() {
+//   console.log('Some sound is being received');
+// });
+
+
+
+
+
+
+////////////////////////////////////////////////////////////////////////////////////v2
+1)type attr in questionSchema
+2)handling it in the client side and then the server SIDE
+3)teacher side incoming responses ---done
+3)then start the student side implementation
+
+
+*******************************************************************************bugs
+1)options are not getting required once went to mcq and then coming back to normal!!!
+2)even the general options aren't coming as required check it out ones;
