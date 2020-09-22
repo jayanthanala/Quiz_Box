@@ -11,7 +11,7 @@ const examSchema = new mongoose.Schema({
   students:[],
   attempted:[],
   duration:String,
-  closetime:Date
+  closedate:Date
 });
 
 module.exports = mongoose.model("Exam",examSchema);
