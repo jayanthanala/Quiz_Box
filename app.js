@@ -85,6 +85,15 @@ app.get("/te/exam/new", authenticatedTeacher, (req, res) => {
   res.render("newexam");
 });
 
+app.get("/te/exam/completed", authenticatedTeacher, (req, res) => {
+  Exam.find({status:"completed",teacherid:req.user._id},(err,exams) => {
+    if(err){console.log(err);}
+    else{
+      res.render("completed",{exams:exams})
+    }
+  })
+});
+
 app.get("/te/exam/staged", authenticatedTeacher, (req, res) => {
   Exam.find({
     status: "staged",

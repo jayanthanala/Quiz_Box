@@ -1,5 +1,4 @@
 {
-
   "name": "quizz-app",
   "version": "1.0.0",
   "description": "Quizz App :smile:",
@@ -37,5 +36,4 @@
     "read-excel-file": "^4.0.6",
     "socket.io": "^2.3.0"
   }
-
 }

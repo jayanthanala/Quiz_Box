@@ -1,0 +1,73 @@
+<%- include("./partials/teheader.ejs") %>
+</head>
+
+<body>
+  <nav class="navbar navbar-expand-lg navbar-light bg-light">
+  <a class="navbar-brand" href="/">QUIRKY</a>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+  <div class="collapse navbar-collapse" id="navbarNav">
+    <ul class="navbar-nav">
+      <li class="nav-item">
+        <a class="nav-link" href="/te/index">Home</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="/te/exam/ready">Exams</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="/te/exam/completed">Completed Exams<span class="sr-only">(current)</span></a>
+      </li>
+      <li class="nav-item active">
+        <a class="nav-link" href="/te/exam/staged">Staged Exams</a>
+      </li>
+    </ul>
+  </div>
+  </nav>
+
+  <center>
+    <h4>Completed Exams</h4>
+    </center>
+
+  <%if(exams[0]){%>
+    <div class="container px-5">
+      <div class="container px-5">
+        <% for(var i=0;i<=exams.length-1;i++){%>
+
+          <div class="row my-5 py-3 border">
+            <div class="col-md-12">
+              <h4 class="">Title: <%=exams[i].title%></h4>
+            </div>
+            <div class="col-md-12">
+              <h6 class="">  Number of questions: <%=exams[i].noquestions%></h6>
+            </div>
+            <div class="col-md-12">
+              Total marks: <%=exams[i].marks%>
+            </div>
+            <div class="col-md-12 d-flex justify-content-around">
+              <a href="/te/exam/<%=exams[i]._id%>/students">View Results</a>
+            </div>
+          </div>
+          <hr>
+
+      <%}%>
+      </div>
+    </div>
+  <%}else{%>
+    <div class="container px-5">
+      <center>
+        <h4 style="padding:30px;border:1px solid black;margin:30px">No Exams Submitted Yet</h4>
+        </center>
+      </div>
+<%  }%>
+
+
+
+
+
+
+
+
+
+
+  <%- include("./partials/tefooter.ejs") %>
