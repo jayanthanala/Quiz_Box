@@ -16,7 +16,7 @@ const Exam = require("./models/exam.js");
 const Response = require("./models/response.js");
 const Question = require("./models/question.js");
 const upload = require("./multer.js");
-const seed = require("./seed.js");
+const seed = require("./seed.js"); 
 
 //seed();
 
@@ -36,23 +36,13 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 //databse setup
-mongoose.connect("mongodb://localhost/QuizDB",{useNewUrlParser:true,useUnifiedTopology: true,useFindAndModify:false});
+mongoose.connect("mongodb://localhost:27017/QuizDB",{useNewUrlParser:true,useUnifiedTopology: true,useFindAndModify:false});
 mongoose.set("useCreateIndex",true);
 
 //passport config
 passport.use(User.createStrategy());
 passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
-
-
-
-
-
-
-
-
-
-
 
 ////////////////////////////////////////////////////////////////////   GETS    //////////////////////////////////////////////////////////////
 app.get("/",(req,res)=>{
@@ -69,8 +59,6 @@ app.get("/login",(req,res)=>{
 app.get("/te/register",(req,res)=>{
   res.render("teregister")
 });
-
-
 
 app.get("/te/logout",authenticatedTeacher,(req,res)=>{
   req.logout();
@@ -228,7 +216,7 @@ app.get("/st/results/:id",authenticatedStudent,(req,res) => {
         }
       });
     }
-  })
+  });
 });
 
 
