@@ -1,23 +1,17 @@
-<!DOCTYPE html>
-<html lang="en" dir="ltr">
-  <head>
-    <meta charset="utf-8">
-    <title></title>
-  </head>
-  <body>
-    <form action="/login" method="post">
-      <div class="">
-        <input name="username" type="text" id="u" class="" required>
-        <label for="u">Username</label>
-      </div>
-      <div class="">
-        <input name="password" type="password" id="p" class="" required>
-        <label for="p">Password</label>
-      </div>
-      <button>Submit</button>
-    </form>
+ <%- include("partials/stheader") %>
+
+<body class="text-center">
+  <form action="/login" class="form-signin" method="post">
+    <h1 class="h3 mb-3 font-weight-normal">Quiz Box</h1>
+    <label for="u" class="sr-only">Username</label>
+    <input name="username" type="text" id="u" class="form-control" placeholder="Username" required autofocus>
+    <label for="p" class="sr-only">Password</label>
+    <input name="password" type="password" id="p" class="form-control" placeholder="Password" required>
+    <button class="btn btn-lg btn-primary btn-block" type="submit">Sign in</button>
     <div class="">
       <a href="/te/register">Register</a>
     </div>
-  </body>
+     <p class="mt-5 mb-3 text-muted">&copy; 2020</p>
+  </form>
+</body>
 </html>

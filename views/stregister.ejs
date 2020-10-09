@@ -1,31 +1,17 @@
-<!DOCTYPE html>
-<html lang="en" dir="ltr">
-  <head>
-    <meta charset="utf-8">
-    <title>Student Register</title>
-  </head>
-  <body>
-    <form action="/st/register" method="post">
-      <div class="">
-        <input name="username" type="text" id="u" class="" required>
-        <label for="u">Reg No</label>
-      </div>
-      <div class="">
-        <input name="name" type="text" id="u" class="" required>
-        <label for="u">Name</label>
-      </div>
-      <div class="">
-        <input name="email" type="email" id="u" class="" required>
-        <label for="u">Email</label>
-      </div>
-      <div class="">
-        <input name="password" type="password" id="p" class="" required>
-        <label for="p">Password</label>
-      </div>
-      <button>Submit</button>
-    </form>
-    <div class="">
-      <a href="/st/login">Login</a>
-    </div>
-  </body>
+<%- include("partials/stheader") %>
+
+<body class="text-center">
+ <form action="/st/register" class="form-signin" method="post">
+   <h1 class="h3 mb-3 font-weight-normal">Student Registration</h1>
+   <label for="u" class="sr-only">Registration Number</label>
+   <input name="username" type="text" id="u" class="form-control" placeholder="Username" required >
+   <label for="u" class="sr-only">Name</label>
+   <input name="name" type="text" id="u" class="form-control" placeholder="Name" required >
+   <label for="u" class="sr-only">Email</label>
+   <input name="email" type="text" id="u" class="form-control" placeholder="School Email" required>
+   <label for="p" class="sr-only">Password</label>
+   <input name="password" type="password" id="p" class="form-control" placeholder="Password" required>
+   <button class="btn btn-lg btn-primary btn-block" type="submit">Register</button>
+ </form>
+</body>
 </html>
