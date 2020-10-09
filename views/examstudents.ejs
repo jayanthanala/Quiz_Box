@@ -1,134 +1,140 @@
-
 <%- include("./partials/teheader.ejs") %>
-  <link rel="stylesheet" href="/stylesheets/examstudent.css">
+<link rel="stylesheet" href="/stylesheets/examstudent.css">
 </head>
-<body>
-  <nav class="navbar navbar-expand-lg navbar-light bg-light">
-  <a class="navbar-brand" href="/">QUIRKY</a>
-  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-    <span class="navbar-toggler-icon"></span>
-  </button>
-  <div class="collapse navbar-collapse" id="navbarNav">
-    <ul class="navbar-nav">
-      <li class="nav-item">
-        <a class="nav-link" href="/te/index">Home</a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" href="/te/exam/ready">Exams</a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" href="/te/exam/completed">Completed Exams</a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" href="/te/exam/staged">Staged Exams</a>
-      </li>
-    </ul>
-  </div>
-</nav>
 
-<div class="container">
-      <div class="row">
-        <div class="col-md-12">
-          <h5 class="text-center"> Number of students added : <%=students.length%></h5>
-        </div>
-      </div>
-      <div class="row">
-        <div class="col-md-6">
-           <h5>Add Students By entering their Roll Number:</h5>
-           <form class="" action="/te/exam/<%=id%>/students" method="post">
-              <div class="form-group">
-                <input type="text" name="student" class="form-control" placeholder="Student Roll Number" id="s">
-              </div>
-          <div class="form-group">
-              <button class="btn btn-outline-success" >Submit</button>
-          </div>
-           </form>
-        </div>
-      <div class="col-md-6">
-        <h5>Share the given accesscode</h5>
-        <div >
-           <input type="text"  value="<%=access%>" id="copy"> <span id="share"><i class="far fa-copy"></span></i>
-        </div>
-    </div>
-  </div>
-  <h2>Students</h2>
-
-    <div class="container mx-5 px-3">
-      <center><h3 style="padding:30px">Submitted</h3></center>
-      <div class="row">
-        <div class="col-md-4">
-          <h5>S.No</h5>
-        </div>
-        <div class="col-md-4">
-          <h5>Reg No</h5>
-        </div>
-        <div class="col-md-4">
-          <h5>Status</h5>
-        </div>
-      </div>
-      <% for(var i=0;i<=attempted.length-1;i++){ %>
-        <div class="row">
-          <div class="col-md-4">
-            <%=i+1%>
-          </div>
-          <div class="col-md-4">
-            <%=attempted[i]%>
-          </div>
-          <div class="col-md-4">
-            Submitted
-          </div>
-        </div>
-        <hr>
-     <%  }%>
-
-
-  <center><h3 style="padding:30px">Viewed</h3></center>
-  <div class="row">
-    <div class="col-md-4">
-      <h5>S.No</h5>
-    </div>
-    <div class="col-md-4">
-      <h5>Reg No</h5>
-    </div>
-    <div class="col-md-4">
-      <h5>Status</h5>
-    </div>
-  </div>
-   <% for(var i=0;i<=students.length-1;i++){ %>
-     <div class="row">
-       <div class="col-md-4">
-         <%=i+1%>
-       </div>
-       <div class="col-md-4">
-         <%=students[i]%>
-       </div>
-       <div class="col-md-4">
-         Viewed / Absent
-       </div>
-     </div>
-     <hr>
-  <%  }%>
- </div>
+<%- include("./partials/tenav.ejs") %>
+<div class="container mt-4">
 
   <div class="row">
-    <div class="col-md-12">
-      Remove Any Student From the List
-      <form class="" action="/te/exam/<%=id%>/students?_method=DELETE" method="POST">
-         <div class="form-group">
-           <input type="text" name="student" class="form-control" placeholder="Student Roll Number" id="s">
-         </div>
-     <div class="form-group">
-         <button class="btn btn-outline-success" >Submit</button>
-     </div>
+    <div class="col-md-4">
+      <h5>Add Students</h5>
+      <form class="" action="/te/exam/<%=id%>/students" method="post">
+        <div class="form-group">
+          <input type="text" name="student" class="form-control" placeholder="Student Roll Number" id="s">
+        </div>
+        <div class="form-group">
+          <button class="btn btn-outline-success">Add</button>
+        </div>
       </form>
     </div>
+    <div class="col-md-4">
+      <h5>Remove Students</h5>
+      <form class="" action="/te/exam/<%=id%>/students?_method=DELETE" method="POST">
+        <div class="form-group">
+          <input type="text" name="student" class="form-control" placeholder="Student Roll Number" id="s">
+        </div>
+        <div class="form-group">
+          <button class="btn btn-outline-danger">Remove</button>
+        </div>
+      </form>
+    </div>
+    <div class="col-md-4">
+      <h5>Access Code</h5>
+      <div>
+        <input type="text" value="<%=access%>" id="copy"> <span id="share"><i class="far fa-copy"></i></span>
+      </div>
+    </div>
   </div>
-</div>
+<hr>
+
+  <h2 class="text-center m-4">Students</h2>
+  <h5>Number of Students: <%=students.length%></h5>
+
+  <table class="table text-center">
+  <thead class="thead-dark">
+    <tr>
+      <th scope="col">#</th>
+      <th scope="col">Number</th>
+      <th scope="col">Status</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% for(var i=0;i<=students.length-1;i++){ %>
+    <tr>
+      <th scope="row"><%=i+1%></th>
+      <td><%=students[i]%></td>
+      <td>Added</td>
+    </tr>
+    <% }%>
+  </tbody>
+</table>
+<hr />
 
 
 
 
 
+
+
+
+
+
+
+
+
+  <!-- <div class="container mx-5 px-3">
+    <center>
+      <h3 style="padding:30px">Submitted</h3>
+    </center>
+    <div class="row">
+      <div class="col-md-4">
+        <h5>S.No</h5>
+      </div>
+      <div class="col-md-4">
+        <h5>Reg No</h5>
+      </div>
+      <div class="col-md-4">
+        <h5>Status</h5>
+      </div>
+    </div>
+    <% for(var i=0;i<=attempted.length-1;i++){ %>
+    <div class="row">
+      <div class="col-md-4">
+        <%=i+1%>
+      </div>
+      <div class="col-md-4">
+        <%=attempted[i]%>
+      </div>
+      <div class="col-md-4">
+        Submitted
+      </div>
+    </div>
+    <hr>
+    <%  }%>
+
+
+    <center>
+      <h3 style="padding:30px">Viewed</h3>
+    </center>
+    <div class="row">
+      <div class="col-md-4">
+        <h5>S.No</h5>
+      </div>
+      <div class="col-md-4">
+        <h5>Reg No</h5>
+      </div>
+      <div class="col-md-4">
+        <h5>Status</h5>
+      </div>
+    </div>
+    <% for(var i=0;i<=students.length-1;i++){ %>
+    <div class="row">
+      <div class="col-md-4">
+        <%=i+1%>
+      </div>
+      <div class="col-md-4">
+        <%=students[i]%>
+      </div>
+      <div class="col-md-4">
+        Viewed / Absent
+      </div>
+    </div>
+    <hr>
+    <%  }%>
+  </div>
+
+
+</div> -->
 
 
 
@@ -143,4 +149,4 @@
 
 </script>
 <script src="https://kit.fontawesome.com/30ef029f33.js" crossorigin="anonymous"></script>
-<%- include("./partials/tefooter.ejs") %>
+<%- include("./partials/footer.ejs") %>

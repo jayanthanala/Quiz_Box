@@ -2,54 +2,58 @@
 <meta http-equiv="refresh" content="30">
 </head>
 
-<body>
-<%- include("partials/tenav.ejs") %>
-<div class="container" style="padding-top:50px">
-  <div class="row">
-    <%if(exams[0]){%>
-    <% for(var i=0;i<=exams.length-1;i++){%>
-      <% if(exams[i].status=="started"){ %>
-   <div class="col-md-4">
-       <h2><%=exams[i].title%></h2>
-       <p>Number of questions: <%=exams[i].noquestions%></p>
-       <p>Total Marks: <%=exams[i].marks%></p>
-       <p>
-        <a class="btn btn-secondary" role="button" href="/te/exam/<%=exams[i]._id%>/students">Students List</a>
-        <a class="btn btn-secondary" role="button" href="/te/exam/<%=exams[i]._id%>/responses">View Responses</a>
-      </p>
-    </div>
-    <%}%>
-    <%}%>
-    <%}%>
-    <% if(!exams[0]){ %>
-        <div class="text-center">
-          <img class="mx-auto d-block" style="margin: 0 auto" src="https://testbanktop.com/wp-content/uploads/2018/01/search_error.png" width="300" height="300" alt="">
-        </div>
-      <div class="col-md-12 text-center">
 
+
+<body>
+  <%- include("partials/tenav.ejs") %>
+  <div class="container" style="padding-top:50px">
+    <div class="">
+      <h4 class="mb-5">Ongoing Exams</h4>
+      <%if(exams[0]){%>
+      <% for(var i=0;i<=exams.length-1;i++){%>
+      <% if(exams[i].status=="started"){ %>
+      <div class="card">
+        <h5 class="card-header"><%=exams[i].title%></h5>
+        <div class="card-body">
+          <h5 class="card-text">Number of questions: <%=exams[i].noquestions%></h5>
+          <p class="card-text">Total Marks: <%=exams[i].marks%></p>
+          <a class="btn btn-secondary" role="button" href="/te/exam/<%=exams[i]._id%>/students">Students List</a>
+          <a class="btn btn-secondary" role="button" href="/te/exam/<%=exams[i]._id%>/responses">View Responses</a>
+        </div>
+      </div>
+      <%}%>
+    <%}%>
+      <%}%>
+    <% if(!exams[0]){ %>
+      <div class="text-center">
+        <img class="mx-auto d-block" style="margin: 0 auto" src="https://testbanktop.com/wp-content/uploads/2018/01/search_error.png" width="300" height="300" alt="">
+      </div>
+      <div class="col-md-12 text-center">
         <p>You'll find Ongoing Exams here</p>
       </div>
       <%  }%>
-  </div>
-  <hr>
-  <div class="row">
-    <%if(exams[0]){%>
-    <% for(var i=0;i<=exams.length-1;i++){%>
-      <% if(exams[i].status=="ready"){ %>
-   <div class="col-md-4">
-       <h2><%=exams[i].title%></h2>
-       <p>Number of questions: <%=exams[i].noquestions%></p>
-       <p>Total Marks: <%=exams[i].marks%></p>
-       <p>
-        <a class="btn btn-warning" role="button" href="/te/exam/<%=exams[i]._id%>/students">Students List</a>
-        <form style="border:0px" action="<%=exams[i]._id%>/start?_method=patch" method="post">
-        <button class="btn btn-outline-success">Start Exa,</button>  <!-- after clicking start only the students should get examid = this exam id -->
-        </form>
-      </p>
     </div>
+    <hr>
+    <div class="">
+      <h4 class="mb-5">Exams Ready</h4>
+      <%if(exams[0]){%>
+      <% for(var i=0;i<=exams.length-1;i++){%>
+      <% if(exams[i].status=="ready"){ %>
+      <div class="card text-center">
+        <h4 class="card-header"><%=exams[i].title%></h4>
+        <div class="card-body text-center">
+          <p class="card-text"><b>Number of questions:</b> <%=exams[i].noquestions%></p>
+          <p class="card-text"><b>Total Marks: </b><%=exams[i].marks%></p>
+          <p class="card-text"><b>Access Code: </b><%=exams[i].access%></p>
+          <a class="btn btn-outline-warning" role="button" href="/te/exam/<%=exams[i]._id%>/students">Students List</a>
+          <form action="<%=exams[i]._id%>/start?_method=patch" class="btn" method="post">
+            <button class="btn btn-outline-success">Start Exam</button>
+          </form>
+        </div>
+      </div>
+      <%}%>
     <%}%>
-    <%}%>
-    <%}%>
+      <%}%>
   </div>
 </div>
 <script src="/scripts/examready.js"></script>
@@ -60,10 +64,20 @@
 
 
 
-<!-- OLD CODE -->
 
 
-  <!-- <div class="container px-5">
+
+
+
+
+
+
+
+
+      <!-- OLD CODE -->
+
+
+      <!-- <div class="container px-5">
     <div class="container px-5">
       <% for(var i=0;i<=exams.length-1;i++){%>
       <% if(exams[i].status=="started"){ %>
@@ -91,7 +105,7 @@
 
 
 
-<!-- <hr>
+      <!-- <hr>
 
 <%if(exams[0]){%>
   <div class="container px-5">
@@ -111,11 +125,11 @@
             <div class="col-md-12 d-flex justify-content-around">
                 <a href="/te/exam/<%=exams[i]._id%>/students" class="btn btn-outline-primary">Students List</a>
                 <form style="border:0px" action="<%=exams[i]._id%>/start?_method=patch" method="post">
-                <button class="btn btn-outline-success">Start</button>  <!-- after clicking start only the students should get examid = this exam id -->
-              </form>
-            </div>
-          </div>
-        <%}%>
-    <%}%>
+                <button class="btn btn-outline-success">Start</button>
+      </form>
     </div>
+  </div>
+  <%}%>
+    <%}%>
+  </div>
   </div> -->
