@@ -1,33 +1,83 @@
-
-<%- include("./partials/teheader.ejs") %>
+<%- include("partials/teheader.ejs") %>
 <meta http-equiv="refresh" content="30">
 </head>
-<body>
-  <nav class="navbar navbar-expand-lg navbar-light bg-light">
-  <a class="navbar-brand" href="/">QUIRKY</a>
-  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-    <span class="navbar-toggler-icon"></span>
-  </button>
-  <div class="collapse navbar-collapse" id="navbarNav">
-    <ul class="navbar-nav">
-      <li class="nav-item">
-        <a class="nav-link" href="/te/index">Home</a>
-      </li>
-      <li class="nav-item active">
-        <a class="nav-link" href="/te/exam/ready">Exams<span class="sr-only">(current)</span></a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" href="/te/exam/completed">Completed Exams</a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" href="/te/exam/staged">Staged Exams</a>
-      </li>
-    </ul>
-  </div>
-</nav>
 
-<%if(exams[0]){%>
-  <div class="container px-5">
+
+
+<body>
+  <%- include("partials/tenav.ejs") %>
+  <div class="container" style="padding-top:50px">
+    <div class="">
+      <h4 class="mb-5">Ongoing Exams</h4>
+      <%if(exams[0]){%>
+      <% for(var i=0;i<=exams.length-1;i++){%>
+      <% if(exams[i].status=="started"){ %>
+      <div class="card">
+        <h5 class="card-header"><%=exams[i].title%></h5>
+        <div class="card-body">
+          <h5 class="card-text">Number of questions: <%=exams[i].noquestions%></h5>
+          <p class="card-text">Total Marks: <%=exams[i].marks%></p>
+          <a class="btn btn-secondary" role="button" href="/te/exam/<%=exams[i]._id%>/students">Students List</a>
+          <a class="btn btn-secondary" role="button" href="/te/exam/<%=exams[i]._id%>/responses">View Responses</a>
+        </div>
+      </div>
+      <%}%>
+    <%}%>
+      <%}%>
+    <% if(!exams[0]){ %>
+      <div class="text-center">
+        <img class="mx-auto d-block" style="margin: 0 auto" src="https://testbanktop.com/wp-content/uploads/2018/01/search_error.png" width="300" height="300" alt="">
+      </div>
+      <div class="col-md-12 text-center">
+        <p>You'll find Ongoing Exams here</p>
+      </div>
+      <%  }%>
+    </div>
+    <hr>
+    <div class="">
+      <h4 class="mb-5">Exams Ready</h4>
+      <%if(exams[0]){%>
+      <% for(var i=0;i<=exams.length-1;i++){%>
+      <% if(exams[i].status=="ready"){ %>
+      <div class="card text-center">
+        <h4 class="card-header"><%=exams[i].title%></h4>
+        <div class="card-body text-center">
+          <p class="card-text"><b>Number of questions:</b> <%=exams[i].noquestions%></p>
+          <p class="card-text"><b>Total Marks: </b><%=exams[i].marks%></p>
+          <p class="card-text"><b>Access Code: </b><%=exams[i].access%></p>
+          <a class="btn btn-outline-warning" role="button" href="/te/exam/<%=exams[i]._id%>/students">Students List</a>
+          <form action="<%=exams[i]._id%>/start?_method=patch" class="btn" method="post">
+            <button class="btn btn-outline-success">Start Exam</button>
+          </form>
+        </div>
+      </div>
+      <%}%>
+    <%}%>
+      <%}%>
+  </div>
+</div>
+<script src="/scripts/examready.js"></script>
+</body>
+<%- include("./partials/footer.ejs") %>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+      <!-- OLD CODE -->
+
+
+      <!-- <div class="container px-5">
     <div class="container px-5">
       <% for(var i=0;i<=exams.length-1;i++){%>
       <% if(exams[i].status=="started"){ %>
@@ -50,12 +100,12 @@
       <%}%>
     <%}%>
     </div>
-  </div>
-
-<%}%>
+  </div> <%}%>-->
 
 
-<hr>
+
+
+      <!-- <hr>
 
 <%if(exams[0]){%>
   <div class="container px-5">
@@ -75,21 +125,11 @@
             <div class="col-md-12 d-flex justify-content-around">
                 <a href="/te/exam/<%=exams[i]._id%>/students" class="btn btn-outline-primary">Students List</a>
                 <form style="border:0px" action="<%=exams[i]._id%>/start?_method=patch" method="post">
-                <button class="btn btn-outline-success">Start</button>  <!-- after clicking start only the students should get examid = this exam id -->
-              </form>
-            </div>
-          </div>
-        <%}%>
-    <%}%>
+                <button class="btn btn-outline-success">Start</button>
+      </form>
     </div>
   </div>
-
-<%}else{%>
-  <h2>NO EXAMS WHICH ARE READY!!</h2>
-<%}%>
-
-
-<script src="/scripts/examready.js">
-
-</script>
-<%- include("./partials/tefooter.ejs") %>
+  <%}%>
+    <%}%>
+  </div>
+  </div> -->

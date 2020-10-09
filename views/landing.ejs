@@ -1,19 +1,10 @@
-<!DOCTYPE html>
-<html lang="en" dir="ltr">
-  <head>
-    <meta charset="utf-8">
-    <title>QUIRKY QUIZAPP</title>
-  </head>
+ <%- include("partials/stheader") %>
   <body>
-    <h1>Landing Page</h1>
-    <div >
-      <a href="/login">Login</a>
-    </div>
-    <div class="">
-      <a href="/st/register">Student Registeration</a>
-    </div>
-    <div class="">
-      <a href="/te/register">Teacher Registeration</a>
+    <div class="form-signin">
+      <h1 class="h3 mb-3 text-center font-weight-normal">Welcome</h1>
+      <a class="btn btn-lg btn-primary btn-block" href="/login" type="submit">Sign in</a>
+      <hr>
+      <a class="btn btn-lg btn-warning btn-block" href="/st/register" type="submit">Student Register</a>
+      <a class="btn btn-lg btn-success btn-block" href="/te/register" type="submit">Teacher Register</a>
     </div>
   </body>
-</html>

@@ -344,7 +344,9 @@ app.post("/login", (req, res) => {
 app.post("/te/register", (req, res) => {
   User.register({
     username: req.body.username,
-    role: 1
+    role: 1,
+    name:req.body.name,
+    email:req.body.email
   }, req.body.password, (error, sol) => {
     if (error) console.log(error);
     else {
@@ -414,7 +416,7 @@ app.post("/te/exam/new", authenticatedTeacher, (req, res) => {
             else {
               //console.log(q);
               //  console.log("sdamdklsa");
-              res.redirect("/te/index");
+              res.redirect("/te/staged");
             }
           })
         }
