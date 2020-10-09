@@ -12,13 +12,14 @@
       <%if(exams[0]){%>
       <% for(var i=0;i<=exams.length-1;i++){%>
       <% if(exams[i].status=="started"){ %>
-      <div class="card">
+      <div class="card text-center">
         <h5 class="card-header"><%=exams[i].title%></h5>
         <div class="card-body">
-          <h5 class="card-text">Number of questions: <%=exams[i].noquestions%></h5>
-          <p class="card-text">Total Marks: <%=exams[i].marks%></p>
-          <a class="btn btn-secondary" role="button" href="/te/exam/<%=exams[i]._id%>/students">Students List</a>
-          <a class="btn btn-secondary" role="button" href="/te/exam/<%=exams[i]._id%>/responses">View Responses</a>
+          <p class="card-text"><b>Number of questions:</b> <%=exams[i].noquestions%></p>
+          <p class="card-text"><b>Total Marks: </b><%=exams[i].marks%></p>
+          <p class="card-text"><b>Access Code: </b><%=exams[i].access%></p>
+          <a class="btn btn-outline-warning" role="button" href="/te/exam/<%=exams[i]._id%>/students">Students List</a>
+          <a class="btn btn-outline-danger" role="button" href="/te/exam/<%=exams[i]._id%>/responses">View Responses</a>
         </div>
       </div>
       <%}%>
