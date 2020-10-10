@@ -110,13 +110,10 @@ app.get("/te/exam/staged", authenticatedTeacher, (req, res) => {
 });
 
 app.get("/te/exam/ready", authenticatedTeacher, (req, res) => {
-  Exam.find({
-    teacherid: req.user._id
-  }, (error, exams) => {
+  Exam.find({teacherid: req.user._id,status:{$ne:"completed"}}, (error, exams) => {
     if (error) console.log(error);
     else {
-
-      //once studets schema gets updated ! then even pass the names!
+      console.log(exams);
       res.render("examready", {
         exams: exams
       });
