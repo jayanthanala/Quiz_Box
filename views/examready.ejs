@@ -9,7 +9,7 @@
   <div class="container" style="padding-top:50px">
     <div class="">
       <%if(exams[0]){%>
-        <h4 class="mb-5">Ongoing Exams</h4>
+      <h4 class="mb-5">Ongoing Exams</h4>
       <% for(var i=0;i<=exams.length-1;i++){%>
       <% if(exams[i].status=="started"){ %>
       <div class="card text-center">
@@ -38,7 +38,7 @@
     <div class="">
 
       <%if(exams[0]){%>
-        <h4 class="mb-5">Exams Ready</h4>
+      <h4 class="mb-5">Exams Ready</h4>
       <% for(var i=0;i<=exams.length-1;i++){%>
       <% if(exams[i].status=="ready"){ %>
       <div class="card text-center">
@@ -61,11 +61,6 @@
 <script src="/scripts/examready.js"></script>
 </body>
 <%- include("./partials/footer.ejs") %>
-
-
-
-
-
 
 
 

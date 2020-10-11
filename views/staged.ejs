@@ -3,53 +3,53 @@
 <%- include("partials/tenav") %>
 
 <%if(exams[0]){ %>
+<div class="container px-5">
   <div class="container px-5">
-    <div class="container px-5">
-      <% for(var i=0;i<=exams.length-1;i++){%>
-      <div class="row my-5 py-3 border">
-        <div class="col-md-12">
-          <h4 class="">Title: <%=exams[i].title%></h4>
-        </div>
-        <div class="col-md-12">
-          <h6 class="">  Number of questions: <%=exams[i].noquestions%></h6>
-        </div>
-        <div class="col-md-12">
-          Total marks: <%=exams[i].marks%>
-        </div>
-        <div class="col-md-12 d-flex justify-content-end">
-            <a href="<%=exams[i]._id%>/edit" class="btn btn-outline-primary">Edit</a>
-        </div>
-        <div class="col-md-12">
-            <form style="border:0px" action="<%=exams[i]._id%>/staged" method="post" enctype="multipart/form-data">
-            <div class="form-group">
-              <label for="file">Upload the Excel file:</label>
-              <input type="file" name="excel" id="file">
-            </div>
-            <div class="form-group">
-              <label for="date<%=i%>"> Date</label>
-              <input type="date" id="date<%=i%>" name="scheduled[date]" class="form-control">
-            </div>
-            <div class="form-group">
-              <label for="time<%=i%>">Time</label>
-              <input type="time" id="time<%=i%>" name="scheduled[time]" class="form-control">
-            </div>
-            <div class="form-group">
-              <label for="cdate<%=i%>"> Date of closing</label>
-              <input type="date" id="cdate<%=i%>" name="scheduled[date2]" class="form-control">
-            </div>
-            <div class="form-group">
-              <label for="ctime<%=i%>">Time of closing</label>
-              <input type="time" id="ctime<%=i%>" name="scheduled[time2]" class="form-control ctime">
-            </div>
-            <div class="form-group">
-              <label for="duration<%=i%>">Duration in mins</label>
-              <input type="range" id="duration<%=i%>" name="scheduled[duration]" class="form-control" min="1" max="180">
-            </div>
-
-            <button class="btn btn-outline-success">Submit</button>
-          </form>
-        </div>
+    <% for(var i=0;i<=exams.length-1;i++){%>
+    <div class="row my-5 py-3 border">
+      <div class="col-md-12">
+        <h4 class="">Title: <%=exams[i].title%></h4>
       </div>
+      <div class="col-md-12">
+        <h6 class=""> Number of questions: <%=exams[i].noquestions%></h6>
+      </div>
+      <div class="col-md-12">
+        Total marks: <%=exams[i].marks%>
+      </div>
+      <div class="col-md-12 d-flex justify-content-end">
+        <a href="<%=exams[i]._id%>/edit" class="btn btn-outline-primary">Edit</a>
+      </div>
+      <div class="col-md-12">
+        <form style="border:0px" action="<%=exams[i]._id%>/staged" method="post" enctype="multipart/form-data">
+          <div class="form-group">
+            <label for="file">Upload the Excel file:</label>
+            <input type="file" name="excel" id="file">
+          </div>
+          <div class="form-group">
+            <label for="date<%=i%>"> Date</label>
+            <input type="date" id="date<%=i%>" name="scheduled[date]" class="form-control">
+          </div>
+          <div class="form-group">
+            <label for="time<%=i%>">Time</label>
+            <input type="time" id="time<%=i%>" name="scheduled[time]" class="form-control">
+          </div>
+          <div class="form-group">
+            <label for="cdate<%=i%>"> Date of closing</label>
+            <input type="date" id="cdate<%=i%>" name="scheduled[date2]" class="form-control">
+          </div>
+          <div class="form-group">
+            <label for="ctime<%=i%>">Time of closing</label>
+            <input type="time" id="ctime<%=i%>" name="scheduled[time2]" class="form-control ctime">
+          </div>
+          <div class="form-group">
+            <label for="duration<%=i%>">Duration in mins</label>
+            <input type="range" id="duration<%=i%>" name="scheduled[duration]" class="form-control" min="1" max="180">
+          </div>
+
+          <button class="btn btn-outline-success">Submit</button>
+        </form>
+      </div>
+    </div>
     <%}%>
     </div>
   </div>
@@ -57,12 +57,12 @@
     <div class="text-center">
       <img class="mx-auto d-block m-4" style="" src="https://testbanktop.com/wp-content/uploads/2018/01/search_error.png" width="300" height="300" alt="">
     </div>
-  <div class="col-md-12 text-center">
-    <h4>You'll find Staged Exams here</h4>
-    <hr>
-  </div>
+    <div class="col-md-12 text-center">
+      <h4>You'll find Staged Exams here</h4>
+      <hr>
+    </div>
 
-  <%}%>
+    <%}%>
 
 <script type="text/javascript">
   var closetime = document.querySelectorAll(".ctime");
