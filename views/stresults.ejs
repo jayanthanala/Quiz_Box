@@ -1,88 +1,50 @@
-<%- include("./partials/teheader.ejs") %>
+<%- include("./partials/stheader.ejs") %>
 </head>
 
 <body>
-   <nav class="navbar navbar-expand-lg navbar-light bg-light">
-    <a class="navbar-brand" href="/">QUIRKY</a>
-    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-       <span class="navbar-toggler-icon"></span>
-     </button>
-     <div class="collapse navbar-collapse" id="navbarNav">
-       <ul class="navbar-nav">
-         <li class="nav-item active">
-           <a class="nav-link" href="/st/index">Home<span class="sr-only">(current)</span></a>
-         </li>
-         <li class="nav-item">
-           <a class="nav-link" href="/st/completed">Completed Exams</a>
-         </li>
-
-         <div class="form-inline my-2 my-lg-0">
-           <script type="text/javascript">
-             function goToPage() {
-               var page = document.getElementById('page').value;
-               window.location = "/st/add/" + page;
-             }
-      </script>
-
-           <input class="form-control mr-sm-2" type="text" placeholder="Search" id="page" name="examid" aria-label="Search">
-           <button class="btn btn-outline-success my-2 my-sm-0" type="submit" value="submit" onclick="goToPage();">Search</button>
-         </div>
-       </ul>
-     </div>
-   </nav>
-
-
-
-
-
-<div class="" style="padding:150px">
-  <%if(questions[0]){%>
-    <center>
-      <h2><%=exam.title%></h2>
-      </center>
-        <% for(var i=0;i<=questions.length-1;i++){%>
-
-          <div class="<%=questions[i]%>">
-            <div class="col-md-12">
-                <h4 class=""><%=(i+1)%>)<%=questions[i].q%>
-              <%if(questions[i].ans == response[0].answers[i].marked){%>
-
-                <p style="float:right;font-weight:200;font-size:20px;color:green" id="marks">(<%=questions[i].marks%>/<%=questions[i].marks%> Marks)</p>
-            <%  }else{ %>
-                <p style="float:right;font-weight:200;font-size:20px;color:red" id="marks">(0/<%=questions[i].marks%> Marks)</p>
-            <%  } %>  </h4>
-
-            </div>
-              <%  for(var j=0;j<=questions[i].options.length-1;j++){ %>
-                <div class="row">
-                  <div class="col-md-6">
-                  <%  if(questions[i].ans == j+1){%>
-                      <p><%=j+1%>)<%=questions[i].options[j]%> <i class="fas fa-check" style="color:green"></i></p>
-                  <%  }else if(response[0].answers[i].marked == j+1 && questions[i].ans != j+1){%>
-                      <p><%=j+1%>)<%=questions[i].options[j]%> <i class="fas fa-times" style="color:red"></i></p>
-                  <%  }else{%>
-                    <p><%=j+1%>)<%=questions[i].options[j]%></p>
-                <%  }%>
-                  </div>
-                </div>
-              <% }%>
-            <%  if(response[0].answers[i].marked == -1){%>
-                <p>No Answer Given</p>
-            <%}%>
-          </div>
-
-
-            <hr>
-        <%}%>
-     <div class="form-group submit" style="">
-         <a href="/st/completed" style="text-decoration:none"><button type="button" class="btn btn-outline-success">Back</button></a>
-     </div>
-  <%}%>
+  <%- include("./partials/stnav.ejs") %>
+  <div class="container" style="">
+    <%if(questions[0]){%>
+    <div class="">
+      <h2 class="text-center mt-4"><%=exam.title%></h2>
+      <hr style="border-top: 1px dashed grey">
+      <p><b>Name:</b> <%=req.name%></p>
+      <p><b>Roll:</b> <%=req.username%></p>
+      <p style=""><b>Date Conducted:</b> <%=moment(exam.date).format( 'DD MMM YYYY')%></p>
+      <p style=""><b>Score:</b> <%=response[0].marks%>/<%=exam.marks%></p>
+      <hr style="border-top: 1px dashed grey">
+    </div>
+<div class="col-md-12">
+    <% for(var i=0;i<=questions.length-1;i++){%>
+      <div class="card m-4" >
+        <div class="card-header">
+        <b><%=(i+1)%>. <%=questions[i].q%></b>
+          <%if(questions[i].ans == response[0].answers[i].marked){%>
+          <p style="float:right;color:green" id="marks">(<%=questions[i].marks%>/<%=questions[i].marks%> Marks)</p>
+          <%  }else{ %>
+          <p style="float:right;color:red" id="marks">(0/<%=questions[i].marks%> Marks)</p>
+          <%  } %>
+        </div>
+        <ul class="list-group list-group-flush">
+          <%  for(var j=0;j<=questions[i].options.length-1;j++){ %>
+          <li class="list-group-item">
+            <%  if(questions[i].ans == j+1){%>
+            <p><%=j+1%>) <%=questions[i].options[j]%> <i class="fas fa-check" style="color:green"></i></p>
+            <%  }else if(response[0].answers[i].marked == j+1 && questions[i].ans != j+1){%>
+            <p><%=j+1%>) <%=questions[i].options[j]%> <i class="fas fa-times" style="color:red"></i></p>
+            <%  }else{%>
+            <p><%=j+1%>) <%=questions[i].options[j]%></p>
+            <%  }%>
+          </li>
+          <% }%>
+        </ul>
+      </div>
+      <%}%>
+    </div>
+    <%}%>
+    <div class="form-group submit text-center m-4">
+      <a href="/st/completed" style="text-decoration:none"><button type="button" class="btn btn-outline-success">Back</button></a>
+    </div>
 </div>
 
-
-
-
-
-
-<%- include("./partials/tefooter.ejs") %>
+<%- include("./partials/footer.ejs") %>
