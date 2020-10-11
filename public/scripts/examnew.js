@@ -156,7 +156,7 @@ function createQuestion(n){
 
   var button2 = document.createElement("button");
   button2.classList.add("minus");
-  button1.classList.add("btn");
+  button2.classList.add("btn");
   button2.innerHTML = "-";
   button2.id="minus"+(n-1);
 

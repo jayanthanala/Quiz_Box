@@ -413,7 +413,7 @@ app.post("/te/exam/new", authenticatedTeacher, (req, res) => {
             else {
               //console.log(q);
               //  console.log("sdamdklsa");
-              res.redirect("/te/staged");
+              res.redirect("/te/exam/staged");
             }
           })
         }

@@ -11,7 +11,7 @@
       <%if(exams[0]){%>
         <h4 class="mb-5">Ongoing Exams</h4>
       <% for(var i=0;i<=exams.length-1;i++){%>
-      <% if(exams[i].status=="started" && exams[i].status=="staged"){ %>
+      <% if(exams[i].status=="started"){ %>
       <div class="card text-center">
         <h5 class="card-header"><%=exams[i].title%></h5>
         <div class="card-body">
@@ -40,7 +40,7 @@
       <%if(exams[0]){%>
         <h4 class="mb-5">Exams Ready</h4>
       <% for(var i=0;i<=exams.length-1;i++){%>
-      <% if(exams[i].status=="ready" && exams[i].status=="staged"){ %>
+      <% if(exams[i].status=="ready"){ %>
       <div class="card text-center">
         <h4 class="card-header"><%=exams[i].title%></h4>
         <div class="card-body text-center">
