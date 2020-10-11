@@ -90,7 +90,7 @@ app.get("/te/exam/completed", authenticatedTeacher, (req, res) => {
   Exam.find({status:"completed",teacherid:req.user._id},(err,exams) => {
     if(err){console.log(err);}
     else{
-      res.render("completed",{exams:exams})
+      res.render("completed",{exams:exams.reverse()})
     }
   })
 });
