@@ -248,6 +248,8 @@ app.get("/st/exam/:id", authenticatedStudent, (req, res) => {
         //console.log("hello");
         res.render("stexam", {
           questions: questions,
+          exam:exam,
+          req:req.user,
           duration: exam.duration,
           start: exam.date,
           close: exam.closedate
