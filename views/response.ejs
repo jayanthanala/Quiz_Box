@@ -1,0 +1,305 @@
+<%- include("./partials/teheader.ejs") %>
+</head>
+
+<h1 style="display:none"><%=id%></h1>
+<h2 style="display:none"><%=questions%></h2>
+<div class="justify-content-end" id="secret" style="display:none">
+  <a href="/te/exam/completed">Final Results</a>
+</div>
+<%- include("./partials/tenav.ejs") %>
+<div class="mt-4 container students ">
+  <h4 class="text-center">Students</h4>
+  <table class="table text-center">
+    <thead class="thead-light">
+      <tr>
+        <th scope="col">#</th>
+        <th scope="col">Username</th>
+        <th scope="col">Marks Obtained</th>
+      </tr>
+    </thead>
+    <tbody>
+      <%for(var i=0;i<=responses.length-1;i++){%>
+      <tr>
+        <th scope="row"><%=i+1%></th>
+        <td><%=responses[i].userid%></td>
+        <td><%=responses[i].marks%></td>
+      </tr>
+      <%}%>
+  </tbody>
+</table>
+<hr>
+<a href="/te/exam/completed" class="btn btn-outline-primary">Back</a>
+</div>
+<div class="mt-4 container questions">
+  <h4 class="text-center">Stats</h4>
+  <table class="table">
+  <thead class="thead-dark">
+    <tr class="text-center">
+      <th scope="col">#</th>
+      <th scope="col">Question</th>
+      <th scope="col">Stats</th>
+    </tr>
+  </thead>
+  <tbody>
+    <%for(var i=0;i<=questions.length-1;i++){%>
+      <tr>
+        <td><%=i+1%></td>
+        <td>
+          <div class="col-md-12">
+            <div class="">
+              <b><%=questions[i].q%></b>
+            </div>
+            <div class="row">
+              <% for(var j=0;j<=questions[i].options.length-1;j++){%>
+              <div class="col-md-12">
+                <%=j+1+". "+questions[i].options[j] %>
+              </div>
+              <%}%>
+        </div>
+      </div></td>
+      <td>
+        <div class="row">
+          <div class="col-md-6" style="padding:0px 50px">
+            <canvas id="piechart1<%=i%>" width="10px" height="10px"></canvas>
+            </div>
+            <div class="col-md-6" style="padding:0px 50px">
+              <canvas id="piechart2<%=i%>" width="50px" height="10px"></canvas>
+            </div>
+          </div>
+        </td>
+      </tr>
+      <%}%>
+  </tbody>
+</table>
+</div>
+
+<script src="/socket.io/socket.io.js"></script>
+<script src="/scripts/responsepage.js"></script>
+
+<script type="text/javascript">
+
+//////////////////////////////////////////////////////////////////////////socket programming
+const socket = io();
+console.log(socket);
+
+var a = document.querySelector("h1");
+var id = a.textContent;
+console.log(id);
+
+var responses = <%-JSON.stringify(responses)%>;
+      console.log(responses);
+      /////////////socket emit
+
+      // var stop;
+      // stop= setInterval(()=>{
+      // socket.emit("sendResponses",id);
+      // console.log("hello");
+      // },7000);
+
+
+      socket.on("responses",(data)=>{
+      console.log(data.responses.length,"***********************************************************************");
+      addData(data);
+
+      });
+
+      socket.on("final",(data)=>{
+      // clearInterval(stop);
+      var secret = document.getElementById("secret");
+      console.log("examcompleted");
+      secret.style.display="flex";
+      })
+
+
+
+
+      function addData(data){
+      console.log("////////////////////////////////////////came inside fucntion",responses.length);
+      if(responses.length==0){
+      data.responses.forEach((d)=>{
+      responses.push(d);
+      console.log("pushed");
+
+      });
+      // console.log(data);
+      // console.log(data.responses);
+      addStudents(data.responses);
+      updateCharts(data.questions);
+
+      }else{
+      console.log("//////////////////////////////////////////////////data came",responses.length,data.responses.length);
+      if(responses.length<data.responses.length){ var newResponses=data.responses.slice(responses.length); console.log(newResponses,"senttttttttt"); addStudents(newResponses); console.log(responses.length,"////////",data.responses.length);
+        console.log("added new"); updateCharts(data.questions); responses.push(newResponses); } } } var container=document.getElementsByClassName("students")[0]; function addStudents(data){ console.log(data.length,"created"); data.forEach((x)=>{
+        let row = document.createElement("div");
+        row.classList.add("row");
+        let first = document.createElement("div");
+        first.classList.add("col-md-6");
+        let second = document.createElement("div");
+        second.classList.add("col-md-6");
+        first.innerHTML=x.userid;
+        second.innerHTML=x.marks;
+        let hr = document.createElement("hr");
+        row.appendChild(first);
+        row.appendChild(second);
+        row.appendChild(hr);
+        console.log("appending");
+        container.appendChild(row);
+        })
+        }
+
+
+        ///////////////////////////////////////////////////////////////////////////////// Chart.js
+        // ******************************************************************************************8888
+        var q = <%-JSON.stringify(questions)%>;
+        //***************************************************************************************************
+        var colors=[
+        'rgba(52,152,219)',
+        'rgba(26,188,156)',
+        'rgba(231,76,60)',
+        'rgba(241,196,15)',
+        'rgba(211,84,0)',
+        'rgba(189,195,199)',
+        'rgba(102,0,204)',
+        'rgba(0,255,204)',
+        'rgba(0,0,255)',
+        'rgba(255,0,0)',
+        'rgba(0,255,0)',
+
+        ]
+
+
+
+        ////////////////////////////////////////////////////////////////////initialization!!!
+    var i;
+      for(i=0;i<=q.length-1;i++){
+       var ctx1=document.getElementById("piechart1"+i);
+       var ctx2=document.getElementById("piechart2"+i);
+      // console.log(ctx1,ctx2);
+    //   var data1={
+    //     datasets:[{
+    //       data:q[i].optioncount,
+    //       backgroundColor:[
+    //       "red",
+    //       "blue",
+    //       "orange",
+    //       "yellow",
+    //       "green"
+    //       "violet"]
+    //     }],
+    //      labels: q[i].options
+    // }
+         var data1={
+           datasets:[{
+             data:q[i].optioncount,
+                        // data:[10,20,30,40],
+             backgroundColor:colors.slice(0,q[i].options.length)
+           }],
+            labels: q[i].options
+       }
+       console.log("data1",data1);
+     // console.log(q[i].options,"///////////////");
+     //   if(1 == 1){
+     //     var data1={
+     //       datasets:[{
+     //         data:[10,20,30,40],
+     //         backgroundColor:[ "red",
+     //          "blue",
+     //          "orange",
+     //          "yellow",
+     //          "green"
+     //          "violet"],
+     //       }],
+     //       labels: q[i].options
+     //   }
+     // }
+       var data2={
+         datasets:[{
+           data:[q[i].unattempted,q[i].rightans,q[i].wrongans],
+           // data:[20,65,25],
+           backgroundColor:colors.slice(0,3)
+       }],
+        labels:["unattempted","right answered","wrongly answered"],
+      };
+       var chart1 = new Chart(ctx1, {
+        type: 'pie',
+        data: data1,
+        options:{
+        responsive:true
+  }
+    });
+    console.log(chart1,"dskjaldjksajd");
+        var chart2 = new Chart(ctx2, {
+        type: 'pie',
+        data: data2,
+        options:{
+        responsive:true
+  }
+    });
+  }
+  //////////////////////////////////////////////////////////////////////////////dynamic updation of the charts!!
+  function updateCharts(questions){
+    q=questions;
+      for(var i=0;i<=q.length-1;i++){
+       var ctx1=document.getElementById("piechart1"+i);
+       var ctx2=document.getElementById("piechart2"+i);
+      console.log(ctx1,ctx2);
+      var data1={
+        datasets:[{
+          data:q[i].optioncount,
+          backgroundColor:colors.slice(0,q[i].options.length),
+    }],
+       labels: q[i].options,
+     }
+     console.log("data1-dynamic",data1);
+     //
+     //   if(i == 0){
+     //     var data1={
+     //       datasets:[{
+     //         data:q[i].optioncount,
+     //         backgroundColor:[
+     //         "red",
+     //         "blue",
+     //         "orange",
+     //         "yellow",
+     //         "green"
+     //         "violet"]
+     //       }],
+     //        labels: q[i].options
+     //   }
+     // }
+     // console.log(q[i].options,"///////////////");
+     //   if(1 == 1){
+     //     var data1={
+     //       datasets:[{
+     //         data:[10,20,30,40],
+     //         backgroundColor:[ "red",
+     //          "blue",
+     //          "orange",
+     //          "yellow",
+     //          "green"
+     //          "violet"],
+     //       }],
+     //       labels: q[i].options
+     //   }
+     // }
+       var data2={
+         datasets:[{
+           data:[q[i].unattempted,q[i].rightans,q[i].wrongans],
+           // data:[20,65,25],
+           backgroundColor:colors.slice(0,3),
+         }],
+         labels:["unattempted","right answered","wrongly answered"],
+       };
+       var chart1 = new Chart(ctx1, {
+        type: 'pie',
+        data: data1,
+        options:{responsive:true}
+    });
+  //  console.log(chart1,"dskjaldjksajd");
+        var chart2 = new Chart(ctx2, {
+        type: 'pie',
+        data: data2,
+        options:{responsive:true}
+    });
+  }
+  }
