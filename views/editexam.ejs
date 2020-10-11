@@ -19,58 +19,58 @@
       <div class="col-md-12" class="main">
         <form class="" action="/te/exam/<%=questions[0].examid%>/edit?_method=patch" method="post">
           <div id=cf>
-          <%for(var i=0;i<=questions.length-1;i++){%>
-              <div class="container">
-                <div class="row">
-                  <div class="col m10">
-                    <div class="row">
-                      <div class="input-field col s12">
-                        <input id="q0" type="text" class="validate" name="questions[<%=i%>][q]"  value="<%=questions[i]["q"]%>">
-                         <label for="q0">Question</label>
-                      </div>
+            <%for(var i=0;i<=questions.length-1;i++){%>
+            <div class="container">
+              <div class="row">
+                <div class="col m10">
+                  <div class="row">
+                    <div class="input-field col s12">
+                      <input id="q0" type="text" class="validate" name="questions[<%=i%>][q]" value="<%=questions[i]["q"]%>">
+                      <label for="q0">Question</label>
                     </div>
-                    <div class="row">
-                      <div class="input-field col s6">
-                        <input id="optionNo0" type="number" class="validate optionno" min="2" value="<%=questions[i].options.length%>">
-                        <label for="optionNo0">Number of options</label>
-                      </div>
-                      <div class="input-field col s6">
-                        <input id="marks<%=i%>" type="number" class="validate marks" min="1" name="questions[<%=i%>][marks]" value="<%=questions[i].marks%>">
-                         <label for="marks<%=i%>">Marks for this question</label>
-                      </div>
+                  </div>
+                  <div class="row">
+                    <div class="input-field col s6">
+                      <input id="optionNo0" type="number" class="validate optionno" min="2" value="<%=questions[i].options.length%>">
+                      <label for="optionNo0">Number of options</label>
                     </div>
-                    <label>Options:</label>
-                    <div class="row options">
-                      <%for(var j=1;j<=questions[i].options.length;j++){%>
-                        <div class="input-field col s6">
-                          <input id="o<%=j%>" type="text" class="validate" name="options[<%=i%>][<%=j%>]" value="<%=questions[i].options[j-1]%>">
-                           <label for="o<%=j%>"><%=j%></label>
-                        </div>
-                      <%}%>
+                    <div class="input-field col s6">
+                      <input id="marks<%=i%>" type="number" class="validate marks" min="1" name="questions[<%=i%>][marks]" value="<%=questions[i].marks%>">
+                      <label for="marks<%=i%>">Marks for this question</label>
+                    </div>
+                  </div>
+                  <label>Options:</label>
+                  <div class="row options">
+                    <%for(var j=1;j<=questions[i].options.length;j++){%>
+                    <div class="input-field col s6">
+                      <input id="o<%=j%>" type="text" class="validate" name="options[<%=i%>][<%=j%>]" value="<%=questions[i].options[j-1]%>">
+                      <label for="o<%=j%>"><%=j%></label>
+                    </div>
+                    <%}%>
                     </div>
                   <div class="row">
                     <div class="input-field col s12">
                       <input id="c0" type="number" class="validate" name="questions[<%=i%>][ans]" min="1" value="<%=questions[i]["ans"]%>" >
-                       <label for="c0">Correct Option Number</label>
-                    </div>
+                    <label for="c0">Correct Option Number</label>
                   </div>
-                  </div>
-                  <div class="col-md-2 d-flex justify-content-around align-items-center">
-                      <button class="plus btn" id="plus<%=i%>">+</button>
-                      <%if(i!=0){%>
-                      <button class="minus btn" id="minus<%=i%>">-</button>
-                      <%}%>
+                </div>
+              </div>
+              <div class="col-md-2 d-flex justify-content-around align-items-center">
+                <button class="plus btn" id="plus<%=i%>">+</button>
+                <%if(i!=0){%>
+                <button class="minus btn" id="minus<%=i%>">-</button>
+                <%}%>
                   </div>
                 </div>
               </div>
 
           <%}%>
-          </div>
-          <div class="row d-flex justify-content-center">
-            <a href="/te/exam/staged" class="btn m-1">Back</a>
-            <button class="btn">Submit</button>
+              </div>
+              <div class="row d-flex justify-content-center">
+                <a href="/te/exam/staged" class="btn m-1">Back</a>
+                <button class="btn">Submit</button>
 
-          </div>
+              </div>
         </form>
       </div>
     </div>
