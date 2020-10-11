@@ -17,6 +17,7 @@ const Response = require("./models/response.js");
 const Question = require("./models/question.js");
 const upload = require("./multert.js");
 const examUpload = require("./multers.js");
+const moment = require("moment");
 // const pdf = require("pdf-lib");
 const seed = require("./seed.js");
 const formidable = require("formidable");
@@ -298,6 +299,8 @@ app.get("/st/results/:id", authenticatedStudent, (req, res) => {
               res.render("stresults", {
                 questions: questions,
                 response: response,
+                req:req.user,
+                moment:moment,
                 exam: exam
               });
             }
