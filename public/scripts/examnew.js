@@ -150,11 +150,13 @@ function createQuestion(n){
 
   var button1 = document.createElement("button");
   button1.classList.add("plus");
+  button1.classList.add("btn");
   button1.innerHTML = "+";
   button1.id="plus"+(n-1);
 
   var button2 = document.createElement("button");
   button2.classList.add("minus");
+  button2.classList.add("btn");
   button2.innerHTML = "-";
   button2.id="minus"+(n-1);
 
