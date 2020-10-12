@@ -1,5 +1,5 @@
-# QUIZZ-APP
-Quizz App 
+# QuizBOX
+A Web Application where students take quizzes.  
 # Features
  1) Real time tracking of student submissions. Clear statistics of student responses is generated, through which teachers can know in which concept students are weak.
  2) Excel sheet can be uploaded to add the students to a particular exam.
