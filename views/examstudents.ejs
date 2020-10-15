@@ -1,5 +1,4 @@
 <%- include("./partials/teheader.ejs") %>
-<link rel="stylesheet" href="stylesheets/examstudent.css">
 </head>
 
 <%- include("./partials/tenav.ejs") %>
@@ -40,6 +39,8 @@
   <h2 class="text-center m-4">Students</h2>
   <h5>Number of Students: <%=students.length%></h5>
 
+
+
   <table class="table text-center">
     <thead class="thead-dark">
       <tr>
@@ -52,14 +53,15 @@
       <% for(var i=0;i<=students.length-1;i++){ %>
       <tr>
         <th scope="row"><%=i+1%></th>
-        <td><%=students[i]%></td>
-        <td>Added</td>
+        <td id="student<%=i%>"><%=students[i]%></td>
+        <td id="statusTag<%=i%>">Added</td>
       </tr>
       <% }%>
     </tbody>
   </table>
   <hr />
   <a href="/te/exam/ready" class="btn btn-outline-primary">Back</a>
+
 
 
 
@@ -143,8 +145,25 @@
 
 
 
-  <script src="/scripts/examstudents.js">
-
-  </script>
+  <script src="/scripts/examstudents.js"></script>
   <script src="https://kit.fontawesome.com/30ef029f33.js" crossorigin="anonymous"></script>
+  <script src="/socket.io/socket.io.js"></script>
+  <script type="text/javascript">
+    const socket = io()
+    var students = <%-JSON.stringify(students)%>;
+    socket.on("status",(data) => {
+      console.log(data);
+      var index = students.findIndex(s => s === data.student);
+      console.log(index);
+      var tag = document.getElementById("statusTag"+index);
+      tag.innerHTML = data.status;
+    });
+
+    socket.on("view",(data) => {
+      console.log(data,"view");
+      var index = students.findIndex(s => s === data.student);
+      var tag = document.getElementById("statusTag"+index);
+      tag.innerHTML = data.status;
+    });
+  </script>
   <%- include("./partials/footer.ejs") %>

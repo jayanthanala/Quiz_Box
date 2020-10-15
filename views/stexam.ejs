@@ -89,6 +89,7 @@
     console.log("clicked");
     var info = {userid:"<%=req.username%>",examid:"<%=questions[0].examid%>"};
     socket.emit("sendResponses",info);
+    socket.emit("changeStatus","<%=req.username%>");
   });
   var questions = <%-JSON.stringify(questions)%>
   //////////////////////////////////on refresh!!!! it should come to the sam equestion! and with same options selected!

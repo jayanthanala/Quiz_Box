@@ -20,9 +20,9 @@
           <p> Number of questions: <%=exams[i].noquestions%></p>
           <p>Total marks: <%=exams[i].marks%></p>
           <%if(exams[i].status=="started"){%>
-            <a href="/st/exam/<%=exams[i]._id%>" class="btn btn-outline-primary">Start Exam</a>
+            <a href="/st/exam/<%=exams[i]._id%>" name="<%=exams[i]._id%>" id="start" class="btn btn-outline-primary">Start Exam</a>
         <%  }else{%>
-              <a href="/st/exam/<%=exams[i]._id%>" class="btn btn-outline-primary">Scheduled</a>
+              <a href="" class="btn btn-outline-primary">Scheduled</a>
           <%}%>
         </div>
         <%}%>
@@ -32,11 +32,22 @@
         <div class="container px-5">
           <center>
             <h5 class="m-5">No Active Exams</h5>
-            <a href="/st/exam/completed" class="btn btn-warning">Recent Exams</a>
+            <a href="/st/completed" class="btn btn-warning">Recent Exams</a>
             </center>
           </div>
     <%  }%>
       <hr>
     </div>
   </main>
+
+  <script src="/socket.io/socket.io.js"></script>
+  <script type="text/javascript">
+    var socket = io();
+    var btn = document.getElementById("start");
+    btn.addEventListener('click',(e)=>{
+      console.log("start btn clicked");
+      var info = {userid:"<%=req.username%>",examid:btn.name};
+      socket.emit("viewed",info);
+    });
+  </script>
   <%- include("./partials/footer.ejs") %>
