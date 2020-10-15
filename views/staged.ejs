@@ -1,95 +1,106 @@
-<%- include("partials/teheader") %>
+<%- include("./partials/teheader.ejs") %>
 </head>
-<%- include("partials/tenav") %>
+<body>
+  <nav class="navbar navbar-expand-lg navbar-light bg-light">
+  <a class="navbar-brand" href="/">QUIRKY</a>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+  <div class="collapse navbar-collapse" id="navbarNav">
+    <ul class="navbar-nav">
+      <li class="nav-item">
+        <a class="nav-link" href="/te/index">Home</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="/te/exam/ready">Exams</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="/te/exam/completed">Completed Exams</a>
+      </li>
+      <li class="nav-item active">
+        <a class="nav-link" href="/te/exam/staged">Staged Exams<span class="sr-only">(current)</span></a>
+      </li>
+    </ul>
+  </div>
+</nav>
 
 <%if(exams[0]){ %>
-<div class="container px-5">
   <div class="container px-5">
-    <% for(var i=0;i<=exams.length-1;i++){%>
-    <div class="row my-5 py-3 border">
-      <div class="col-md-12">
-        <h4 class="">Title: <%=exams[i].title%></h4>
+    <div class="container px-5">
+      <% for(var i=0;i<=exams.length-1;i++){%>
+      <div class="row my-5 py-3 border">
+        <div class="col-md-12">
+          <h4 class="">Title: <%=exams[i].title%></h4>
+        </div>
+        <div class="col-md-12">
+          <h6 class="">  Number of questions: <%=exams[i].noquestions%></h6>
+        </div>
+        <div class="col-md-12">
+          Total marks: <%=exams[i].marks%>
+        </div>
+        <div class="col-md-12 d-flex justify-content-end">
+            <a href="<%=exams[i]._id%>/edit" class="btn btn-outline-primary">Edit</a>
+        </div>
+        <div class="col-md-12">
+            <form style="border:0px" action="<%=exams[i]._id%>/staged" method="post" enctype="multipart/form-data">
+            <div class="form-group">
+              <label for="file">Upload the Excel file:</label>
+              <input type="file" name="excel" id="file">
+            </div>
+            <div class="form-group">
+              <label for="date<%=i%>"> Date</label>
+              <input type="date" id="date<%=i%>" name="scheduled[date]" class="form-control">
+            </div>
+            <div class="form-group">
+              <label for="time<%=i%>">Time</label>
+              <input type="time" id="time<%=i%>" name="scheduled[time]" class="form-control">
+            </div>
+            <div class="form-group">
+              <label for="cdate<%=i%>"> Date of closing</label>
+              <input type="date" id="cdate<%=i%>" name="scheduled[date2]" class="form-control">
+            </div>
+            <div class="form-group">
+              <label for="ctime<%=i%>">Time of closing</label>
+              <input type="time" id="ctime<%=i%>" name="scheduled[time2]" class="form-control ctime">
+            </div>
+            <div class="form-group">
+              <label for="duration<%=i%>">Duration in mins</label>
+              <input type="range" id="duration<%=i%>" name="scheduled[duration]" class="form-control" min="1" max="180">
+            </div>
+            <button class="btn btn-outline-success">Submit</button>
+          </form>
+        </div>
       </div>
-      <div class="col-md-12">
-        <h6 class=""> Number of questions: <%=exams[i].noquestions%></h6>
-      </div>
-      <div class="col-md-12">
-        Total marks: <%=exams[i].marks%>
-      </div>
-      <div class="col-md-12 d-flex justify-content-end">
-        <a href="<%=exams[i]._id%>/edit" class="btn btn-outline-primary">Edit</a>
-      </div>
-      <div class="col-md-12">
-        <form style="border:0px" action="<%=exams[i]._id%>/staged" method="post" enctype="multipart/form-data">
-          <div class="form-group">
-            <label for="file">Upload the Excel file:</label>
-            <input type="file" name="excel" id="file">
-          </div>
-          <div class="form-group">
-            <label for="date<%=i%>"> Date</label>
-            <input type="date" id="date<%=i%>" name="scheduled[date]" class="form-control">
-          </div>
-          <div class="form-group">
-            <label for="time<%=i%>">Time</label>
-            <input type="time" id="time<%=i%>" name="scheduled[time]" class="form-control">
-          </div>
-          <div class="form-group">
-            <label for="cdate<%=i%>"> Date of closing</label>
-            <input type="date" id="cdate<%=i%>" name="scheduled[date2]" class="form-control">
-          </div>
-          <div class="form-group">
-            <label for="ctime<%=i%>">Time of closing</label>
-            <input type="time" id="ctime<%=i%>" name="scheduled[time2]" class="form-control ctime">
-          </div>
-          <div class="form-group">
-            <label for="duration<%=i%>">Duration in mins</label>
-            <input type="range" id="duration<%=i%>" name="scheduled[duration]" class="form-control" min="1" max="180">
-          </div>
-
-          <button class="btn btn-outline-success">Submit</button>
-        </form>
-      </div>
-    </div>
     <%}%>
     </div>
   </div>
 <%}else{%>
-    <div class="text-center">
-      <img class="mx-auto d-block m-4" style="" src="https://testbanktop.com/wp-content/uploads/2018/01/search_error.png" width="300" height="300" alt="">
-    </div>
-    <div class="col-md-12 text-center">
-      <h4>You'll find Staged Exams here</h4>
-      <hr>
-    </div>
-
-    <%}%>
+  <h5>NO EXAMS WHICH ARE STAGED !!</h5>
+<%}%>
 
 <script type="text/javascript">
   var closetime = document.querySelectorAll(".ctime");
    for(var i=0;i<=closetime.length-1;i++){
      closetime[i].addEventListener("change",(e)=>{
        var element = e.srcElement;
+       console.log("Event");
        var index = element.id.substring(5);
        var rangeinput = document.querySelector("#duration"+index);
-
        var starttime = document.querySelector("#time"+index).value;
        var startdate = document.querySelector("#date"+index).value;
        var closedate = document.querySelector("#cdate"+index).value;
        var closetime = element.value;
-
        var array = startdate.split("-");
        var time = starttime.split(":");
        var start = new Date(Number(array[0]),Number(array[1])-1,Number(array[2]),Number(time[0]),Number(time[1]));
-
        var array2 = closedate.split("-");
        var time2 = closetime.split(":");
        var close= new Date(Number(array2[0]),Number(array2[1])-1,Number(array2[2]),Number(time2[0]),Number(time2[1]));
-
        var duration = (close.getTime()-start.getTime())/(1000*60);
+       console.log(duration);
        rangeinput.setAttribute("max",duration);
      })
    }
 </script>
-
 
 <%- include("./partials/footer.ejs") %>
