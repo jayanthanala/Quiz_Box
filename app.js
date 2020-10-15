@@ -1066,21 +1066,22 @@ const io = socket(server);
 io.on("connection", (socket) => {
   //  console.log("connected");
   socket.on("sendResponses", (id) => {
-    //    console.log("sendresponses");
-    Exam.findById(id, (err, exam) => {
+       console.log("sendresponses");
+       console.log(id);
+    Exam.findById(id.examid, (err, exam) => {
       if (err) console.log(err);
       else {
         if (exam) {
           if (exam.status == "started") {
             setTimeout(() => {
               Response.find({
-                examid: id
+                examid: id.examid
               }, (e, s) => {
                 if (e) console.log(e);
                 else {
                   //console.log(s);
                   Question.find({
-                    examid: id,
+                    examid: id.examid,
                     qtype: 0
                   }, (er, so) => {
                     if (er) console.log(er);
