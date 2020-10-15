@@ -54,7 +54,7 @@
       <tr>
         <th scope="row"><%=i+1%></th>
         <td id="student<%=i%>"><%=students[i]%></td>
-        <td id="statusTag<%=i%>">Added</td>
+        <td id="statusTag<%=i%>">Not Viewed</td>
       </tr>
       <% }%>
     </tbody>
@@ -149,20 +149,13 @@
   <script src="https://kit.fontawesome.com/30ef029f33.js" crossorigin="anonymous"></script>
   <script src="/socket.io/socket.io.js"></script>
   <script type="text/javascript">
-    const socket = io()
+    const socket = io();
     var students = <%-JSON.stringify(students)%>;
-    socket.on("status",(data) => {
-      console.log(data);
-      var index = students.findIndex(s => s === data.student);
-      console.log(index);
-      var tag = document.getElementById("statusTag"+index);
-      tag.innerHTML = data.status;
-    });
-
     socket.on("view",(data) => {
-      console.log(data,"view");
+      //console.log(data,"view");
       var index = students.findIndex(s => s === data.student);
-      var tag = document.getElementById("statusTag"+index);
+       var tag = document.getElementById("statusTag"+index);
+      //localStorage.setItem(document.getElementById("statusTag"+index).innerHTML,data.status);
       tag.innerHTML = data.status;
     });
   </script>
