@@ -830,6 +830,7 @@ app.post("/st/submit/:id",authenticatedStudent,examNotAttempted, (req, res) => {
         }, (err, s) => {
           if (err) console.log(err);
           else {
+            //res.redirect("/st/completed");
           //console.log("NO ERROR");
             Exam.updateOne({
               _id: req.params.id
@@ -842,20 +843,7 @@ app.post("/st/submit/:id",authenticatedStudent,examNotAttempted, (req, res) => {
                 console.log(err);
               } else {
               //  console.log("noERROR2");
-                Exam.findOneAndUpdate({
-                  _id: req.params.id
-                }, {
-                  $pull: {
-                    students: req.user.username
-                  }
-                }, (err) => {
-                  if (err) {
-                    console.log(err);
-                  } else {
-                  //  console.log("noERROR3");
-                    res.redirect("/st/completed");
-                  }
-                });
+                res.redirect("/st/completed");
               }
             });
           }
@@ -1101,6 +1089,16 @@ io.on("connection", (socket) => {
         }
       }
     })
+  });
+
+  socket.on("changeStatus",(user) => {
+    console.log("ChangeStatus",user);
+    io.emit("status",{student:user,status:"Submitted"});
+  });
+
+  socket.on("viewed",(info) => {
+    console.log(info,"viewed event");
+    io.emit("view",{student:info.userid,status:"Viewed"});
   });
 
 })
