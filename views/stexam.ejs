@@ -1,95 +1,83 @@
 <%- include("./partials/stheader.ejs") %>
 <link rel="stylesheet" href="/stylesheets/stexam.css">
 </head>
-<body style="padding-top:2rem">
-  <div class="container-fluid" style="margin:5px">
-    <div class="">
-      <h3 class="text-center"><%=exam.title%></h3>
-      <hr style="border-top: 0.2px dashed grey">
-      <p><b>Name:</b> <%=req.name%></p>
-      <p><b>Roll:</b> <%=req.username%></p>
-      <p><b>Time Left: </b><span id="hours">00</span>:<span id="mins">00</span>:<span id="secs">00</span> </p>
-      <hr style="border-top: 0.2px dashed grey">
-    </div>
-
-    <div class="card border-dark mb-3" style="max-width: 9rem;">
-  <div class="card-header">Question Navigation</div>
-  <div class="card-body text-dark row" >
-    <%for(var i=1;i<=questions.length;i++){%>
-
-    <span class="card-title box"><%=i%></span>
-    <%}%>
-  </div>
-  </div>
-
-
-
-    <div class="row ">
-
-      <div class="col-md-9">
-          <%if(questions[0]){%>
-          <form class="" action="/st/submit/<%=questions[0].examid%>" method="post" enctype="multipart/form-data">
-                <% for(var i=0;i<=questions.length-1;i++){%>
-                <%if(i==0){%>
-                  <div class="containers" style="display:block">
-                <%}else{%>
-                  <div class="containers" style="display:none">
-                <%}%>
-
-                <div class="card" style="">
-                    <div class="card-header">
-                      <%=(i+1)%>)<%=questions[i].q%>
-                    </div>
-                    <%if(questions[i].qtype==0){%>
-                      <%for(var j=0;j<=questions[i].options.length-1;j++){ %>
-                    <ul class="list-group list-group-flush">
-                      <li class="list-group-item"><input type="radio" name="q[<%=questions[i]._id%>]" value="<%=j+1%>"  id="<%=i%>,<%=j%>"> <%=questions[i].options[j]%></li>
-                    </ul>
-                    <% }%>
-                    <div style="display:none">
-                      <input type="radio" name="q[<%=questions[i]._id%>]" value="-1"  checked>
-                      <label class="btn btn-secondary">blah blah</label>
-                   </div>
-                    <%}else{%>
-                      <div class="row">
-                        <div class="col-md-12">
-                          <input type="file" name="q[<%=questions[i]._id%>]" multiple id="<%=i%>,<%=j%>">
-                        </div>
-                      </div>
-                    <%}%>
-                </div>
-                    <div class="m-2">
-                      <%  if(i!=0) {%>
-                            <button class="btn btn-outline-primary <%=i%> navigation">P</button>
-                        <%}%>
-                  <%if(i!=questions.length-1){%>
-                        <button class="btn btn-outline-primary <%=i%> navigation">N</button>
-                    <%}%>
-                    </div>
-                </div>
-
-                <%}%>
-             <%if(questions.length==1){%>
-               <div class="form-group submit m-2">
-                   <button type="submit" class="btn btn-outline-success">Submit</button>
-               </div>
-             <%}else{ %>
-               <div class="form-group submit" style="display:none">
-                   <button type="submit" class="btn btn-outline-success">Submit</button>
-               </div>
-             <%}%>
-              </form>
+<body>
+<div class="row">
+  <div class="col-md-3  container p-5">
+    <div class="row boxrow">
+      <%for(var i=1;i<=questions.length;i++){%>
+        <div class="box">
+        <%  if(i<10){%>
+            0<%=i%>
+          <%}else{%>
+            <%=i%>
           <%}%>
+        </div>
+      <%}%>
+    </div>
+  </div>
+  <div class="col-md-9">
+      <div class="col-md-12 d-inline timer">
+          <h1>  timer: <span id="hours">00</span>:<span id="mins">00</span>:<span id="secs">00</span> </h1>
+                <hr>
       </div>
 
-
-
-
-
-
-    </div>
+      <%if(questions[0]){%>
+      <form class="" action="/st/submit/<%=questions[0].examid%>" method="post" enctype="multipart/form-data">
+            <% for(var i=0;i<=questions.length-1;i++){%>
+            <%if(i==0){%>
+              <div class="containers" style="display:block">
+            <%}else{%>
+              <div class="containers" style="display:none">
+            <%}%>
+              <div class="col-md-12">
+                <h4 class=""><%=(i+1)%>)<%=questions[i].q%></h4>
+              </div>
+              <%if(questions[i].qtype==0){%>
+                <%  for(var j=0;j<=questions[i].options.length-1;j++){ %>
+                  <div class="row">
+                    <div class="col-md-6">
+                      <input type="radio" name="q[<%=questions[i]._id%>]" value="<%=j+1%>"  id="<%=i%>,<%=j%>">
+                      <label  for="<%=i%>,<%=j%>"><%=questions[i].options[j]%> </label>
+                    </div>
+                  </div>
+                <% }%>
+                <div style="display:none">
+                  <input type="radio" name="q[<%=questions[i]._id%>]" value="-1"  checked>
+                  <label class="btn btn-secondary">blah blah</label>
+               </div>
+              <%}else{%>
+                <div class="row">
+                  <div class="col-md-12">
+                    <input type="file" name="q[<%=questions[i]._id%>]" multiple id="<%=i%>,<%=j%>">
+                  </div>
+                </div>
+              <%}%>
+                <div class="">
+                <%if(i!=questions.length-1){%>
+                    <button class="btn btn-outline-primary <%=i%> navigation">Next</button>
+                <%}%>
+                </div>
+              <%  if(i!=0) {%>
+                  <div class="">
+                    <button class="btn btn-outline-primary <%=i%> navigation">Previous</button>
+                  </div>
+                <%}%>
+            </div>
+            <%}%>
+         <%if(questions.length==1){%>
+           <div class="form-group submit">
+               <button type="submit" class="btn btn-outline-success">Submit</button>
+           </div>
+         <%}else{ %>
+           <div class="form-group submit" style="display:none">
+               <button type="submit" class="btn btn-outline-success">Submit</button>
+           </div>
+         <%}%>
+          </form>
+      <%}%>
   </div>
-
+</div>
 
 
 
@@ -99,13 +87,11 @@
   var form = document.getElementsByTagName("form")[0];
   form.addEventListener('submit',()=>{
     console.log("clicked");
-    socket.emit("sendResponses","<%=questions[0].examid%>");
+    var info = {userid:"<%=req.username%>",examid:"<%=questions[0].examid%>"};
+    socket.emit("sendResponses",info);
   });
-
   var questions = <%-JSON.stringify(questions)%>
-
   //////////////////////////////////on refresh!!!! it should come to the sam equestion! and with same options selected!
-
 var z=0;
 if(localStorage.getItem("z")) z=localStorage.getItem("z");
  var buttons = document.getElementsByClassName("navigation");
@@ -130,10 +116,8 @@ if(localStorage.getItem("z")) z=localStorage.getItem("z");
      }
      boxes[index].classList.add("boxred");
     console.log(index+2,qs.length-1);
-
    });
  }
-
  var inputs = document.getElementsByTagName("input");
  for(var i=0;i<=inputs.length-1;i++){
    inputs[i].addEventListener("click",(e)=>{
@@ -165,13 +149,11 @@ if(localStorage.getItem("z")) z=localStorage.getItem("z");
        if(z!=1) boxes[j].classList.add("boxred");
      }
    }
-
    };
  submit.addEventListener("click",()=>{
    localStorage.clear();
    form.submit();
  });
-
 for(var i=0;i<=boxes.length-1;i++){
   boxes[i].addEventListener("click",(e)=>{
     for(var j=0;j<=qs.length-2;j++){
@@ -182,12 +164,9 @@ for(var i=0;i<=boxes.length-1;i++){
       }
             }
       qs[j].style.display="none";
-
-
     }
     var index = Number(e.srcElement.innerHTML);
     qs[index-1].style.display="block";
-
     if(index==qs.length-1) submit.style.display="block";
     else{
       submit.style.display="none";
@@ -195,22 +174,18 @@ for(var i=0;i<=boxes.length-1;i++){
   });
 }
 ///////////////////////////////////////////timer
-
 var duration = Number(<%=duration%>)*60*1000;
 var starttime = new Date(<%-JSON.stringify(start)%>);
 var h = document.querySelector("#hours");
 var m = document.querySelector("#mins");
 var s = document.querySelector("#secs");
-
 var closetime = new Date(<%-JSON.stringify(close)%>);
 var totaltime =0;
 if(closetime.getTime()> (starttime.getTime()+duration)) totaltime = new Date(starttime.getTime()+duration);
 else{
    totaltime = new Date(closetime.getTime());
 }
-
 console.log(totaltime);
-
 var now = new Date();
 var timer = totaltime.getTime()-now.getTime()
 var hours = Math.floor((timer/1000)/3600);
@@ -222,8 +197,6 @@ if(mins<10) m.innerHTML=0+String(mins);
 else m.innerHTML=mins;
 if(seconds<10) s.innerHTML=0+String(seconds);
 else s.innerHTML=seconds;
-
-
 ////////////////////////////////////////////////////iteration
 var stopit=setInterval(()=>{
   var now = new Date();
@@ -247,10 +220,6 @@ var stopit=setInterval(()=>{
     clearInterval(stopit);
   }
 },1000)
-
-
-
-
 // var hours = totaltime.getHours()-now.getHours();
 // var mins = totaltime.getMinutes()-now.getMinutes();
 // var seconds = totaltime.getSeconds()-now.getSeconds();
@@ -262,13 +231,10 @@ if ('speechSynthesis' in window){
   console.log("he,lo");
     var recognition = new webkitSpeechRecognition();
     console.log(recognition);
-
 recognition.continuous = true;
-
     recognition.onstart = ()=>{
       console.log("started the service");
     };
-
     // recognition.maxAlternatives=4;
     recognition.lang='en-IN';
     //recognition.interimResults=true;
@@ -277,7 +243,6 @@ recognition.continuous = true;
     //newGrammar.src = '#JSGF V1.0; grammar names; public <name> = 1 |  2 |  3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12 | 13 | 14 | 15 | 16 | 17 | 18 | 19 | 20 | A | B | C | D | E | F | G | H | I | J ;'
     newGrammar.src = '#JSGF V1.0; grammar letters; public <letter> =  a | b | c | d | e | f | g | h | i ;'
     speechRecognitionList[1] = newGrammar; // should add the new SpeechGrammar object to the list
-
     recognition.grammars = speechRecognitionList;
     var i=0;
   recognition.onresult = (e)=>{
@@ -306,7 +271,6 @@ recognition.continuous = true;
               case "D":
                 if(options.length>4) options[3].click();
                   break;
-
               case "E":
                 if(options.length>5) options[4].click();
                   break;
@@ -371,16 +335,11 @@ recognition.continuous = true;
           form.submit
       }
     i++;
-
   }
-
-
-
 recognition.start();
     // recognition.onerror = function(event) {
     //     console.log(event.error);
     // };
-
 // recognition.addEventListener('soundstart', function() {
 //   console.log('Some sound is being received');
 // });
