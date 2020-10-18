@@ -247,6 +247,7 @@ app.get("/st/exam/:id", authenticatedStudent, (req, res) => {
     } else {
       Exam.findById(req.params.id, (e, exam) => {
         //console.log("hello");
+        console.log(exam,questions)
         res.render("stexam", {
           questions: questions,
           exam:exam,
@@ -386,9 +387,9 @@ app.post("/te/exam/new",uploadq.array('qupload'), (req, res) => {
     if (error) console.log(error);
     else {
       //  console.log("************************************************************8");
-      console.log(req.files)
+      //console.log(req.files)
       let filearray = req.files;
-      console.log(questions)
+     // console.log(questions)
       var marks = 0;
       let k=0;
       questions.forEach((q, i) => {
