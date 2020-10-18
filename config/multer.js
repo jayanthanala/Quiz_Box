@@ -25,7 +25,7 @@ var upload = multer({
       }) //sets the fieldname present in the meta data section of the bucket properties to fiel.fieldname
     },
     key: (req, file, cb) => {
-      cb(null, Date.now().toString()); //this will make the image name on the bucket as the date created.
+      cb(null, Date.now().toString()+".jpg"); //this will make the image name on the bucket as the date created.
     }
   })
 
