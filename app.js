@@ -22,6 +22,7 @@ const moment = require("moment");
 const seed = require("./seed.js");
 const formidable = require("formidable");
 const { PDFDocument } = require('pdf-lib');
+const uploadq = require("./config/multer.js")
 
 //seed();
 
@@ -363,7 +364,8 @@ app.post("/te/register", (req, res) => {
 
 
 
-app.post("/te/exam/new", authenticatedTeacher, (req, res) => {
+// app.post("/te/exam/new", authenticatedTeacher, (req, res) => {
+app.post("/te/exam/new",uploadq.array('qupload'), (req, res) => {
   var accessCode = "";
   var questions = req.body.questions;
   var options = req.body.options;
@@ -384,9 +386,14 @@ app.post("/te/exam/new", authenticatedTeacher, (req, res) => {
     if (error) console.log(error);
     else {
       //  console.log("************************************************************8");
+      console.log(req.files)
+      let filearray = req.files;
+      console.log(questions)
       var marks = 0;
+      let k=0;
       questions.forEach((q, i) => {
         if (q.ans) {
+
           q["qtype"] = 0;
           q["options"] = options[i];
           //  console.log(options[i],options[i].length);
@@ -398,6 +405,11 @@ app.post("/te/exam/new", authenticatedTeacher, (req, res) => {
           q["examid"] = exam._id;
           q["unattempted"] = q["wrongans"] = q["rightans"] = 0;
           marks += Number(q["marks"]);
+          if(!q.q){
+            q["q"]=filearray[k].location;
+            k++;
+            q["qtype"]=-1;
+          }
         } else {
           console.log("filetype");
           q["qtype"] = 1;
@@ -720,7 +732,7 @@ app.post("/st/submit/:id",authenticatedStudent,examNotAttempted, (req, res) => {
       var obj = [];
       questions.forEach(async(q, i) => {
 
-        if(q.qtype==0){
+        if(q.qtype==0 ||q.qtype==-1){
 
           q.optioncount[Number(arr2[i]) - 1] = q.optioncount[Number(arr2[i]) - 1] + 1;
           if (Number(arr2[i]) != -1) {

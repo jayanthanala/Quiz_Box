@@ -17,7 +17,7 @@
     <hr>
     <div class="">
       <div class="col-md-12" class="main">
-        <form class="" action="/te/exam/new" method="post">
+        <form class="" action="/te/exam/new" method="post" enctype="multipart/form-data">
           <div class="continer px-5">
             <div class="row px-5">
               <div class="input-field col s12">
@@ -38,9 +38,16 @@
                     </div>
                   </div>
                   <div class="row">
-                    <div class="input-field col s12">
+                    <div class="input-field col s10">
                       <input id="q0" type="text" class="validate" name="questions[0][q]" required>
                       <label for="q0">Question</label>
+                    </div>
+                    <div class="col s1">
+                      <label >Text</label>
+                    <div class="custom-control custom-switch">
+                      <input type="checkbox" class="custom-control-input qs" id="qs0">
+                      <label class="custom-control-label" for="qs0">Upload</label>
+                    </div>
                     </div>
                   </div>
                   <div class="row">

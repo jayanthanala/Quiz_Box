@@ -33,7 +33,7 @@ function createQuestion(n){
 
 
    var questiondiv = document.createElement("div");
-   questiondiv.classList.add("input-field", "col", "s12");
+   questiondiv.classList.add("input-field", "col", "s10");
 
    var questionInput = document.createElement("input");
    questionInput.classList.add("validate");
@@ -48,8 +48,35 @@ function createQuestion(n){
    questiondiv.appendChild(questionInput);
    questiondiv.appendChild(questionLabel);
    var r = document.createElement("div");
+
+   var sdiv = document.createElement("div");
+   var slabel1 = document.createElement("label");
+   var sdiv2 = document.createElement("div");
+   var sinput = document.createElement("input");
+   var slabel2 = document.createElement("label");
+
+
+   sdiv.classList.add("col","s1");
+   slabel1.innerHTML="Text";
+   sdiv2.classList.add("custom-control","custom-switch");
+   sinput.setAttribute("type","checkbox");
+   sinput.classList.add("custom-control-input","qs");
+   sinput.id="qs"+(n-1);
+   slabel2.classList.add("custom-control-label");
+   slabel2.setAttribute("for","qs"+(n-1));
+   slabel2.innerHTML="UPLOAD";
+
+   sdiv2.appendChild(sinput);
+   sdiv2.appendChild(slabel2);
+   sdiv.appendChild(slabel1);
+   sdiv.appendChild(sdiv2);
+   //////
    r.classList.add("row");
+
+
    r.appendChild(questiondiv);
+   r.appendChild(sdiv);
+
 
     var row2 = document.createElement("div");
     row2.classList.add("row");
@@ -317,3 +344,24 @@ $("#cf").on("click",".cs",(e)=>{
         div.parent().parent().next().next().next().css("display","block");
   }
 })
+
+
+$("#cf").on("click",".qs",(e=>{
+  console.log("clicked")
+  let element = e.target;
+  let index = Number(element.id.substring(2));
+  let question = $("#q"+index);
+  let questionLabel = question.next();
+
+  if(question.attr("type")=="text"){
+    question.attr("type","file");
+    question.attr("name","qupload")
+    questionLabel.css("display","none");
+   // question.prop('multiple',true);
+  }else{
+    question.attr("type","text");
+    questionLabel.css("display","block");
+    question.attr("name","questions["+index+"][q]");
+  }
+
+}))
