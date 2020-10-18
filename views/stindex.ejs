@@ -1,5 +1,6 @@
 <%- include("./partials/stheader.ejs") %>
 </head>
+
 <body>
   <%- include("./partials/stnav.ejs") %>
   <main role="main">
@@ -10,44 +11,65 @@
       </div>
     </div>
     <div class="container">
+
+      <!-- <div class="row row-cols-1 row-cols-md-2">
+        <div class="col mb-4">
+          <div class="card">
+            <img src="" class="card-img-top" alt="" height="100" style="background: rgb(238,174,202);background: radial-gradient(circle, rgba(238,174,202,1) 28%, rgba(148,187,233,1) 65%);">
+            <div class="card-body h-100">
+              <h5 class="card-title">Card title</h5>
+              <p class="card-text">This is a longer card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
+            </div>
+          </div>
+        </div>
+      </div> -->
       <%if(exams[0]){%>
-        <h4 class="text-center">Active Exams</h4>
-      <div class="row">
-            <% for(var i=0;i<=exams.length-1;i++){%>
-            <% if(exams[i].status=="started" || exams[i].status=="ready"){ %>
-        <div class="col-md-4">
-          <h3><%=exams[i].title%></h3>
-          <p> Number of questions: <%=exams[i].noquestions%></p>
-          <p>Total marks: <%=exams[i].marks%></p>
-          <%if(exams[i].status=="started"){%>
-            <a href="/st/exam/<%=exams[i]._id%>" name="<%=exams[i]._id%>" id="start" class="btn btn-outline-primary">Start Exam</a>
-        <%  }else{%>
-              <a href="" class="btn btn-outline-primary">Scheduled</a>
-          <%}%>
-        </div> 
+      <h4 class="text-center mb-5">Active Exams</h4>
+      <div class="row row-cols-1 row-cols-md-2">
+        <% for(var i=0;i<=exams.length-1;i++){%>
+        <% if(exams[i].status=="started" || exams[i].status=="ready"){ %>
+          <div class="col mb-4">
+            <div class="card">
+              <img src="" class="card-img-top" alt="" height="150" style="background: rgb(238,174,202);background: radial-gradient(circle, rgba(238,174,202,1) 28%, rgba(148,187,233,1) 65%);">
+              <div class="card-body h-100">
+                <h4 class="card-title"><%=exams[i].title%></h4>
+                <p class="card-text"><b>Number of questions: </b><%=exams[i].noquestions%></p>
+                <p class="card-text"><b>Total marks: </b><%=exams[i].marks%></p>
+                <%if(exams[i].status=="started"){%>
+                <a href="/st/exam/<%=exams[i]._id%>" name="<%=exams[i]._id%>" id="start" class="btn btn-outline-success">Start Exam</a>
+                <%  }else{%>
+                <a href="" class="btn btn-outline-primary">Scheduled</a>
+                <%}%>
+              </div>
+            </div>
+
+        </div>
         <%}%>
-      <%}%>
+          <%}%>
       </div>
       <%}else{%>
-        <div class="container px-5">
-          <center>
-            <h5 class="m-5">No Active Exams</h5>
-            <a href="/st/completed" class="btn btn-warning">Recent Exams</a>
+          <div class="container px-5">
+            <center>
+              <h5 class="m-5">No Active Exams</h5>
+              <a href="/st/completed" class="btn btn-warning">Recent Exams</a>
             </center>
           </div>
-    <%  }%>
-      <hr>
-    </div>
+          <%  }%>
+          <hr>
+        </div>
   </main>
 
   <script src="/socket.io/socket.io.js"></script>
   <script type="text/javascript">
     var socket = io();
     var btn = document.getElementById("start");
-    btn.addEventListener('click',(e)=>{
+    btn.addEventListener('click', (e) => {
       console.log("start btn clicked");
-      var info = {userid:"<%=req.username%>",examid:btn.name};
-      socket.emit("viewed",info);
+      var info = {
+        userid: "<%=req.username%>",
+        examid: btn.name
+      };
+      socket.emit("viewed", info);
     });
   </script>
   <%- include("./partials/footer.ejs") %>
