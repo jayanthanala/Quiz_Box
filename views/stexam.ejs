@@ -182,10 +182,11 @@ for(var i=0;i<=boxes.length-1;i++){
 }
 ///////////////////////////////////////////timer
 var duration = Number(<%=duration%>)*60*1000;
-var starttime = new Date(<%-JSON.stringify(start)%>);
+//var starttime = new Date(<%-JSON.stringify(start)%>);
 var h = document.querySelector("#hours");
 var m = document.querySelector("#mins");
 var s = document.querySelector("#secs");
+var starttime = new Date();
 var closetime = new Date(<%-JSON.stringify(close)%>);
 var totaltime =0;
 if(closetime.getTime()> (starttime.getTime()+duration)) totaltime = new Date(starttime.getTime()+duration);
