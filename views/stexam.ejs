@@ -32,7 +32,11 @@
                 <%}%>
                 <div class="card mx-auto justify-content-center" style="">
                     <div class="card-header">
-                      <b><%=questions[i].q%></b>
+                      <%if(questions[i].qtype == -1 or questions[i].q == 1){%>
+                        <img src=<%questions[i].q%> alt="question">
+                    <%  }else{%>
+                        <b><%=questions[i].q%></b>
+                    <%  }%>
                     </div>
                     <%if(questions[i].qtype==0){%>
                       <%for(var j=0;j<=questions[i].options.length-1;j++){ %>
