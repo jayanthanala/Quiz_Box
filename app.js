@@ -618,7 +618,7 @@ app.delete("/te/exam/:id/students", (req, res) => {
 /////////////////////////////////////////////patch routes
 app.patch("/te/exam/:id/start", (req, res) => {
   Exam.findById(req.params.id, (e, exam) => {
-    if (e) console.log(e);
+    if (e) console.log(e,'error at 621');
     else {
       start(exam._id);
       examStarted(exams.pop(exam));
