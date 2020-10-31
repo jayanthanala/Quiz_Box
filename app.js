@@ -384,7 +384,7 @@ app.post("/te/exam/new",uploadq.array('qupload'), (req, res) => {
   }
   //console.log("sdamdklsa");
   Exam.create(exam, (error, exam) => {
-    if (error) console.log(error);
+    if (error) console.log(error,'error at 387');
     else {
       //  console.log("************************************************************8");
       //console.log(req.files)
