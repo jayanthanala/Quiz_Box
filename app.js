@@ -1070,7 +1070,7 @@ function examNotAttempted(req, res, next) {
   })
 }
 /////////////////////////////////////////////////////////////server/////////////////////////////////////////////
-server = app.listen(3000, () => {
+server = app.listen(process.env.PORT || 3000, () => {
   console.log("Server is up on port 3000");
 });
 
