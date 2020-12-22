@@ -44,7 +44,7 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 //databse setup
-mongoose.connect("mongodb://localhost/QuizDB", {
+mongoose.connect(process.env.DBURL, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
   useFindAndModify: false
